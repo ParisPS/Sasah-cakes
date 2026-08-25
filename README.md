@@ -88,6 +88,16 @@ Painel, como interpretar um alerta, limites do plano gratuito e como
 habilitar tracing/replay depois, se necessário — em
 [`docs/OBSERVABILITY.md`](docs/OBSERVABILITY.md).
 
+## Motion e Animações
+
+Animações sutis (CSS puro + `IntersectionObserver`, sem Framer Motion —
+justificativa em
+[`docs/design/motion-principles.md`](docs/design/motion-principles.md)):
+skeleton na paleta da marca para as fotos do portfólio, fade-in +
+slide-up ao rolar a Home, menu mobile animado e um `loading.tsx` global
+como feedback entre rotas. Toda animação respeita `prefers-reduced-motion`
+(`motion-reduce:` do Tailwind).
+
 ## Deploy
 
 Produção: **https://sasah-cakes.vercel.app/**
@@ -104,18 +114,17 @@ detecta o Next.js e usa `next build` como comando de build por padrão.
 
 ## Status atual
 
-**Fase 6 — Observabilidade concluída.** Sentry monitorando erros em
-produção (client, server, edge) e nos error boundaries de UI — ver
-[Observabilidade](#observabilidade) e
-[`docs/OBSERVABILITY.md`](docs/OBSERVABILITY.md).
+**Fase 7 — Motion e Animações concluída.** Skeleton loading, animações de
+entrada ao rolar a Home, menu mobile animado e feedback de carregamento
+entre rotas — todos com `prefers-reduced-motion` respeitado. Ver
+[Motion e Animações](#motion-e-animações) e
+[`docs/design/motion-principles.md`](docs/design/motion-principles.md).
 
-- Fora de escopo (nota em
-  [`docs/OBSERVABILITY.md`](docs/OBSERVABILITY.md#considerações-futuras-não-aplicado-por-ora)):
-  Datadog, New Relic, OpenTelemetry — desproporcional sem um backend
-  próprio
-- Segue fora de escopo (nota em
-  [`docs/design/style-guide.md`](docs/design/style-guide.md#considerações-futuras)):
-  motion refinado e formulário de pedido
+- Ainda fora de escopo: formulário de pedido (nota em
+  [`docs/design/style-guide.md`](docs/design/style-guide.md#considerações-futuras))
+- Fase 6 — observabilidade: ver [Observabilidade](#observabilidade) e
+  [`docs/OBSERVABILITY.md`](docs/OBSERVABILITY.md) (nota de não aplicado
+  por ora: Datadog, New Relic, OpenTelemetry)
 - Fase 5 — lint, formatação, testes (unitários, integração leve e E2E) e
   CI: ver [Qualidade e Testes](#qualidade-e-testes) e
   [`docs/TESTING.md`](docs/TESTING.md) (nota de não aplicado por ora:
