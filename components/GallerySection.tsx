@@ -35,8 +35,8 @@ export function GallerySection({ variant = "full" }: GallerySectionProps) {
           key={item.arquivo}
           className={
             variant === "preview"
-              ? "relative aspect-3/4 w-40 shrink-0 overflow-hidden rounded-md bg-sage-100 md:w-auto"
-              : "relative aspect-3/4 overflow-hidden rounded-md bg-sage-100"
+              ? "bg-sage-100 relative aspect-3/4 w-40 shrink-0 overflow-hidden rounded-md md:w-auto"
+              : "bg-sage-100 relative aspect-3/4 overflow-hidden rounded-md"
           }
         >
           <Image

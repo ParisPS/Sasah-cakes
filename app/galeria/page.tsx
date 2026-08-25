@@ -11,7 +11,7 @@ export default function GaleriaPage() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-16 md:px-6">
       <h1 className="text-sage-900">Nosso Trabalho</h1>
-      <p className="mt-3 text-ink-600">{cardapio.portfolio.status}</p>
+      <p className="text-ink-600 mt-3">{cardapio.portfolio.status}</p>
 
       <div className="mt-10">
         <GallerySection variant="full" />

@@ -24,13 +24,13 @@ export function ProductCard({
   children,
 }: ProductCardProps) {
   return (
-    <div className="rounded-lg bg-cream-300 p-6 shadow-sm transition-[box-shadow,transform] duration-150 active:scale-[0.98] active:shadow-md md:hover:shadow-md">
+    <div className="bg-cream-300 rounded-lg p-6 shadow-sm transition-[box-shadow,transform] duration-150 active:scale-[0.98] active:shadow-md md:hover:shadow-md">
       <h4>{title}</h4>
       <p className="caption mt-1">{subtitle}</p>
       {/* Preço em destaque — mesma escala de H4 (ver design-tokens.md),
           mas sem tag <h4> duplicada por card para manter a hierarquia
           semântica do documento. */}
-      <p className="font-heading mt-3 text-[19px] leading-[1.25] font-semibold text-sage-700 md:text-[22px]">
+      <p className="font-heading text-sage-700 mt-3 text-[19px] leading-[1.25] font-semibold md:text-[22px]">
         {formatarPreco(price)}
       </p>
       {children}

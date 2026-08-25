@@ -1,16 +1,16 @@
 {
   "bolos": {
     "redondos": [
-      { "tamanho": "15cm", "rendimento": "12 fatias", "preco": 180.00 },
-      { "tamanho": "20cm", "rendimento": "25 fatias", "preco": 210.00 },
-      { "tamanho": "25cm", "rendimento": "35 fatias", "preco": 240.00 }
+      { "tamanho": "15cm", "rendimento": "12 fatias", "preco": 180.0 },
+      { "tamanho": "20cm", "rendimento": "25 fatias", "preco": 210.0 },
+      { "tamanho": "25cm", "rendimento": "35 fatias", "preco": 240.0 }
     ],
     "quadrados": [
-      { "tamanho": "20x15", "rendimento": "25 fatias", "preco": 190.00 },
-      { "tamanho": "27x15", "rendimento": "35 fatias", "preco": 210.00 },
-      { "tamanho": "30x22", "rendimento": "45 fatias", "preco": 240.00 },
-      { "tamanho": "36x26", "rendimento": "65 fatias", "preco": 270.00 },
-      { "tamanho": "40x30", "rendimento": "85 fatias", "preco": 300.00 }
+      { "tamanho": "20x15", "rendimento": "25 fatias", "preco": 190.0 },
+      { "tamanho": "27x15", "rendimento": "35 fatias", "preco": 210.0 },
+      { "tamanho": "30x22", "rendimento": "45 fatias", "preco": 240.0 },
+      { "tamanho": "36x26", "rendimento": "65 fatias", "preco": 270.0 },
+      { "tamanho": "40x30", "rendimento": "85 fatias", "preco": 300.0 }
     ],
     "recheiosDisponiveis": [
       "Amendoim",
@@ -25,7 +25,7 @@
   },
   "docinhos": {
     "quantidade": 100,
-    "preco": 120.00,
+    "preco": 120.0,
     "opcoesDeSabores": [
       { "quantidadeSabores": 2, "descricao": "50 unidades de cada sabor" },
       { "quantidadeSabores": 4, "descricao": "25 unidades de cada sabor" }

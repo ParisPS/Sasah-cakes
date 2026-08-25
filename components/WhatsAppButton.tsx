@@ -13,7 +13,7 @@ export function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chamar no WhatsApp"
-      className="fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center rounded-pill bg-sage-500 text-cream-300 shadow-lg transition-transform active:scale-95 md:hover:bg-sage-700"
+      className="rounded-pill bg-sage-500 text-cream-300 md:hover:bg-sage-700 fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center shadow-lg transition-transform active:scale-95"
     >
       <svg
         viewBox="0 0 32 32"

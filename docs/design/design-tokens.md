@@ -13,35 +13,35 @@ material da cliente.
 
 ### Sálvia (cor de marca / primária)
 
-| Token       | Hex       | Uso                                                    |
-|-------------|-----------|---------------------------------------------------------|
-| `sage-900`  | `#3F4A2E` | Texto sobre creme em títulos de destaque, ênfase forte  |
-| `sage-700`  | `#5C6B41` | Hover/estado ativo de elementos primários, texto de link |
-| `sage-500`  | `#7C8A5E` | Cor de marca principal — botões, cabeçalhos de seção, ícones |
-| `sage-300`  | `#A8B48A` | Bordas, divisores, estados secundários                 |
-| `sage-100`  | `#DCE3CB` | Fundos suaves, hover de badges/cards                    |
+| Token      | Hex       | Uso                                                          |
+| ---------- | --------- | ------------------------------------------------------------ |
+| `sage-900` | `#3F4A2E` | Texto sobre creme em títulos de destaque, ênfase forte       |
+| `sage-700` | `#5C6B41` | Hover/estado ativo de elementos primários, texto de link     |
+| `sage-500` | `#7C8A5E` | Cor de marca principal — botões, cabeçalhos de seção, ícones |
+| `sage-300` | `#A8B48A` | Bordas, divisores, estados secundários                       |
+| `sage-100` | `#DCE3CB` | Fundos suaves, hover de badges/cards                         |
 
 ### Creme / off-white
 
-| Token        | Hex       | Uso                                              |
-|--------------|-----------|---------------------------------------------------|
-| `cream-700`  | `#E8DFC8` | Bordas e divisores sobre fundo branco             |
-| `cream-500`  | `#F5EFDF` | Fundo de seções alternadas, texto sobre `sage-500`|
-| `cream-300`  | `#FBF7EC` | Fundo de cards sobre branco                       |
+| Token       | Hex       | Uso                                                |
+| ----------- | --------- | -------------------------------------------------- |
+| `cream-700` | `#E8DFC8` | Bordas e divisores sobre fundo branco              |
+| `cream-500` | `#F5EFDF` | Fundo de seções alternadas, texto sobre `sage-500` |
+| `cream-300` | `#FBF7EC` | Fundo de cards sobre branco                        |
 
 ### Base
 
-| Token       | Hex       | Uso                                    |
-|-------------|-----------|------------------------------------------|
-| `white`     | `#FFFFFF` | Fundo geral da página                    |
-| `ink-900`   | `#2E2A20` | Texto principal (marrom-preto quente, não preto puro) |
-| `ink-600`   | `#6B6455` | Texto secundário, legendas                |
+| Token     | Hex       | Uso                                                   |
+| --------- | --------- | ----------------------------------------------------- |
+| `white`   | `#FFFFFF` | Fundo geral da página                                 |
+| `ink-900` | `#2E2A20` | Texto principal (marrom-preto quente, não preto puro) |
+| `ink-600` | `#6B6455` | Texto secundário, legendas                            |
 
 ### Utilitárias
 
-| Token       | Hex       | Uso                          |
-|-------------|-----------|-------------------------------|
-| `success`   | `#7C8A5E` (= `sage-500`) | Confirmações — reaproveita a cor de marca |
+| Token     | Hex                      | Uso                                       |
+| --------- | ------------------------ | ----------------------------------------- |
+| `success` | `#7C8A5E` (= `sage-500`) | Confirmações — reaproveita a cor de marca |
 
 A V1 do site não tem formulário (apenas botão flutuante de WhatsApp), então
 nenhum token de erro/validação é definido nesta fase. Ver nota em
@@ -62,16 +62,16 @@ Google Fonts.
 
 ### Escala tipográfica
 
-| Nível     | Fonte    | Peso | Desktop | Mobile | Line-height |
-|-----------|----------|------|---------|--------|-------------|
-| H1        | Fraunces | 700  | 56px    | 36px   | 1.1         |
-| H2        | Fraunces | 700  | 40px    | 28px   | 1.15        |
-| H3        | Fraunces | 600  | 28px    | 22px   | 1.2         |
-| H4        | Fraunces | 600  | 22px    | 19px   | 1.25        |
-| H5        | Fraunces | 600  | 18px    | 17px   | 1.3         |
-| H6        | Fraunces | 600  | 16px    | 15px   | 1.3         |
-| Corpo     | Lora     | 400  | 16px    | 16px   | 1.6         |
-| Legenda   | Lora     | 400  | 14px    | 13px   | 1.5         |
+| Nível   | Fonte    | Peso | Desktop | Mobile | Line-height |
+| ------- | -------- | ---- | ------- | ------ | ----------- |
+| H1      | Fraunces | 700  | 56px    | 36px   | 1.1         |
+| H2      | Fraunces | 700  | 40px    | 28px   | 1.15        |
+| H3      | Fraunces | 600  | 28px    | 22px   | 1.2         |
+| H4      | Fraunces | 600  | 22px    | 19px   | 1.25        |
+| H5      | Fraunces | 600  | 18px    | 17px   | 1.3         |
+| H6      | Fraunces | 600  | 16px    | 15px   | 1.3         |
+| Corpo   | Lora     | 400  | 16px    | 16px   | 1.6         |
+| Legenda | Lora     | 400  | 14px    | 13px   | 1.5         |
 
 ## Espaçamentos
 
@@ -85,23 +85,23 @@ Uso recomendado: `4`/`8` para espaçamento interno de badges e ícones,
 
 ## Border-radius
 
-| Token          | Valor    | Uso                                              |
-|----------------|----------|----------------------------------------------------|
-| `radius-sm`    | `8px`    | Inputs, botões pequenos                            |
-| `radius-md`    | `16px`   | Cards de produto                                   |
-| `radius-lg`    | `28px`   | Blocos de conteúdo grandes, seções em destaque     |
-| `radius-pill`  | `999px`  | Badges, título de seção com fundo, botão principal |
+| Token         | Valor   | Uso                                                |
+| ------------- | ------- | -------------------------------------------------- |
+| `radius-sm`   | `8px`   | Inputs, botões pequenos                            |
+| `radius-md`   | `16px`  | Cards de produto                                   |
+| `radius-lg`   | `28px`  | Blocos de conteúdo grandes, seções em destaque     |
+| `radius-pill` | `999px` | Badges, título de seção com fundo, botão principal |
 
 ## Sombras
 
 Sombras suaves, com leve tingimento quente (não preto puro), para manter o
 tom artesanal em vez de "flat corporativo".
 
-| Token       | Valor                                        | Uso                    |
-|-------------|-----------------------------------------------|-------------------------|
-| `shadow-sm` | `0 1px 3px rgba(63, 74, 46, 0.10)`            | Cards em repouso        |
-| `shadow-md` | `0 6px 16px rgba(63, 74, 46, 0.14)`           | Cards em hover, dropdowns |
-| `shadow-lg` | `0 16px 32px rgba(63, 74, 46, 0.18)`          | Modais, botão flutuante de WhatsApp |
+| Token       | Valor                                | Uso                                 |
+| ----------- | ------------------------------------ | ----------------------------------- |
+| `shadow-sm` | `0 1px 3px rgba(63, 74, 46, 0.10)`   | Cards em repouso                    |
+| `shadow-md` | `0 6px 16px rgba(63, 74, 46, 0.14)`  | Cards em hover, dropdowns           |
+| `shadow-lg` | `0 16px 32px rgba(63, 74, 46, 0.18)` | Modais, botão flutuante de WhatsApp |
 
 ## Botões
 
