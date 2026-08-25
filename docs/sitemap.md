@@ -1,8 +1,9 @@
 # Sitemap — Sasah Cakes
 
 Estrutura de páginas do site institucional, definida na Fase 1
-(arquitetura de informação). Design visual e implementação de UI ficam
-para as fases seguintes.
+(arquitetura de informação). O design visual de cada página está
+especificado em [`docs/design/wireframes.md`](design/wireframes.md)
+(Fase 2); implementação de UI fica para a Fase 3.
 
 ## Páginas
 

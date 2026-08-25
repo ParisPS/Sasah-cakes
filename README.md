@@ -12,15 +12,23 @@ como canal digital de apoio ao contato direto via WhatsApp/telefone.
 
 ## Stack
 
-Ainda a ser definida — decisão prevista para a Fase 2 (Design e
-Desenvolvimento).
+Definida para a Fase 3 (implementação): **Next.js/React**, deploy via
+**Vercel**. Ainda não implementada nesta fase.
 
 ## Status atual
 
-**Fase 1 — Estrutura e Conteúdo.** Nesta fase o foco é arquitetura de
-informação e organização de conteúdo, sem design visual ou desenvolvimento
-de UI. Conteúdo estruturado em [`content/cardapio.json`](content/cardapio.json)
-e páginas planejadas em [`docs/sitemap.md`](docs/sitemap.md).
+**Fase 2 — Design concluída.** Especificação visual completa, sem código
+de aplicação ainda:
+
+- [`docs/design/design-tokens.md`](docs/design/design-tokens.md) —
+  paleta, tipografia, espaçamentos, border-radius, sombras
+- [`docs/design/wireframes.md`](docs/design/wireframes.md) — wireframes
+  mobile-first de todas as páginas
+- [`docs/design/style-guide.md`](docs/design/style-guide.md) — guia
+  consolidado de referência para a implementação
+
+Conteúdo estruturado em [`content/cardapio.json`](content/cardapio.json)
+e páginas planejadas em [`docs/sitemap.md`](docs/sitemap.md) (Fase 1).
 
 ## Fluxo de trabalho
 
