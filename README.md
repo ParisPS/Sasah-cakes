@@ -76,6 +76,18 @@ public/portfolio/        # fotos reais da galeria (servidas via next/image)
 Guia completo — como rodar cada camada localmente, estrutura de pastas de
 teste, o que o CI verifica — em [`docs/TESTING.md`](docs/TESTING.md).
 
+## Observabilidade
+
+Erros em produção (client, server e edge) são capturados automaticamente
+via **Sentry** (`@sentry/nextjs`), incluindo os error boundaries de UI
+(`app/error.tsx`, `app/global-error.tsx`). Sem session replay nem
+tracing de performance detalhado por padrão — mantém o plano gratuito
+viável para o baixo tráfego esperado.
+
+Painel, como interpretar um alerta, limites do plano gratuito e como
+habilitar tracing/replay depois, se necessário — em
+[`docs/OBSERVABILITY.md`](docs/OBSERVABILITY.md).
+
 ## Deploy
 
 Produção: **https://sasah-cakes.vercel.app/**
@@ -92,18 +104,22 @@ detecta o Next.js e usa `next build` como comando de build por padrão.
 
 ## Status atual
 
-**Fase 5 — Qualidade de Código concluída.** Lint, formatação, testes
-(unitários, integração leve e E2E) e CI configurados — ver
-[Qualidade e Testes](#qualidade-e-testes) e
-[`docs/TESTING.md`](docs/TESTING.md).
+**Fase 6 — Observabilidade concluída.** Sentry monitorando erros em
+produção (client, server, edge) e nos error boundaries de UI — ver
+[Observabilidade](#observabilidade) e
+[`docs/OBSERVABILITY.md`](docs/OBSERVABILITY.md).
 
-- Fora de escopo (registrado como nota em
-  [`docs/TESTING.md`](docs/TESTING.md#considerações-futuras-não-aplicado-por-ora)):
-  testes de mutação (Stryker) e ferramentas de arquitetura/contrato —
-  desproporcional para o porte atual do site
+- Fora de escopo (nota em
+  [`docs/OBSERVABILITY.md`](docs/OBSERVABILITY.md#considerações-futuras-não-aplicado-por-ora)):
+  Datadog, New Relic, OpenTelemetry — desproporcional sem um backend
+  próprio
 - Segue fora de escopo (nota em
   [`docs/design/style-guide.md`](docs/design/style-guide.md#considerações-futuras)):
-  observabilidade, motion refinado e formulário de pedido
+  motion refinado e formulário de pedido
+- Fase 5 — lint, formatação, testes (unitários, integração leve e E2E) e
+  CI: ver [Qualidade e Testes](#qualidade-e-testes) e
+  [`docs/TESTING.md`](docs/TESTING.md) (nota de não aplicado por ora:
+  testes de mutação e ferramentas de arquitetura)
 
 Fases anteriores, ainda válidas como fonte de verdade:
 
