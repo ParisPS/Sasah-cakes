@@ -1,4 +1,9 @@
-import data from "@/content/cardapio.json";
+// O atributo `with { type: "json" }` é exigido pelo loader ESM nativo do
+// Node (usado pelos testes E2E do Playwright, que rodam fora do bundler
+// do Next.js/Vite) desde que o package.json declara "type": "module".
+// Next.js (Turbopack) e Vitest (Vite) ignoram/aceitam o atributo — o
+// import continua funcionando normalmente nos dois.
+import data from "@/content/cardapio.json" with { type: "json" };
 
 // Tipos derivados de content/cardapio.json (fonte de verdade do conteúdo,
 // definida na Fase 1 — ver docs/sitemap.md). Nenhuma página deve

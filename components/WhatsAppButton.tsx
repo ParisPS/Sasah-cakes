@@ -13,6 +13,10 @@ export function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chamar no WhatsApp"
+      // Páginas como Como Encomendar e Contato também têm um botão "Chamar
+      // no WhatsApp" no corpo do conteúdo, com o mesmo nome acessível —
+      // data-testid distingue este botão flutuante nos testes E2E.
+      data-testid="whatsapp-float"
       className="rounded-pill bg-sage-500 text-cream-300 md:hover:bg-sage-700 fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center shadow-lg transition-transform active:scale-95"
     >
       <svg
