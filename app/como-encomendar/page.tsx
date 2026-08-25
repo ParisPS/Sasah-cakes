@@ -25,52 +25,50 @@ export default function ComoEncomendarPage() {
         {PASSOS.map((passo) => (
           <li
             key={passo.numero}
-            className="rounded-lg bg-cream-300 p-6 shadow-sm"
+            className="bg-cream-300 rounded-lg p-6 shadow-sm"
           >
-            <span className="font-heading text-2xl font-bold text-sage-700">
+            <span className="font-heading text-sage-700 text-2xl font-bold">
               {passo.numero}
             </span>
-            <p className="mt-2 text-ink-900">{passo.texto}</p>
+            <p className="text-ink-900 mt-2">{passo.texto}</p>
           </li>
         ))}
       </ol>
 
       <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div className="rounded-lg bg-cream-300 p-8 text-center shadow-sm">
+        <div className="bg-cream-300 rounded-lg p-8 text-center shadow-sm">
           <h2 className="text-sage-900">Contato</h2>
-          <p className="mt-3 text-ink-900">{contato.nome}</p>
+          <p className="text-ink-900 mt-3">{contato.nome}</p>
           <p className="text-ink-600">{contato.telefone}</p>
           <a
             href={linkWhatsApp(contato.telefone)}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 inline-block rounded-pill bg-sage-500 px-7 py-3 font-body text-cream-300 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:bg-sage-700 active:shadow-md md:hover:bg-sage-700 md:hover:shadow-md"
+            className="rounded-pill bg-sage-500 font-body text-cream-300 active:bg-sage-700 md:hover:bg-sage-700 mt-6 inline-block px-7 py-3 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md md:hover:shadow-md"
           >
             Chamar no WhatsApp
           </a>
         </div>
 
-        <div className="rounded-lg bg-cream-300 p-8 shadow-sm">
+        <div className="bg-cream-300 rounded-lg p-8 shadow-sm">
           <h2 className="text-sage-900">Pagamento e retirada</h2>
-          <ul className="mt-4 space-y-3 text-ink-900">
+          <ul className="text-ink-900 mt-4 space-y-3">
             <li>
-              <span className="font-semibold text-sage-700">
-                Pagamento:
-              </span>{" "}
+              <span className="text-sage-700 font-semibold">Pagamento:</span>{" "}
               {pagamento}
             </li>
             <li>
-              <span className="font-semibold text-sage-700">Sinal:</span>{" "}
+              <span className="text-sage-700 font-semibold">Sinal:</span>{" "}
               {sinal}
             </li>
             <li>
-              <span className="font-semibold text-sage-700">
+              <span className="text-sage-700 font-semibold">
                 Antecedência mínima:
               </span>{" "}
               {antecedenciaMinima}
             </li>
             <li>
-              <span className="font-semibold text-sage-700">Entrega:</span>{" "}
+              <span className="text-sage-700 font-semibold">Entrega:</span>{" "}
               {entrega}
             </li>
           </ul>

@@ -60,7 +60,7 @@ export default function CardapioPage() {
       <div className="mt-14 text-center">
         <Link
           href="/como-encomendar"
-          className="inline-block rounded-pill bg-sage-500 px-7 py-3 font-body text-cream-300 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:bg-sage-700 active:shadow-md md:hover:bg-sage-700 md:hover:shadow-md"
+          className="rounded-pill bg-sage-500 font-body text-cream-300 active:bg-sage-700 md:hover:bg-sage-700 inline-block px-7 py-3 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md md:hover:shadow-md"
         >
           Quero Encomendar
         </Link>

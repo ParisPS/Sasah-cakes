@@ -15,14 +15,14 @@ export default function ContatoPage() {
     <main className="mx-auto max-w-md px-4 py-16 text-center md:px-6">
       <h1 className="text-sage-900">Contato</h1>
 
-      <div className="mt-10 rounded-lg bg-cream-300 p-8 shadow-sm">
+      <div className="bg-cream-300 mt-10 rounded-lg p-8 shadow-sm">
         <p className="text-ink-900">{contato.nome}</p>
         <p className="text-ink-600">{contato.telefone}</p>
         <a
           href={linkWhatsApp(contato.telefone)}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-6 inline-block rounded-pill bg-sage-500 px-7 py-3 font-body text-cream-300 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:bg-sage-700 active:shadow-md md:hover:bg-sage-700 md:hover:shadow-md"
+          className="rounded-pill bg-sage-500 font-body text-cream-300 active:bg-sage-700 md:hover:bg-sage-700 mt-6 inline-block px-7 py-3 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md md:hover:shadow-md"
         >
           Chamar no WhatsApp
         </a>

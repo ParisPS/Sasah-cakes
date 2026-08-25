@@ -25,30 +25,30 @@ export default function Home() {
   return (
     <main>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-cream-500 px-4 py-24 text-center md:px-6 md:py-32">
+      <section className="bg-cream-500 relative overflow-hidden px-4 py-24 text-center md:px-6 md:py-32">
         {/* Manchas de aquarela decorativas — ver design-tokens.md
             ("Cards" → decoração opcional). Puramente visual, sem
             interação/motion. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-pill bg-sage-300/30 blur-3xl"
+          className="rounded-pill bg-sage-300/30 pointer-events-none absolute -top-24 -left-24 h-72 w-72 blur-3xl"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-20 -bottom-32 h-80 w-80 rounded-pill bg-sage-100/60 blur-3xl"
+          className="rounded-pill bg-sage-100/60 pointer-events-none absolute -right-20 -bottom-32 h-80 w-80 blur-3xl"
         />
 
         <div className="relative mx-auto max-w-2xl">
           <h1 className="text-sage-900">
             Bolos e docinhos feitos à mão, com carinho
           </h1>
-          <p className="mt-6 text-lg text-ink-600">
-            Encomendas para festas e ocasiões especiais — retirada no
-            local, pagamento via Pix.
+          <p className="text-ink-600 mt-6 text-lg">
+            Encomendas para festas e ocasiões especiais — retirada no local,
+            pagamento via Pix.
           </p>
           <Link
             href="/cardapio"
-            className="mt-8 inline-block rounded-pill bg-sage-500 px-7 py-3 font-body text-cream-300 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:bg-sage-700 active:shadow-md md:hover:bg-sage-700 md:hover:shadow-md"
+            className="rounded-pill bg-sage-500 font-body text-cream-300 active:bg-sage-700 md:hover:bg-sage-700 mt-8 inline-block px-7 py-3 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md md:hover:shadow-md"
           >
             Ver Cardápio
           </Link>
@@ -62,11 +62,11 @@ export default function Home() {
             <Link
               key={item.href}
               href={item.href}
-              className="group block rounded-lg bg-cream-300 p-6 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md md:hover:shadow-md"
+              className="group bg-cream-300 block rounded-lg p-6 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md md:hover:shadow-md"
             >
               <h3 className="text-sage-900">{item.title}</h3>
-              <p className="mt-2 text-ink-600">{item.description}</p>
-              <span className="mt-4 inline-block font-body text-sage-700">
+              <p className="text-ink-600 mt-2">{item.description}</p>
+              <span className="font-body text-sage-700 mt-4 inline-block">
                 Ver mais →
               </span>
             </Link>
@@ -82,7 +82,7 @@ export default function Home() {
         </div>
         <Link
           href="/galeria"
-          className="mt-6 inline-block font-body text-sage-700 underline underline-offset-4"
+          className="font-body text-sage-700 mt-6 inline-block underline underline-offset-4"
         >
           Ver galeria completa →
         </Link>

@@ -11,12 +11,12 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-cream-700 bg-white/95 backdrop-blur">
+    <header className="border-cream-700 sticky top-0 z-40 border-b bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 md:px-6">
         <Link
           href="/"
           onClick={() => setOpen(false)}
-          className="font-heading text-xl font-bold text-sage-700"
+          className="font-heading text-sage-700 text-xl font-bold"
         >
           Sasah Cakes
         </Link>
@@ -27,7 +27,7 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="font-body text-ink-900 transition-colors hover:text-sage-700"
+              className="font-body text-ink-900 hover:text-sage-700 transition-colors"
             >
               {link.label}
             </Link>
@@ -41,7 +41,7 @@ export function Header() {
           aria-expanded={open}
           aria-controls="menu-mobile"
           aria-label={open ? "Fechar menu" : "Abrir menu"}
-          className="text-2xl text-sage-700 active:opacity-70 md:hidden"
+          className="text-sage-700 text-2xl active:opacity-70 md:hidden"
         >
           {open ? "✕" : "☰"}
         </button>
@@ -51,14 +51,14 @@ export function Header() {
       {open && (
         <nav
           id="menu-mobile"
-          className="flex flex-col gap-1 border-t border-cream-700 bg-white px-4 pb-4 md:hidden"
+          className="border-cream-700 flex flex-col gap-1 border-t bg-white px-4 pb-4 md:hidden"
         >
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="rounded-sm px-2 py-3 font-body text-ink-900 active:bg-sage-100"
+              className="font-body text-ink-900 active:bg-sage-100 rounded-sm px-2 py-3"
             >
               {link.label}
             </Link>
