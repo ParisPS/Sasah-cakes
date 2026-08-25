@@ -35,6 +35,20 @@ npm run lint
 npm run build
 ```
 
+## Deploy
+
+Produção: **https://sasah-cakes.vercel.app/**
+
+O repositório está conectado à Vercel via GitHub App:
+
+- Todo Pull Request gera automaticamente uma **URL de preview** (o bot da
+  Vercel comenta o link direto no PR).
+- Merge em `main` atualiza a **produção** automaticamente, sem passo
+  manual.
+
+Nenhuma configuração adicional foi necessária no repositório — a Vercel
+detecta o Next.js e usa `next build` como comando de build por padrão.
+
 ## Status atual
 
 **Fase 2 — Design concluída.** Especificação visual completa, sem código
