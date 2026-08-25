@@ -5,7 +5,33 @@
 .vscode/
 .idea/
 
-# Dependências (a definir na Fase 2, quando a stack for escolhida)
+# Dependências
 node_modules/
-dist/
-build/
+/.pnp
+.pnp.*
+
+# Next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Produção
+/build
+/dist
+
+# Testes
+/coverage
+
+# Env
+.env*
+!.env.example
+
+# Vercel
+.vercel
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
