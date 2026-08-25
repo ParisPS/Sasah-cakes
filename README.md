@@ -12,8 +12,28 @@ como canal digital de apoio ao contato direto via WhatsApp/telefone.
 
 ## Stack
 
-Definida para a Fase 3 (implementação): **Next.js/React**, deploy via
-**Vercel**. Ainda não implementada nesta fase.
+- **Next.js (App Router) + React + TypeScript**, projeto na raiz do
+  repositório (não em subpasta `/app` isolada — o diretório `app/` que
+  existe aqui é o roteador do App Router, não um wrapper de monorepo).
+  Raiz única mantém `content/` e `docs/` acessíveis por caminho relativo
+  simples, sem a complexidade de um monorepo para um único app.
+- **Tailwind CSS v4** para estilização. Escolhido em vez de CSS Modules ou
+  styled-components porque o design system
+  ([`docs/design/design-tokens.md`](docs/design/design-tokens.md)) já é
+  uma escala de tokens nomeados (cores, radius, sombras, tipografia) — o
+  `@theme` do Tailwind v4 mapeia esses tokens 1:1 para utility classes
+  (`bg-sage-500`, `rounded-lg`, `shadow-md`, `font-heading`) direto em
+  `app/globals.css`, sem exigir arquivo de tema separado.
+- Deploy via **Vercel**, com preview automático por Pull Request.
+
+## Rodando localmente
+
+```
+npm install
+npm run dev      # http://localhost:3000
+npm run lint
+npm run build
+```
 
 ## Status atual
 

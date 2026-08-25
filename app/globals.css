@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — traduzidos de docs/design/design-tokens.md.
+ * Definidos no namespace @theme do Tailwind v4: cada variável abaixo
+ * vira automaticamente uma utility class (ex: --color-sage-500 → bg-sage-500,
+ * text-sage-500, border-sage-500).
+ *
+ * Espaçamentos (4, 8, 12, 16, 24, 32, 48, 64, 96px) não são redefinidos
+ * aqui: a escala padrão do Tailwind (p-1..p-24 em base 4px) já corresponde
+ * exatamente à escala do design system, então usamos os utilitários padrão
+ * (p-4 = 16px, p-6 = 24px, p-12 = 48px, p-24 = 96px, etc).
+ */
+@theme {
+  /* Sálvia — cor de marca / primária */
+  --color-sage-100: #dce3cb;
+  --color-sage-300: #a8b48a;
+  --color-sage-500: #7c8a5e;
+  --color-sage-700: #5c6b41;
+  --color-sage-900: #3f4a2e;
+
+  /* Creme / off-white */
+  --color-cream-300: #fbf7ec;
+  --color-cream-500: #f5efdf;
+  --color-cream-700: #e8dfc8;
+
+  /* Texto */
+  --color-ink-600: #6b6455;
+  --color-ink-900: #2e2a20;
+
+  /* Utilitária (reaproveita a cor de marca — ver design-tokens.md) */
+  --color-success: #7c8a5e;
+
+  /* Tipografia — famílias carregadas via next/font/google em app/layout.tsx */
+  --font-heading: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-lora), "Iowan Old Style", "Palatino Linotype", serif;
+
+  /* Border-radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 28px;
+  --radius-pill: 9999px;
+
+  /* Sombras — tingidas de verde, não preto puro */
+  --shadow-sm: 0 1px 3px rgba(63, 74, 46, 0.1);
+  --shadow-md: 0 6px 16px rgba(63, 74, 46, 0.14);
+  --shadow-lg: 0 16px 32px rgba(63, 74, 46, 0.18);
+}
+
+@layer base {
+  body {
+    @apply bg-white font-body text-ink-900;
+  }
+
+  /* Escala tipográfica — mobile primeiro, breakpoint desktop em md (768px),
+     conforme docs/design/design-tokens.md e docs/design/wireframes.md. */
+  h1 {
+    @apply font-heading text-[36px] leading-[1.1] font-bold md:text-[56px];
+  }
+  h2 {
+    @apply font-heading text-[28px] leading-[1.15] font-bold md:text-[40px];
+  }
+  h3 {
+    @apply font-heading text-[22px] leading-[1.2] font-semibold md:text-[28px];
+  }
+  h4 {
+    @apply font-heading text-[19px] leading-[1.25] font-semibold md:text-[22px];
+  }
+  h5 {
+    @apply font-heading text-[17px] leading-[1.3] font-semibold md:text-[18px];
+  }
+  h6 {
+    @apply font-heading text-[15px] leading-[1.3] font-semibold md:text-[16px];
+  }
+}
+
+@layer components {
+  /* Legenda/caption — ver escala tipográfica em design-tokens.md */
+  .caption {
+    @apply font-body text-[13px] leading-[1.5] text-ink-600 md:text-[14px];
+  }
+}
