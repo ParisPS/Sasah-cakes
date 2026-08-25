@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GallerySection } from "@/components/GallerySection";
+import { RevealOnScroll } from "@/components/RevealOnScroll";
 
 const DESTAQUES = [
   {
@@ -57,7 +58,7 @@ export default function Home() {
 
       {/* Destaques */}
       <section className="mx-auto max-w-5xl px-4 py-16 md:px-6">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+        <RevealOnScroll className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {DESTAQUES.map((item) => (
             <Link
               key={item.href}
@@ -71,21 +72,23 @@ export default function Home() {
               </span>
             </Link>
           ))}
-        </div>
+        </RevealOnScroll>
       </section>
 
       {/* Preview de galeria */}
       <section className="mx-auto max-w-5xl px-4 py-16 md:px-6">
-        <h2 className="text-sage-900">Nosso Trabalho</h2>
-        <div className="mt-8">
-          <GallerySection variant="preview" />
-        </div>
-        <Link
-          href="/galeria"
-          className="font-body text-sage-700 mt-6 inline-block underline underline-offset-4"
-        >
-          Ver galeria completa →
-        </Link>
+        <RevealOnScroll>
+          <h2 className="text-sage-900">Nosso Trabalho</h2>
+          <div className="mt-8">
+            <GallerySection variant="preview" />
+          </div>
+          <Link
+            href="/galeria"
+            className="font-body text-sage-700 mt-6 inline-block underline underline-offset-4"
+          >
+            Ver galeria completa →
+          </Link>
+        </RevealOnScroll>
       </section>
     </main>
   );
