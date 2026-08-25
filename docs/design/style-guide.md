@@ -80,3 +80,7 @@ Fora do escopo desta fase — apenas registradas aqui para não se perderem:
 - **Observabilidade, lint avançado, testes automatizados** — configuração
   de qualidade de código e monitoramento será tratada quando o projeto
   Next.js for implementado (Fase 3 em diante), não nesta fase de design.
+- **Cor de erro/validação** — a V1 não tem formulário (apenas botão
+  flutuante de WhatsApp), então nenhum token `error` foi definido. Se um
+  formulário for implementado em fase posterior, uma cor de
+  erro/validação precisará ser escolhida na ocasião.
