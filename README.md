@@ -1,5 +1,7 @@
 # Sasah Cakes
 
+[![CI](https://github.com/ParisPS/Sasah-cakes/actions/workflows/ci.yml/badge.svg)](https://github.com/ParisPS/Sasah-cakes/actions/workflows/ci.yml)
+
 Site institucional da **Sasah Cakes**, confeitaria da Samirah Carvalho
 Paula. Vende bolos (redondos e quadrados) e docinhos sob encomenda, com
 retirada no local e pagamento via Pix.
@@ -33,6 +35,8 @@ npm install
 npm run dev      # http://localhost:3000
 npm run lint
 npm run build
+npm run test      # testes unitários/integração — ver docs/TESTING.md
+npm run test:e2e   # testes end-to-end (Playwright)
 ```
 
 ## Estrutura de pastas
@@ -56,6 +60,22 @@ docs/                    # sitemap, guidelines, design (Fases 1 e 2)
 public/portfolio/        # fotos reais da galeria (servidas via next/image)
 ```
 
+## Qualidade e Testes
+
+- **ESLint** (`eslint-config-next`) para correção — mantido em vez de
+  migrar para Biome, pelas regras específicas do Next.js/React
+  (`core-web-vitals`, `exhaustive-deps`) mantidas pela Vercel.
+- **Prettier** (+ `prettier-plugin-tailwindcss`) para formatação.
+- **Vitest** + Testing Library para testes unitários e de integração leve
+  (`lib/cardapio.ts`, componentes recorrentes).
+- **Playwright** para testes end-to-end, em mobile (390px) e desktop
+  (1280px).
+- **GitHub Actions** roda lint + testes unitários + E2E em todo Pull
+  Request; a `main` exige os três passando antes de permitir merge.
+
+Guia completo — como rodar cada camada localmente, estrutura de pastas de
+teste, o que o CI verifica — em [`docs/TESTING.md`](docs/TESTING.md).
+
 ## Deploy
 
 Produção: **https://sasah-cakes.vercel.app/**
@@ -72,29 +92,18 @@ detecta o Next.js e usa `next build` como comando de build por padrão.
 
 ## Status atual
 
-**Fase 4 — Conteúdo real concluída.** A galeria (Home + página Galeria)
-exibe 12 fotos reais de trabalhos entregues (7 bolos redondos, 3 bolos
-quadrados, 2 bandejas de docinhos), carregadas via `next/image` a partir
-de `public/portfolio/`, com categoria e texto alternativo descritivo
-definidos em [`content/cardapio.json`](content/cardapio.json). As fotos
-são recortes de carrossel do Instagram (~231×325px) — resolução moderada,
-substituíveis por versões em melhor definição no futuro sem mudança de
-estrutura.
+**Fase 5 — Qualidade de Código concluída.** Lint, formatação, testes
+(unitários, integração leve e E2E) e CI configurados — ver
+[Qualidade e Testes](#qualidade-e-testes) e
+[`docs/TESTING.md`](docs/TESTING.md).
 
-As 6 páginas do sitemap estão implementadas e em produção:
-
-- Home, [`/cardapio`](https://sasah-cakes.vercel.app/cardapio),
-  [`/docinhos`](https://sasah-cakes.vercel.app/docinhos),
-  [`/como-encomendar`](https://sasah-cakes.vercel.app/como-encomendar),
-  [`/galeria`](https://sasah-cakes.vercel.app/galeria) e
-  [`/contato`](https://sasah-cakes.vercel.app/contato)
-- Componentes recorrentes de
-  [`docs/design/style-guide.md`](docs/design/style-guide.md): Header
-  sticky, botão flutuante de WhatsApp, card de produto, badges e galeria
-- Fora de escopo (registrado como nota, ver
+- Fora de escopo (registrado como nota em
+  [`docs/TESTING.md`](docs/TESTING.md#considerações-futuras-não-aplicado-por-ora)):
+  testes de mutação (Stryker) e ferramentas de arquitetura/contrato —
+  desproporcional para o porte atual do site
+- Segue fora de escopo (nota em
   [`docs/design/style-guide.md`](docs/design/style-guide.md#considerações-futuras)):
-  motion refinado, observabilidade, testes automatizados e formulário de
-  pedido
+  observabilidade, motion refinado e formulário de pedido
 
 Fases anteriores, ainda válidas como fonte de verdade:
 
@@ -104,6 +113,14 @@ Fases anteriores, ainda válidas como fonte de verdade:
   [`docs/design/design-tokens.md`](docs/design/design-tokens.md),
   [`docs/design/wireframes.md`](docs/design/wireframes.md) e
   [`docs/design/style-guide.md`](docs/design/style-guide.md)
+- Fase 3 — as 6 páginas do sitemap implementadas e em produção: Home,
+  [`/cardapio`](https://sasah-cakes.vercel.app/cardapio),
+  [`/docinhos`](https://sasah-cakes.vercel.app/docinhos),
+  [`/como-encomendar`](https://sasah-cakes.vercel.app/como-encomendar),
+  [`/galeria`](https://sasah-cakes.vercel.app/galeria) e
+  [`/contato`](https://sasah-cakes.vercel.app/contato)
+- Fase 4 — galeria com 12 fotos reais de trabalhos entregues, servidas via
+  `next/image` a partir de `public/portfolio/`
 
 ## Fluxo de trabalho
 
