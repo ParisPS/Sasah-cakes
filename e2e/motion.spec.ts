@@ -156,9 +156,20 @@ test.describe("sem layout shift perceptível (CLS)", () => {
 
   test("Galeria ao carregar as fotos (skeleton → imagem)", async ({ page }) => {
     test.setTimeout(60_000); // carregar 12 fotos reais pode levar um tempo
-    const cls = await measureCls(page, "/galeria", () =>
-      waitForPortfolioImages(page),
-    );
+    const cls = await measureCls(page, "/galeria", async () => {
+      // No mobile, o grid vira 1 coluna — a página fica bem mais alta, e
+      // as últimas fotos ficam longe o suficiente da viewport inicial
+      // para o lazy loading nativo nunca disparar sem rolar. Desce a
+      // página em passos para trazer cada uma para perto da viewport.
+      await page.evaluate(async () => {
+        const step = window.innerHeight;
+        for (let y = 0; y < document.body.scrollHeight; y += step) {
+          window.scrollTo({ top: y, behavior: "instant" });
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+      });
+      await waitForPortfolioImages(page);
+    });
 
     expect(cls).toBeLessThan(0.1);
   });
