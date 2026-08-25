@@ -1,0 +1,62 @@
+{
+  "bolos": {
+    "redondos": [
+      { "tamanho": "15cm", "rendimento": "12 fatias", "preco": 180.00 },
+      { "tamanho": "20cm", "rendimento": "25 fatias", "preco": 210.00 },
+      { "tamanho": "25cm", "rendimento": "35 fatias", "preco": 240.00 }
+    ],
+    "quadrados": [
+      { "tamanho": "20x15", "rendimento": "25 fatias", "preco": 190.00 },
+      { "tamanho": "27x15", "rendimento": "35 fatias", "preco": 210.00 },
+      { "tamanho": "30x22", "rendimento": "45 fatias", "preco": 240.00 },
+      { "tamanho": "36x26", "rendimento": "65 fatias", "preco": 270.00 },
+      { "tamanho": "40x30", "rendimento": "85 fatias", "preco": 300.00 }
+    ],
+    "recheiosDisponiveis": [
+      "Amendoim",
+      "Beijinho",
+      "Brigadeiro",
+      "Doce de Leite",
+      "Limão",
+      "Maracujá",
+      "Ninho",
+      "Paçoca"
+    ]
+  },
+  "docinhos": {
+    "quantidade": 100,
+    "preco": 120.00,
+    "opcoesDeSabores": [
+      { "quantidadeSabores": 2, "descricao": "50 unidades de cada sabor" },
+      { "quantidadeSabores": 4, "descricao": "25 unidades de cada sabor" }
+    ],
+    "saboresDisponiveis": [
+      "Beijinho",
+      "Brigadeiro",
+      "Cajuzinho",
+      "Churros",
+      "Ninho",
+      "Olho de Sogra",
+      "Paçoca"
+    ]
+  },
+  "comoEncomendar": {
+    "contato": {
+      "nome": "Samirah Carvalho Paula",
+      "telefone": "(21) 98200-8885"
+    },
+    "pagamento": "Pix (chave = telefone de contato)",
+    "entrega": "Somente retirada no local (sem entrega)",
+    "antecedenciaMinima": "4 dias",
+    "sinal": "50% do valor no ato do pedido"
+  },
+  "portfolio": {
+    "status": "placeholder — fotos reais serão fornecidas depois",
+    "itens": [
+      { "arquivo": "portfolio-01.jpg", "categoria": "bolo temático" },
+      { "arquivo": "portfolio-02.jpg", "categoria": "bolo futebol" },
+      { "arquivo": "portfolio-03.jpg", "categoria": "bolo festa" },
+      { "arquivo": "portfolio-04.jpg", "categoria": "bandeja de docinhos" }
+    ]
+  }
+}
