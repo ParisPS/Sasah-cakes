@@ -1,14 +1,92 @@
-// Placeholder temporário — a Home completa é implementada na Issue
-// "Implementar página Home" (docs/design/wireframes.md).
+import Link from "next/link";
+import { GallerySection } from "@/components/GallerySection";
+
+const DESTAQUES = [
+  {
+    href: "/cardapio",
+    title: "Cardápio de Bolos",
+    description: "Bolos redondos e quadrados, recheios à sua escolha.",
+  },
+  {
+    href: "/docinhos",
+    title: "Docinhos",
+    description: "Pacotes de 100 docinhos, com até 4 sabores diferentes.",
+  },
+  {
+    href: "/como-encomendar",
+    title: "Como Encomendar",
+    description: "Contato, pagamento via Pix e retirada no local.",
+  },
+];
+
+// Home — ver docs/design/wireframes.md ("Home") e
+// docs/design/style-guide.md.
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-cream-500 p-8">
-      <div className="rounded-lg bg-white p-12 text-center shadow-sm">
-        <h1 className="text-sage-700">Sasah Cakes</h1>
-        <p className="mt-4 text-ink-600">
-          Bootstrap Next.js concluído — design tokens configurados.
-        </p>
-      </div>
+    <main>
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-cream-500 px-4 py-24 text-center md:px-6 md:py-32">
+        {/* Manchas de aquarela decorativas — ver design-tokens.md
+            ("Cards" → decoração opcional). Puramente visual, sem
+            interação/motion. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-pill bg-sage-300/30 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-20 -bottom-32 h-80 w-80 rounded-pill bg-sage-100/60 blur-3xl"
+        />
+
+        <div className="relative mx-auto max-w-2xl">
+          <h1 className="text-sage-900">
+            Bolos e docinhos feitos à mão, com carinho
+          </h1>
+          <p className="mt-6 text-lg text-ink-600">
+            Encomendas para festas e ocasiões especiais — retirada no
+            local, pagamento via Pix.
+          </p>
+          <Link
+            href="/cardapio"
+            className="mt-8 inline-block rounded-pill bg-sage-500 px-7 py-3 font-body text-cream-300 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:bg-sage-700 active:shadow-md md:hover:bg-sage-700 md:hover:shadow-md"
+          >
+            Ver Cardápio
+          </Link>
+        </div>
+      </section>
+
+      {/* Destaques */}
+      <section className="mx-auto max-w-5xl px-4 py-16 md:px-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {DESTAQUES.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="group block rounded-lg bg-cream-300 p-6 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md md:hover:shadow-md"
+            >
+              <h3 className="text-sage-900">{item.title}</h3>
+              <p className="mt-2 text-ink-600">{item.description}</p>
+              <span className="mt-4 inline-block font-body text-sage-700">
+                Ver mais →
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Preview de galeria */}
+      <section className="mx-auto max-w-5xl px-4 py-16 md:px-6">
+        <h2 className="text-sage-900">Nosso Trabalho</h2>
+        <div className="mt-8">
+          <GallerySection variant="preview" />
+        </div>
+        <Link
+          href="/galeria"
+          className="mt-6 inline-block font-body text-sage-700 underline underline-offset-4"
+        >
+          Ver galeria completa →
+        </Link>
+      </section>
     </main>
   );
 }
