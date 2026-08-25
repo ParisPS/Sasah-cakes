@@ -27,8 +27,8 @@ especificado em [`docs/design/wireframes.md`](design/wireframes.md)
 
 - **Galeria**
   Portfólio de bolos decorados (temáticos, futebol, festas) e bandejas de
-  docinhos. Usa placeholders até que fotos reais sejam fornecidas. Fonte
-  de dados: `content/cardapio.json` (`portfolio`).
+  docinhos, com fotos reais de trabalhos entregues. Fonte de dados:
+  `content/cardapio.json` (`portfolio`); imagens em `public/portfolio/`.
 
 - **Contato**
   Repete as informações de contato (nome e telefone) e reforça o canal de

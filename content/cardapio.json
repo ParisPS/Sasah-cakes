@@ -51,12 +51,68 @@
     "sinal": "50% do valor no ato do pedido"
   },
   "portfolio": {
-    "status": "placeholder — fotos reais serão fornecidas depois",
+    "status": "Fotos reais de trabalhos entregues.",
     "itens": [
-      { "arquivo": "portfolio-01.jpg", "categoria": "bolo temático" },
-      { "arquivo": "portfolio-02.jpg", "categoria": "bolo futebol" },
-      { "arquivo": "portfolio-03.jpg", "categoria": "bolo festa" },
-      { "arquivo": "portfolio-04.jpg", "categoria": "bandeja de docinhos" }
+      {
+        "arquivo": "bolo-redondo-rosa-floral.jpg",
+        "categoria": "bolo-redondo",
+        "alt": "Bolo redondo rosa claro decorado com rosas e topo comemorativo de aniversário de 85 anos"
+      },
+      {
+        "arquivo": "bolo-redondo-aniversario-rosa.jpg",
+        "categoria": "bolo-redondo",
+        "alt": "Bolo redondo rosa degradê decorado com flores lilás e topo 'Parabéns'"
+      },
+      {
+        "arquivo": "bolo-redondo-drip-azul.jpg",
+        "categoria": "bolo-redondo",
+        "alt": "Bolo redondo branco com drip azul na base"
+      },
+      {
+        "arquivo": "bolo-redondo-doce-de-leite-coco.jpg",
+        "categoria": "bolo-redondo",
+        "alt": "Bolo redondo naked cake de doce de leite com trufas de coco no topo"
+      },
+      {
+        "arquivo": "bolo-redondo-laco-lilas.jpg",
+        "categoria": "bolo-redondo",
+        "alt": "Bolo redondo branco decorado com laços e corações lilás"
+      },
+      {
+        "arquivo": "bolo-redondo-tema-doramas.jpg",
+        "categoria": "bolo-redondo",
+        "alt": "Bolo redondo branco e rosa tema doramas, com corações e topo personalizado"
+      },
+      {
+        "arquivo": "bolo-redondo-festa-junina-copa.jpg",
+        "categoria": "bolo-redondo",
+        "alt": "Bolo redondo tema festa junina e Copa do Mundo, com topo 'Arraiá da Torcida'"
+      },
+      {
+        "arquivo": "bolo-quadrado-lilas-edicao-limitada.jpg",
+        "categoria": "bolo-quadrado",
+        "alt": "Bolo quadrado com chantilly lilás e topo 'Edição Limitada'"
+      },
+      {
+        "arquivo": "bolo-quadrado-branco-vermelho.jpg",
+        "categoria": "bolo-quadrado",
+        "alt": "Bolo quadrado branco com florzinhas vermelhas no topo e borda prateada"
+      },
+      {
+        "arquivo": "bolo-quadrado-flamengo.jpg",
+        "categoria": "bolo-quadrado",
+        "alt": "Bolo quadrado tema Flamengo, com mascote, bolas de futebol e escudo do time"
+      },
+      {
+        "arquivo": "docinhos-bandeja-brigadeiro.jpg",
+        "categoria": "docinho",
+        "alt": "Bandeja de brigadeiros em forminhas vermelhas e brancas"
+      },
+      {
+        "arquivo": "docinhos-bandeja-lilas.jpg",
+        "categoria": "docinho",
+        "alt": "Bandeja de docinhos brancos em forminhas lilás"
+      }
     ]
   }
 }

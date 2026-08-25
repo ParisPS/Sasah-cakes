@@ -53,7 +53,7 @@ lib/
   nav.ts                  # links de navegação (Header)
 content/cardapio.json    # fonte de verdade do conteúdo (Fase 1)
 docs/                    # sitemap, guidelines, design (Fases 1 e 2)
-assets/portfolio/        # placeholders da galeria até fotos reais
+public/portfolio/        # fotos reais da galeria (servidas via next/image)
 ```
 
 ## Deploy
@@ -72,8 +72,16 @@ detecta o Next.js e usa `next build` como comando de build por padrão.
 
 ## Status atual
 
-**Fase 3 — Desenvolvimento concluída.** As 6 páginas do sitemap estão
-implementadas e em produção:
+**Fase 4 — Conteúdo real concluída.** A galeria (Home + página Galeria)
+exibe 12 fotos reais de trabalhos entregues (7 bolos redondos, 3 bolos
+quadrados, 2 bandejas de docinhos), carregadas via `next/image` a partir
+de `public/portfolio/`, com categoria e texto alternativo descritivo
+definidos em [`content/cardapio.json`](content/cardapio.json). As fotos
+são recortes de carrossel do Instagram (~231×325px) — resolução moderada,
+substituíveis por versões em melhor definição no futuro sem mudança de
+estrutura.
+
+As 6 páginas do sitemap estão implementadas e em produção:
 
 - Home, [`/cardapio`](https://sasah-cakes.vercel.app/cardapio),
   [`/docinhos`](https://sasah-cakes.vercel.app/docinhos),
@@ -83,7 +91,7 @@ implementadas e em produção:
 - Componentes recorrentes de
   [`docs/design/style-guide.md`](docs/design/style-guide.md): Header
   sticky, botão flutuante de WhatsApp, card de produto, badges e galeria
-- Fora de escopo desta fase (registrado como nota, ver
+- Fora de escopo (registrado como nota, ver
   [`docs/design/style-guide.md`](docs/design/style-guide.md#considerações-futuras)):
   motion refinado, observabilidade, testes automatizados e formulário de
   pedido

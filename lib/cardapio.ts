@@ -15,9 +15,13 @@ export type OpcaoSabores = {
   descricao: string;
 };
 
+export type CategoriaPortfolio = "bolo-redondo" | "bolo-quadrado" | "docinho";
+
 export type ItemPortfolio = {
   arquivo: string;
-  categoria: string;
+  categoria: CategoriaPortfolio;
+  /** Texto alternativo descritivo, para acessibilidade (ver next/image). */
+  alt: string;
 };
 
 export type Cardapio = {
@@ -49,6 +53,13 @@ export type Cardapio = {
 };
 
 export const cardapio = data as Cardapio;
+
+/** Rótulo legível para cada categoria de foto do portfólio (usado no Badge). */
+export const CATEGORIA_PORTFOLIO_LABELS: Record<CategoriaPortfolio, string> = {
+  "bolo-redondo": "Bolo redondo",
+  "bolo-quadrado": "Bolo quadrado",
+  docinho: "Docinhos",
+};
 
 /** Formata um valor numérico como preço em reais (ex: 180 → "R$ 180,00"). */
 export function formatarPreco(valor: number): string {
