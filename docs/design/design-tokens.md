@@ -37,12 +37,15 @@ material da cliente.
 | `ink-900`   | `#2E2A20` | Texto principal (marrom-preto quente, não preto puro) |
 | `ink-600`   | `#6B6455` | Texto secundário, legendas                |
 
-### Utilitárias (necessárias para UI real — formulário de encomenda, feedback)
+### Utilitárias
 
 | Token       | Hex       | Uso                          |
 |-------------|-----------|-------------------------------|
 | `success`   | `#7C8A5E` (= `sage-500`) | Confirmações — reaproveita a cor de marca |
-| `error`     | `#B5573F` | Terracota queimado, para validação de formulário — combina com a paleta sem introduzir uma cor fria |
+
+A V1 do site não tem formulário (apenas botão flutuante de WhatsApp), então
+nenhum token de erro/validação é definido nesta fase. Ver nota em
+[`style-guide.md`](style-guide.md#considerações-futuras).
 
 ## Tipografia
 
