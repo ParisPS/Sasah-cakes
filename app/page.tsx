@@ -49,7 +49,7 @@ export default function Home() {
           </p>
           <Link
             href="/cardapio"
-            className="rounded-pill bg-sage-500 font-body text-cream-300 active:bg-sage-700 md:hover:bg-sage-700 mt-8 inline-block px-7 py-3 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md md:hover:shadow-md"
+            className="rounded-pill bg-sage-500 font-body text-cream-300 active:bg-sage-700 md:hover:bg-sage-700 mt-8 inline-block px-7 py-3 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md motion-reduce:transition-none md:hover:shadow-md"
           >
             Ver Cardápio
           </Link>
@@ -63,7 +63,7 @@ export default function Home() {
             <Link
               key={item.href}
               href={item.href}
-              className="group bg-cream-300 block rounded-lg p-6 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md md:hover:shadow-md"
+              className="group bg-cream-300 block rounded-lg p-6 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md motion-reduce:transition-none md:hover:shadow-md"
             >
               <h3 className="text-sage-900">{item.title}</h3>
               <p className="text-ink-600 mt-2">{item.description}</p>
