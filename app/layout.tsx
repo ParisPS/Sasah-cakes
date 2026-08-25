@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Fraunces, Lora } from "next/font/google";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -29,7 +32,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={`${fraunces.variable} ${lora.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <Header />
+        {children}
+        <Footer />
+        <WhatsAppButton />
+      </body>
     </html>
   );
 }

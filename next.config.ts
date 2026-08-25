@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  // O projeto já documenta seu fluxo de trabalho em
+  // docs/PROJECT_GUIDELINES.md — desliga a geração automática de
+  // AGENTS.md/CLAUDE.md do Next.js para não duplicar/conflitar com isso.
+  agentRules: false,
 };
 
 export default nextConfig;
