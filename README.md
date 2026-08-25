@@ -35,6 +35,27 @@ npm run lint
 npm run build
 ```
 
+## Estrutura de pastas
+
+```
+app/                    # App Router — uma pasta por rota
+  layout.tsx             # layout raiz: fontes, Header, Footer, WhatsAppButton
+  page.tsx                # Home ("/")
+  globals.css              # design tokens (Tailwind v4 @theme) + tipografia base
+  cardapio/page.tsx       # "/cardapio"
+  docinhos/page.tsx       # "/docinhos"
+  como-encomendar/page.tsx # "/como-encomendar"
+  galeria/page.tsx        # "/galeria"
+  contato/page.tsx        # "/contato"
+components/              # componentes recorrentes (style-guide.md)
+lib/
+  cardapio.ts             # tipos + helpers sobre content/cardapio.json
+  nav.ts                  # links de navegação (Header)
+content/cardapio.json    # fonte de verdade do conteúdo (Fase 1)
+docs/                    # sitemap, guidelines, design (Fases 1 e 2)
+assets/portfolio/        # placeholders da galeria até fotos reais
+```
+
 ## Deploy
 
 Produção: **https://sasah-cakes.vercel.app/**
@@ -51,18 +72,30 @@ detecta o Next.js e usa `next build` como comando de build por padrão.
 
 ## Status atual
 
-**Fase 2 — Design concluída.** Especificação visual completa, sem código
-de aplicação ainda:
+**Fase 3 — Desenvolvimento concluída.** As 6 páginas do sitemap estão
+implementadas e em produção:
 
-- [`docs/design/design-tokens.md`](docs/design/design-tokens.md) —
-  paleta, tipografia, espaçamentos, border-radius, sombras
-- [`docs/design/wireframes.md`](docs/design/wireframes.md) — wireframes
-  mobile-first de todas as páginas
-- [`docs/design/style-guide.md`](docs/design/style-guide.md) — guia
-  consolidado de referência para a implementação
+- Home, [`/cardapio`](https://sasah-cakes.vercel.app/cardapio),
+  [`/docinhos`](https://sasah-cakes.vercel.app/docinhos),
+  [`/como-encomendar`](https://sasah-cakes.vercel.app/como-encomendar),
+  [`/galeria`](https://sasah-cakes.vercel.app/galeria) e
+  [`/contato`](https://sasah-cakes.vercel.app/contato)
+- Componentes recorrentes de
+  [`docs/design/style-guide.md`](docs/design/style-guide.md): Header
+  sticky, botão flutuante de WhatsApp, card de produto, badges e galeria
+- Fora de escopo desta fase (registrado como nota, ver
+  [`docs/design/style-guide.md`](docs/design/style-guide.md#considerações-futuras)):
+  motion refinado, observabilidade, testes automatizados e formulário de
+  pedido
 
-Conteúdo estruturado em [`content/cardapio.json`](content/cardapio.json)
-e páginas planejadas em [`docs/sitemap.md`](docs/sitemap.md) (Fase 1).
+Fases anteriores, ainda válidas como fonte de verdade:
+
+- Fase 1 — conteúdo em [`content/cardapio.json`](content/cardapio.json) e
+  páginas em [`docs/sitemap.md`](docs/sitemap.md)
+- Fase 2 — especificação visual em
+  [`docs/design/design-tokens.md`](docs/design/design-tokens.md),
+  [`docs/design/wireframes.md`](docs/design/wireframes.md) e
+  [`docs/design/style-guide.md`](docs/design/style-guide.md)
 
 ## Fluxo de trabalho
 
