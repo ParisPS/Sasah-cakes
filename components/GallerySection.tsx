@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { cardapio, CATEGORIA_PORTFOLIO_LABELS } from "@/lib/cardapio";
 import { Badge } from "./Badge";
+import { PortfolioImage } from "./PortfolioImage";
 
 type GallerySectionProps = {
   /**
@@ -15,10 +15,12 @@ type GallerySectionProps = {
 };
 
 // Fotos reais de trabalhos entregues (Fase 4), servidas de
-// public/portfolio/ e carregadas via next/image (lazy loading + formatos
-// modernos automáticos). Proporção retrato (3/4) para acomodar as fotos
-// originais (~231x325px, recortadas de um carrossel de Instagram) sem
-// cortar demais o bolo.
+// public/portfolio/ e carregadas via next/image (lazy loading nativo —
+// nenhum item aqui usa `priority` — + formatos modernos automáticos).
+// PortfolioImage (Fase 7) cobre o carregamento com um skeleton na paleta
+// da marca. Proporção retrato (3/4) para acomodar as fotos originais
+// (~231x325px, recortadas de um carrossel de Instagram) sem cortar
+// demais o bolo.
 export function GallerySection({ variant = "full" }: GallerySectionProps) {
   const itens = cardapio.portfolio.itens;
 
@@ -39,16 +41,14 @@ export function GallerySection({ variant = "full" }: GallerySectionProps) {
               : "bg-sage-100 relative aspect-3/4 overflow-hidden rounded-md"
           }
         >
-          <Image
+          <PortfolioImage
             src={`/portfolio/${item.arquivo}`}
             alt={item.alt}
-            fill
             sizes={
               variant === "preview"
                 ? "(min-width: 768px) 25vw, 160px"
                 : "(min-width: 768px) 33vw, 100vw"
             }
-            className="object-cover"
           />
           <div className="absolute bottom-2 left-2">
             <Badge>{CATEGORIA_PORTFOLIO_LABELS[item.categoria]}</Badge>
