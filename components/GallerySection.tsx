@@ -1,4 +1,5 @@
-import { cardapio } from "@/lib/cardapio";
+import Image from "next/image";
+import { cardapio, CATEGORIA_PORTFOLIO_LABELS } from "@/lib/cardapio";
 import { Badge } from "./Badge";
 
 type GallerySectionProps = {
@@ -13,10 +14,11 @@ type GallerySectionProps = {
   variant?: "preview" | "full";
 };
 
-// Fotos reais ainda não foram fornecidas (ver assets/portfolio/README.md)
-// — cada item é renderizado como um placeholder sage-100 com a categoria
-// em badge sobreposto, até que os arquivos reais substituam os nomes em
-// content/cardapio.json (portfolio.itens).
+// Fotos reais de trabalhos entregues (Fase 4), servidas de
+// public/portfolio/ e carregadas via next/image (lazy loading + formatos
+// modernos automáticos). Proporção retrato (3/4) para acomodar as fotos
+// originais (~231x325px, recortadas de um carrossel de Instagram) sem
+// cortar demais o bolo.
 export function GallerySection({ variant = "full" }: GallerySectionProps) {
   const itens = cardapio.portfolio.itens;
 
@@ -33,12 +35,23 @@ export function GallerySection({ variant = "full" }: GallerySectionProps) {
           key={item.arquivo}
           className={
             variant === "preview"
-              ? "relative aspect-square w-40 shrink-0 overflow-hidden rounded-md bg-sage-100 md:w-auto"
-              : "relative aspect-square overflow-hidden rounded-md bg-sage-100"
+              ? "relative aspect-3/4 w-40 shrink-0 overflow-hidden rounded-md bg-sage-100 md:w-auto"
+              : "relative aspect-3/4 overflow-hidden rounded-md bg-sage-100"
           }
         >
+          <Image
+            src={`/portfolio/${item.arquivo}`}
+            alt={item.alt}
+            fill
+            sizes={
+              variant === "preview"
+                ? "(min-width: 768px) 25vw, 160px"
+                : "(min-width: 768px) 33vw, 100vw"
+            }
+            className="object-cover"
+          />
           <div className="absolute bottom-2 left-2">
-            <Badge>{item.categoria}</Badge>
+            <Badge>{CATEGORIA_PORTFOLIO_LABELS[item.categoria]}</Badge>
           </div>
         </div>
       ))}
