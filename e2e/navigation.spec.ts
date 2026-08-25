@@ -38,7 +38,14 @@ test.describe("navegação entre páginas via header", () => {
         .click();
 
       await expect(page).toHaveURL(destino.path);
-      await expect(page.locator("h1")).toContainText(destino.heading);
+      // getByRole (não locator("h1") solto): com app/loading.tsx (Fase 7),
+      // o Next.js pode manter a página anterior renderizada por um
+      // instante enquanto a nova carrega — nessa janela, dois <h1>
+      // coexistem no DOM. Filtrar por nome evita o "strict mode
+      // violation" de pegar os dois.
+      await expect(
+        page.getByRole("heading", { level: 1, name: destino.heading }),
+      ).toBeVisible();
     });
   }
 

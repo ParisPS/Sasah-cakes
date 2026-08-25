@@ -74,16 +74,19 @@ Usada na Home (preview) e na página Galeria (completa).
 - Desktop (≥768px): nav inline substitui o `☰`.
 - Fixo no topo (`position: sticky`) em ambas as versões.
 
+## Motion / animações de interface
+
+Princípios de transição, duração, easing e acessibilidade (sempre
+respeitando `prefers-reduced-motion`) documentados em
+[`motion-principles.md`](motion-principles.md) e implementados na Fase 7
+(skeleton loading da galeria, entrada de seções ao rolar a Home, menu
+mobile animado, feedback de carregamento entre rotas).
+
 ## Considerações futuras
 
-Fora do escopo desta fase — apenas registradas aqui para não se perderem:
+Fora do escopo do projeto até aqui — apenas registradas para não se
+perderem:
 
-- **Motion / animações de interface** — princípios de transição e
-  microinterações (hover de cards, entrada de seções ao rolar a página)
-  serão definidos em uma fase específica de motion design.
-- **Observabilidade, lint avançado, testes automatizados** — configuração
-  de qualidade de código e monitoramento será tratada quando o projeto
-  Next.js for implementado (Fase 3 em diante), não nesta fase de design.
 - **Cor de erro/validação** — a V1 não tem formulário (apenas botão
   flutuante de WhatsApp), então nenhum token `error` foi definido. Se um
   formulário for implementado em fase posterior, uma cor de
