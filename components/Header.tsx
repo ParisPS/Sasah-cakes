@@ -41,18 +41,45 @@ export function Header() {
           aria-expanded={open}
           aria-controls="menu-mobile"
           aria-label={open ? "Fechar menu" : "Abrir menu"}
-          className="text-sage-700 text-2xl active:opacity-70 md:hidden"
+          className="text-sage-700 grid text-2xl active:opacity-70 md:hidden"
         >
-          {open ? "✕" : "☰"}
+          {/* Duas camadas sobrepostas (grid + mesma célula) em vez de
+              trocar o texto na hora — permite um fade/rotate suave entre
+              ☰ e ✕ em vez de um corte seco. Ver
+              docs/design/motion-principles.md (duration-200, ease-in-out). */}
+          <span
+            aria-hidden="true"
+            className={`col-start-1 row-start-1 transition-all duration-200 ease-in-out motion-reduce:transition-none ${
+              open ? "rotate-45 opacity-0" : "rotate-0 opacity-100"
+            }`}
+          >
+            ☰
+          </span>
+          <span
+            aria-hidden="true"
+            className={`col-start-1 row-start-1 transition-all duration-200 ease-in-out motion-reduce:transition-none ${
+              open ? "rotate-0 opacity-100" : "-rotate-45 opacity-0"
+            }`}
+          >
+            ✕
+          </span>
         </button>
       </div>
 
-      {/* Menu mobile */}
-      {open && (
-        <nav
-          id="menu-mobile"
-          className="border-cream-700 flex flex-col gap-1 border-t bg-white px-4 pb-4 md:hidden"
-        >
+      {/* Menu mobile — sempre no DOM (não condicional) para poder animar
+          a saída, não só a entrada. Truque do CSS grid para animar até
+          "altura automática" sem JS medindo o conteúdo: uma única linha
+          de grid transiciona de 0fr para 1fr. `inert` tira o menu
+          fechado da árvore de acessibilidade e do foco por teclado,
+          mesmo com o nó continuando no DOM. */}
+      <nav
+        id="menu-mobile"
+        inert={!open}
+        className={`grid overflow-hidden transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none md:hidden ${
+          open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        }`}
+      >
+        <div className="border-cream-700 flex min-h-0 flex-col gap-1 overflow-hidden border-t bg-white px-4 pb-4">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -63,8 +90,8 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-        </nav>
-      )}
+        </div>
+      </nav>
     </header>
   );
 }
