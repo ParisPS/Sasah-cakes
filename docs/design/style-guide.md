@@ -32,8 +32,12 @@ Usado no Cardápio (tamanhos de bolo) e em Docinhos (pacote).
 
 - Estrutura: nome/tamanho (H4 ou H5) + rendimento (corpo, `ink-600`) +
   preço em destaque (H4, `sage-700`).
-- Estilo: `radius-lg`, fundo `cream-300`, `shadow-sm` em repouso →
-  `shadow-md` no hover, padding `24px`.
+- Estilo: `radius-lg`, fundo `cream-300`, padding `24px`. Estado
+  funcional principal é **active/tap** (mobile-first, sem cursor):
+  `shadow-sm` em repouso → `shadow-md` ao toque/clique (active), com leve
+  escala (ex: `scale(0.98)`) ou redução de opacidade para dar feedback
+  tátil. Hover (`shadow-md`) pode existir como enhancement **opcional**
+  apenas em desktop (≥768px).
 - Variante "pacote" (Docinhos): mesmo card, mais largo, com sub-lista das
   opções de sabores dentro.
 
