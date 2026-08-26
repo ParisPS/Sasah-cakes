@@ -92,15 +92,16 @@ test.describe("prefers-reduced-motion", () => {
     ).toBeVisible();
   });
 
-  test("cards de destaque da Home são clicáveis com reduced motion", async ({
+  // Desde a Fase 9, a seção de produtos em destaque não tem mais um link
+  // "Ver mais" por card (eram cards que só espelhavam a navegação —
+  // achado da auditoria, item 1.1); o CTA secundário "Ver cardápio
+  // completo", único e abaixo da seção, assume esse papel.
+  test("CTA 'Ver cardápio completo' da Home funciona com reduced motion", async ({
     page,
   }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
-    await page
-      .getByRole("link", { name: /Ver mais/ })
-      .first()
-      .click();
+    await page.getByRole("link", { name: "Ver cardápio completo" }).click();
 
     await expect(page).toHaveURL("/cardapio");
   });
