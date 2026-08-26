@@ -21,6 +21,12 @@ type GallerySectionProps = {
    * filtro de categoria no topo — ver docs/redesign/arquitetura.md
    * "3.3". Default true para manter o comportamento da Home. */
   showBadge?: boolean;
+  /** Nomes de arquivo que ocupam 2 colunas no grid "full" (desktop) —
+   * cria o "grid editorial" da Galeria (Fase 9) sem variar o crop da
+   * foto em si, que continua fixo em 3:4 (decisão da Etapa 2, mantida
+   * aqui: variar o TAMANHO de exibição, não a proporção do recorte). Sem
+   * efeito no variant "preview". */
+  arquivosDestacados?: string[];
 };
 
 // Fotos reais de trabalhos entregues (Fase 4), servidas de
@@ -35,20 +41,25 @@ export function GallerySection({
   variant = "full",
   itens = cardapio.portfolio.itens,
   showBadge = true,
+  arquivosDestacados = [],
 }: GallerySectionProps) {
   return (
     <div
       className={
         variant === "preview"
           ? "flex gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-4 md:gap-6 md:overflow-visible"
-          : "grid grid-cols-1 gap-6 md:grid-cols-3"
+          : "grid grid-cols-1 gap-6 md:grid-flow-dense md:grid-cols-3"
       }
     >
       {itens.map((item) => (
         <div
           key={item.arquivo}
           className={
-            variant === "preview" ? "w-40 shrink-0 md:w-auto" : undefined
+            variant === "preview"
+              ? "w-40 shrink-0 md:w-auto"
+              : arquivosDestacados.includes(item.arquivo)
+                ? "md:col-span-2"
+                : undefined
           }
         >
           {/* Moldura tipo passe-partout (Fase 9): a mat de cream-300 ao
