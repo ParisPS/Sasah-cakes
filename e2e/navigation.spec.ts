@@ -1,6 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
 import { cardapio, linkWhatsApp } from "@/lib/cardapio";
 
+// Docinhos e Contato saíram como páginas próprias na Fase 9 (redesign de
+// marca) — Docinhos virou seção de /cardapio, Contato foi absorvido por
+// /como-encomendar. Ver docs/redesign/arquitetura.md "1".
 const PAGINAS = [
   {
     path: "/",
@@ -8,14 +11,12 @@ const PAGINAS = [
     heading: "Bolos e docinhos feitos à mão, com carinho",
   },
   { path: "/cardapio", label: "Cardápio", heading: "Cardápio" },
-  { path: "/docinhos", label: "Docinhos", heading: "Docinhos" },
   {
     path: "/como-encomendar",
     label: "Como Encomendar",
     heading: "Como Encomendar",
   },
   { path: "/galeria", label: "Galeria", heading: "Nosso Trabalho" },
-  { path: "/contato", label: "Contato", heading: "Contato" },
 ];
 
 // No mobile, os links de navegação só entram na árvore de acessibilidade
@@ -50,9 +51,29 @@ test.describe("navegação entre páginas via header", () => {
   }
 
   test("logo 'Sasah Cakes' sempre volta para a Home", async ({ page }) => {
-    await page.goto("/contato");
+    await page.goto("/como-encomendar");
     await page.getByRole("link", { name: "Sasah Cakes" }).click();
     await expect(page).toHaveURL("/");
+  });
+});
+
+test.describe("redirects de páginas removidas (Fase 9)", () => {
+  test("/docinhos redireciona para a seção Docinhos do Cardápio", async ({
+    page,
+  }) => {
+    await page.goto("/docinhos");
+    await expect(page).toHaveURL("/cardapio#docinhos");
+    await expect(
+      page.getByRole("heading", { level: 2, name: "Docinhos" }),
+    ).toBeVisible();
+  });
+
+  test("/contato redireciona para Como Encomendar", async ({ page }) => {
+    await page.goto("/contato");
+    await expect(page).toHaveURL("/como-encomendar");
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Como Encomendar" }),
+    ).toBeVisible();
   });
 });
 

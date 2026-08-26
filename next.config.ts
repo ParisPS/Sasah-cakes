@@ -13,6 +13,25 @@ const nextConfig: NextConfig = {
   // docs/PROJECT_GUIDELINES.md — desliga a geração automática de
   // AGENTS.md/CLAUDE.md do Next.js para não duplicar/conflitar com isso.
   agentRules: false,
+
+  // Fase 9 (redesign de marca) — Docinhos e Contato deixaram de ser
+  // páginas próprias (ver docs/redesign/arquitetura.md "1"). Redirects
+  // 301 (permanent) preservam links já compartilhados/indexados em vez
+  // de deixá-los quebrados. Ver docs/sitemap.md ("Redirects").
+  async redirects() {
+    return [
+      {
+        source: "/docinhos",
+        destination: "/cardapio#docinhos",
+        permanent: true,
+      },
+      {
+        source: "/contato",
+        destination: "/como-encomendar",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 // withSentryConfig faz upload de source maps no build (para stack traces
