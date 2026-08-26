@@ -37,7 +37,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${fraunces.variable} ${bricolage.variable}`}>
+    <html
+      lang="pt-BR"
+      // scroll-smooth: rolagem suave para navegação por âncora (ex: a
+      // barra de categorias do Cardápio, Fase 9). O navegador já ignora
+      // essa animação sozinho quando prefers-reduced-motion está ativo
+      // (spec de scroll-behavior), sem precisar de motion-reduce: aqui.
+      className={`${fraunces.variable} ${bricolage.variable} scroll-smooth`}
+    >
       <body className="antialiased">
         <Header />
         {children}

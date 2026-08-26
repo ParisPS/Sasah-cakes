@@ -13,12 +13,16 @@ type ProductCardProps = {
  * recorrentes" → "Card de produto"). Usado no Cardápio (tamanhos de bolo)
  * e em Docinhos (pacote).
  *
- * Repouso: borda fina (`cream-700`) em vez de sombra — Fase 9 (redesign
- * de marca, ver docs/redesign/direcao-artistica.md "3.2"): sombra como
- * único recurso de definição lia "card de UI genérico"; a borda dá
- * contorno sem depender disso. Sombra (`shadow-md`) entra só como
- * reforço no active/hover, junto com leve escala ao toque — o card
- * "sobe" fisicamente ao ser tocado, em vez de já vir pesado em repouso.
+ * Repouso: borda fina (`cream-700`) + `shadow-sm` quase imperceptível —
+ * Fase 9 (redesign de marca, ver docs/redesign/direcao-artistica.md
+ * "3.2"): reduz a DEPENDÊNCIA de sombra como único recurso, mas não a
+ * elimina de vez. A família `cream` inteira tem luminância muito
+ * próxima entre si (cream-300 sobre branco/cream-500 mede ~1.1:1 de
+ * contraste — a borda sozinha não segura o contorno do card em todo
+ * fundo), então o `shadow-sm` residual continua fazendo o trabalho
+ * pesado de separar o card do que está atrás dele; a borda reforça.
+ * `shadow-md` entra como reforço maior no active/hover, junto com leve
+ * escala ao toque — o card "sobe" fisicamente ao ser tocado.
  */
 export function ProductCard({
   title,
@@ -27,7 +31,7 @@ export function ProductCard({
   children,
 }: ProductCardProps) {
   return (
-    <div className="bg-cream-300 border-cream-700 rounded-lg border p-6 shadow-none transition-[box-shadow,transform] duration-150 active:scale-[0.98] active:shadow-md motion-reduce:transition-none md:hover:shadow-md">
+    <div className="bg-cream-300 border-cream-700 rounded-lg border p-6 shadow-sm transition-[box-shadow,transform] duration-150 active:scale-[0.98] active:shadow-md motion-reduce:transition-none md:hover:shadow-md">
       <h4>{title}</h4>
       <p className="caption mt-1">{subtitle}</p>
       {/* Preço em destaque — mesma escala de H4 (ver design-tokens.md),
