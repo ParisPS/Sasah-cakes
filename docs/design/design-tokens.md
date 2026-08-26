@@ -49,29 +49,35 @@ nenhum token de erro/validação é definido nesta fase. Ver nota em
 
 ## Tipografia
 
-Serifada em todo o site, reforçando o tom rústico/cottagecore. Fontes via
-Google Fonts.
+Revisada na **Fase 9** (redesign de marca) — decisão e justificativa
+completa em
+[`../redesign/direcao-artistica.md`](../redesign/direcao-artistica.md#1-tipografia).
+Fontes via Google Fonts.
 
-- **Títulos** — [Fraunces](https://fonts.google.com/specimen/Fraunces),
-  peso 600–700, `font-optical-sizing` ligado. Serifada bold/condensada,
-  com personalidade artesanal.
+- **Display** — [Fraunces](https://fonts.google.com/specimen/Fraunces),
+  peso 600–700. Serifada bold, com personalidade artesanal. Reservada
+  para H1–H3, hero, e a exceção do preço em destaque (ver escala
+  abaixo).
   - Fallback: `Georgia, 'Times New Roman', serif`
-- **Corpo de texto** — [Lora](https://fonts.google.com/specimen/Lora),
-  peso 400–500. Serifada mais fina, legível em blocos de texto.
-  - Fallback: `'Iowan Old Style', 'Palatino Linotype', serif`
+- **Funcional** —
+  [Bricolage Grotesque](https://fonts.google.com/specimen/Bricolage+Grotesque),
+  peso 400–600 (trocou a Lora na Fase 9). Grotesca com detalhes
+  orgânicos — corpo de texto, nav, botões, badges e H4–H6.
+  - Fallback: `-apple-system, 'Segoe UI', sans-serif`
 
 ### Escala tipográfica
 
-| Nível   | Fonte    | Peso | Desktop | Mobile | Line-height |
-| ------- | -------- | ---- | ------- | ------ | ----------- |
-| H1      | Fraunces | 700  | 56px    | 36px   | 1.1         |
-| H2      | Fraunces | 700  | 40px    | 28px   | 1.15        |
-| H3      | Fraunces | 600  | 28px    | 22px   | 1.2         |
-| H4      | Fraunces | 600  | 22px    | 19px   | 1.25        |
-| H5      | Fraunces | 600  | 18px    | 17px   | 1.3         |
-| H6      | Fraunces | 600  | 16px    | 15px   | 1.3         |
-| Corpo   | Lora     | 400  | 16px    | 16px   | 1.6         |
-| Legenda | Lora     | 400  | 14px    | 13px   | 1.5         |
+| Nível                           | Fonte               | Peso | Desktop | Mobile | Line-height |
+| ------------------------------- | ------------------- | ---- | ------- | ------ | ----------- |
+| H1                              | Fraunces            | 700  | 56px    | 36px   | 1.1         |
+| H2                              | Fraunces            | 700  | 40px    | 28px   | 1.15        |
+| H3                              | Fraunces            | 600  | 28px    | 22px   | 1.2         |
+| H4                              | Bricolage Grotesque | 600  | 22px    | 19px   | 1.25        |
+| H5                              | Bricolage Grotesque | 600  | 18px    | 17px   | 1.3         |
+| H6                              | Bricolage Grotesque | 600  | 16px    | 15px   | 1.3         |
+| Corpo                           | Bricolage Grotesque | 400  | 16px    | 16px   | 1.6         |
+| Legenda                         | Bricolage Grotesque | 500  | 14px    | 13px   | 1.5         |
+| **Preço em destaque (exceção)** | **Fraunces**        | 600  | 22px    | 19px   | 1.25        |
 
 ## Espaçamentos
 
