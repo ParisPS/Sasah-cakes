@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Lora } from "next/font/google";
+import { Fraunces, Bricolage_Grotesque } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
@@ -12,10 +12,16 @@ const fraunces = Fraunces({
   display: "swap",
 });
 
-const lora = Lora({
+// Fonte funcional — Fase 9 (redesign de marca), substitui a Lora. Ver
+// docs/redesign/direcao-artistica.md ("1.2 Fonte funcional"): uma
+// grotesca com detalhes orgânicos, para tirar o site do "cottagecore
+// all-serif" sem perder o caráter artesanal nos elementos de UI (corpo,
+// nav, botões, badges, H4–H6). Pesos 400/500/600 cobrem toda a escala
+// funcional definida na Etapa 2.
+const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-lora",
+  weight: ["400", "500", "600"],
+  variable: "--font-bricolage",
   display: "swap",
 });
 
@@ -31,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" className={`${fraunces.variable} ${lora.variable}`}>
+    <html lang="pt-BR" className={`${fraunces.variable} ${bricolage.variable}`}>
       <body className="antialiased">
         <Header />
         {children}
