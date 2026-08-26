@@ -77,6 +77,34 @@ test.describe("redirects de páginas removidas (Fase 9)", () => {
   });
 });
 
+test.describe("rodapé não duplica conteúdo da página (Fase 9)", () => {
+  // Achado da auditoria, item 1.4: em Como Encomendar a própria página já
+  // mostra nome/telefone/WhatsApp em destaque — o rodapé não repete. Ver
+  // components/Footer.tsx e docs/redesign/arquitetura.md "3.5".
+  test("rodapé de /como-encomendar não repete o link de WhatsApp", async ({
+    page,
+  }) => {
+    await page.goto("/como-encomendar");
+    const rodape = page.locator("footer");
+
+    await expect(
+      rodape.getByRole("link", { name: /fale no whatsapp/i }),
+    ).toHaveCount(0);
+    await expect(rodape.getByText("Sasah Cakes").first()).toBeVisible();
+  });
+
+  test("rodapé de /cardapio mostra o link de WhatsApp normalmente", async ({
+    page,
+  }) => {
+    await page.goto("/cardapio");
+    const rodape = page.locator("footer");
+
+    await expect(
+      rodape.getByRole("link", { name: /fale no whatsapp/i }),
+    ).toBeVisible();
+  });
+});
+
 test.describe("botão flutuante de WhatsApp", () => {
   const linkEsperado = linkWhatsApp(cardapio.comoEncomendar.contato.telefone);
 

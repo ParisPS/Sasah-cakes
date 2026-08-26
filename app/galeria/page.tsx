@@ -5,6 +5,8 @@ import { RevealOnScroll } from "@/components/RevealOnScroll";
 
 export const metadata: Metadata = {
   title: "Galeria · Sasah Cakes",
+  description:
+    "Fotos reais de bolos e docinhos entregues pela Sasah Cakes, com filtro por categoria.",
 };
 
 // Duas fotos com mais impacto visual (temáticas/coloridas) ganham

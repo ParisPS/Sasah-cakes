@@ -7,6 +7,8 @@ import { RevealOnScroll } from "@/components/RevealOnScroll";
 
 export const metadata: Metadata = {
   title: "Cardápio · Sasah Cakes",
+  description:
+    "Bolos redondos, quadrados e pacotes de docinhos da Sasah Cakes — tamanhos, rendimento, sabores e preços.",
 };
 
 const CATEGORIAS = [
