@@ -1,4 +1,5 @@
 import { cardapio, CATEGORIA_PORTFOLIO_LABELS } from "@/lib/cardapio";
+import type { ItemPortfolio } from "@/lib/cardapio";
 import { Badge } from "./Badge";
 import { PortfolioImage } from "./PortfolioImage";
 
@@ -12,6 +13,14 @@ type GallerySectionProps = {
    * de galeria") e docs/design/wireframes.md.
    */
   variant?: "preview" | "full";
+  /** Itens a exibir — por padrão, o portfólio completo. A Home passa uma
+   * amostra curada (ver lib/cardapio.ts, amostraCuradaPortfolio); a
+   * Galeria pode passar um subconjunto filtrado por categoria. */
+  itens?: ItemPortfolio[];
+  /** A Galeria (Fase 9) substitui o badge repetido por foto por um
+   * filtro de categoria no topo — ver docs/redesign/arquitetura.md
+   * "3.3". Default true para manter o comportamento da Home. */
+  showBadge?: boolean;
 };
 
 // Fotos reais de trabalhos entregues (Fase 4), servidas de
@@ -20,10 +29,13 @@ type GallerySectionProps = {
 // PortfolioImage (Fase 7) cobre o carregamento com um skeleton na paleta
 // da marca. Proporção retrato (3/4) para acomodar as fotos originais
 // (~231x325px, recortadas de um carrossel de Instagram) sem cortar
-// demais o bolo.
-export function GallerySection({ variant = "full" }: GallerySectionProps) {
-  const itens = cardapio.portfolio.itens;
-
+// demais o bolo — crop fixo mantido na Fase 9 (redesign de marca), ver
+// docs/redesign/direcao-artistica.md "3.4".
+export function GallerySection({
+  variant = "full",
+  itens = cardapio.portfolio.itens,
+  showBadge = true,
+}: GallerySectionProps) {
   return (
     <div
       className={
@@ -36,22 +48,30 @@ export function GallerySection({ variant = "full" }: GallerySectionProps) {
         <div
           key={item.arquivo}
           className={
-            variant === "preview"
-              ? "bg-sage-100 relative aspect-3/4 w-40 shrink-0 overflow-hidden rounded-md md:w-auto"
-              : "bg-sage-100 relative aspect-3/4 overflow-hidden rounded-md"
+            variant === "preview" ? "w-40 shrink-0 md:w-auto" : undefined
           }
         >
-          <PortfolioImage
-            src={`/portfolio/${item.arquivo}`}
-            alt={item.alt}
-            sizes={
-              variant === "preview"
-                ? "(min-width: 768px) 25vw, 160px"
-                : "(min-width: 768px) 33vw, 100vw"
-            }
-          />
-          <div className="absolute bottom-2 left-2">
-            <Badge>{CATEGORIA_PORTFOLIO_LABELS[item.categoria]}</Badge>
+          {/* Moldura tipo passe-partout (Fase 9): a mat de cream-300 ao
+              redor da foto muda a leitura de "recorte de baixa
+              resolução" para "peça apresentada com intenção" — ver
+              docs/redesign/direcao-artistica.md "3.4". */}
+          <div className="bg-cream-300 rounded-md p-2">
+            <div className="bg-sage-100 relative aspect-3/4 overflow-hidden rounded-sm">
+              <PortfolioImage
+                src={`/portfolio/${item.arquivo}`}
+                alt={item.alt}
+                sizes={
+                  variant === "preview"
+                    ? "(min-width: 768px) 25vw, 160px"
+                    : "(min-width: 768px) 33vw, 100vw"
+                }
+              />
+              {showBadge && (
+                <div className="absolute bottom-2 left-2">
+                  <Badge>{CATEGORIA_PORTFOLIO_LABELS[item.categoria]}</Badge>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ))}

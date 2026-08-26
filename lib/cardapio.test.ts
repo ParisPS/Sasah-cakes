@@ -1,10 +1,14 @@
 import { describe, expect, it } from "vitest";
 import {
+  amostraCuradaPortfolio,
   cardapio,
   CATEGORIA_PORTFOLIO_LABELS,
   formatarPreco,
   linkWhatsApp,
+  primeiraFotoDaCategoria,
+  tamanhoIntermediario,
   telefoneParaWhatsApp,
+  type ItemPortfolio,
 } from "./cardapio";
 
 // Normaliza espaços (Intl.NumberFormat pode usar NBSP U+00A0 entre "R$" e
@@ -84,5 +88,74 @@ describe("dados de content/cardapio.json", () => {
       expect(Object.keys(CATEGORIA_PORTFOLIO_LABELS)).toContain(item.categoria);
       expect(item.alt.length).toBeGreaterThan(10);
     }
+  });
+});
+
+describe("tamanhoIntermediario", () => {
+  it("retorna o item do meio de uma lista com número ímpar de itens", () => {
+    expect(tamanhoIntermediario(["a", "b", "c"])).toBe("b");
+  });
+
+  it("retorna o item logo depois do meio de uma lista com número par de itens", () => {
+    expect(tamanhoIntermediario(["a", "b", "c", "d"])).toBe("c");
+  });
+
+  it("usa os tamanhos reais de content/cardapio.json", () => {
+    expect(tamanhoIntermediario(cardapio.bolos.redondos).tamanho).toBe("20cm");
+    expect(tamanhoIntermediario(cardapio.bolos.quadrados).tamanho).toBe(
+      "30x22",
+    );
+  });
+});
+
+describe("primeiraFotoDaCategoria", () => {
+  it("retorna a primeira foto de uma categoria, na ordem do JSON", () => {
+    const foto = primeiraFotoDaCategoria(
+      cardapio.portfolio.itens,
+      "bolo-quadrado",
+    );
+    expect(foto?.arquivo).toBe("bolo-quadrado-lilas-edicao-limitada.jpg");
+  });
+
+  it("retorna undefined se a categoria não existir na lista", () => {
+    const foto = primeiraFotoDaCategoria([], "docinho");
+    expect(foto).toBeUndefined();
+  });
+});
+
+describe("amostraCuradaPortfolio", () => {
+  const ITENS: ItemPortfolio[] = [
+    { arquivo: "r1.jpg", categoria: "bolo-redondo", alt: "r1" },
+    { arquivo: "r2.jpg", categoria: "bolo-redondo", alt: "r2" },
+    { arquivo: "r3.jpg", categoria: "bolo-redondo", alt: "r3" },
+    { arquivo: "q1.jpg", categoria: "bolo-quadrado", alt: "q1" },
+    { arquivo: "d1.jpg", categoria: "docinho", alt: "d1" },
+  ];
+
+  it("cobre cada categoria existente pelo menos uma vez antes de repetir categoria", () => {
+    const amostra = amostraCuradaPortfolio(ITENS, 3);
+    const categorias = new Set(amostra.map((item) => item.categoria));
+    expect(categorias.size).toBe(3);
+  });
+
+  it("completa a quantidade pedida com os itens restantes, na ordem original", () => {
+    const amostra = amostraCuradaPortfolio(ITENS, 4);
+    expect(amostra.map((item) => item.arquivo)).toEqual([
+      "r1.jpg",
+      "q1.jpg",
+      "d1.jpg",
+      "r2.jpg",
+    ]);
+  });
+
+  it("nunca retorna mais itens do que existem na lista original", () => {
+    const amostra = amostraCuradaPortfolio(ITENS, 100);
+    expect(amostra).toHaveLength(ITENS.length);
+  });
+
+  it("nunca repete o mesmo item na amostra", () => {
+    const amostra = amostraCuradaPortfolio(ITENS, ITENS.length);
+    const arquivosUnicos = new Set(amostra.map((item) => item.arquivo));
+    expect(arquivosUnicos.size).toBe(amostra.length);
   });
 });

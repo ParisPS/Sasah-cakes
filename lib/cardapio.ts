@@ -87,3 +87,58 @@ export function linkWhatsApp(
 ): string {
   return `https://wa.me/${telefoneParaWhatsApp(telefone)}?text=${encodeURIComponent(mensagem)}`;
 }
+
+/**
+ * Tamanho "do meio" de uma lista (ex: entre os tamanhos de bolo redondo)
+ * — critério objetivo para a Home escolher qual tamanho mostrar na seção
+ * de produtos em destaque, sem favorecer arbitrariamente o mais caro ou
+ * o mais barato. Ver docs/redesign/arquitetura.md ("3.1 Home").
+ */
+export function tamanhoIntermediario<T>(lista: T[]): T {
+  return lista[Math.floor(lista.length / 2)];
+}
+
+/** Primeira foto do portfólio de uma categoria, na ordem em que aparece
+ * em content/cardapio.json. Usada para dar uma foto representativa a um
+ * produto em destaque na Home — não afirma que a foto retrata
+ * exatamente aquele tamanho/preço, só ilustra a categoria. */
+export function primeiraFotoDaCategoria(
+  itens: ItemPortfolio[],
+  categoria: CategoriaPortfolio,
+): ItemPortfolio | undefined {
+  return itens.find((item) => item.categoria === categoria);
+}
+
+/**
+ * Amostra curada de fotos do portfólio: cobre cada categoria existente
+ * pelo menos uma vez (na ordem em que a categoria aparece pela primeira
+ * vez em `itens`), completando o restante pela ordem original — em vez
+ * de simplesmente pegar as N primeiras fotos, o que mostraria só uma
+ * categoria se ela tiver mais itens que as outras (hoje, 7 das 12 fotos
+ * são de bolo redondo). Usada pela Home para a prévia da galeria (Etapa
+ * 3, ver docs/redesign/arquitetura.md "3.1"), sem repetir fotos já
+ * usadas em outra seção da mesma página (passe o restante via
+ * `itens.filter(...)`).
+ */
+export function amostraCuradaPortfolio(
+  itens: ItemPortfolio[],
+  quantidade: number,
+): ItemPortfolio[] {
+  const resultado: ItemPortfolio[] = [];
+  const categoriasUsadas = new Set<CategoriaPortfolio>();
+
+  for (const item of itens) {
+    if (resultado.length >= quantidade) break;
+    if (!categoriasUsadas.has(item.categoria)) {
+      resultado.push(item);
+      categoriasUsadas.add(item.categoria);
+    }
+  }
+
+  for (const item of itens) {
+    if (resultado.length >= quantidade) break;
+    if (!resultado.includes(item)) resultado.push(item);
+  }
+
+  return resultado;
+}
