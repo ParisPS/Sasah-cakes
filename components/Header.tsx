@@ -27,7 +27,7 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="font-body text-ink-900 hover:text-sage-700 transition-colors motion-reduce:transition-none"
+              className="font-body text-ink-900 hover:text-sage-700 font-medium transition-colors motion-reduce:transition-none"
             >
               {link.label}
             </Link>
@@ -85,7 +85,7 @@ export function Header() {
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              className="font-body text-ink-900 active:bg-sage-100 rounded-sm px-2 py-3"
+              className="font-body text-ink-900 active:bg-sage-100 rounded-sm px-2 py-3 font-medium"
             >
               {link.label}
             </Link>

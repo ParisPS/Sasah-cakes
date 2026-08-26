@@ -13,9 +13,12 @@ type ProductCardProps = {
  * recorrentes" → "Card de produto"). Usado no Cardápio (tamanhos de bolo)
  * e em Docinhos (pacote).
  *
- * Estado funcional principal é active/tap (mobile-first, sem cursor):
- * shadow-sm em repouso → shadow-md + leve escala ao toque. Hover
- * (shadow-md) é um enhancement opcional, só em desktop (md:).
+ * Repouso: borda fina (`cream-700`) em vez de sombra — Fase 9 (redesign
+ * de marca, ver docs/redesign/direcao-artistica.md "3.2"): sombra como
+ * único recurso de definição lia "card de UI genérico"; a borda dá
+ * contorno sem depender disso. Sombra (`shadow-md`) entra só como
+ * reforço no active/hover, junto com leve escala ao toque — o card
+ * "sobe" fisicamente ao ser tocado, em vez de já vir pesado em repouso.
  */
 export function ProductCard({
   title,
@@ -24,7 +27,7 @@ export function ProductCard({
   children,
 }: ProductCardProps) {
   return (
-    <div className="bg-cream-300 rounded-lg p-6 shadow-sm transition-[box-shadow,transform] duration-150 active:scale-[0.98] active:shadow-md motion-reduce:transition-none md:hover:shadow-md">
+    <div className="bg-cream-300 border-cream-700 rounded-lg border p-6 shadow-none transition-[box-shadow,transform] duration-150 active:scale-[0.98] active:shadow-md motion-reduce:transition-none md:hover:shadow-md">
       <h4>{title}</h4>
       <p className="caption mt-1">{subtitle}</p>
       {/* Preço em destaque — mesma escala de H4 (ver design-tokens.md),

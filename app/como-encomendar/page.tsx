@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { cardapio, linkWhatsApp } from "@/lib/cardapio";
+import { Button } from "@/components/Button";
 
 export const metadata: Metadata = {
   title: "Como Encomendar · Sasah Cakes",
@@ -40,14 +41,14 @@ export default function ComoEncomendarPage() {
           <h2 className="text-sage-900">Contato</h2>
           <p className="text-ink-900 mt-3">{contato.nome}</p>
           <p className="text-ink-600">{contato.telefone}</p>
-          <a
+          <Button
+            variant="primary"
             href={linkWhatsApp(contato.telefone)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-pill bg-sage-500 font-body text-cream-300 active:bg-sage-700 md:hover:bg-sage-700 mt-6 inline-block px-7 py-3 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md motion-reduce:transition-none md:hover:shadow-md"
+            external
+            className="mt-6"
           >
             Chamar no WhatsApp
-          </a>
+          </Button>
         </div>
 
         <div className="bg-cream-300 rounded-lg p-8 shadow-sm">
