@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { GallerySection } from "@/components/GallerySection";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
+import { Button } from "@/components/Button";
 
 const DESTAQUES = [
   {
@@ -47,12 +48,9 @@ export default function Home() {
             Encomendas para festas e ocasiões especiais — retirada no local,
             pagamento via Pix.
           </p>
-          <Link
-            href="/cardapio"
-            className="rounded-pill bg-sage-500 font-body text-cream-300 active:bg-sage-700 md:hover:bg-sage-700 mt-8 inline-block px-7 py-3 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md motion-reduce:transition-none md:hover:shadow-md"
-          >
+          <Button variant="primary" href="/cardapio" className="mt-8">
             Ver Cardápio
-          </Link>
+          </Button>
         </div>
       </section>
 

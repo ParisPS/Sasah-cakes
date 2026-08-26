@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
 import * as Sentry from "@sentry/nextjs";
+import { Button } from "@/components/Button";
 
 // Error boundary do Next.js App Router — captura erros não tratados
 // dentro de qualquer página/segmento e mostra essa tela em vez da tela
@@ -29,19 +29,12 @@ export default function Error({
           tente novamente em instantes.
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <button
-            type="button"
-            onClick={() => reset()}
-            className="rounded-pill bg-sage-500 font-body text-cream-300 active:bg-sage-700 md:hover:bg-sage-700 px-7 py-3 shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md motion-reduce:transition-none md:hover:shadow-md"
-          >
+          <Button variant="primary" onClick={() => reset()}>
             Tentar novamente
-          </button>
-          <Link
-            href="/"
-            className="rounded-pill border-sage-500 font-body text-sage-700 active:bg-sage-100 md:hover:bg-sage-100 border px-7 py-3"
-          >
+          </Button>
+          <Button variant="secondary" href="/">
             Voltar para a Home
-          </Link>
+          </Button>
         </div>
         {error.digest && (
           <p className="caption mt-6">Código de referência: {error.digest}</p>

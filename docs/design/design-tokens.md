@@ -111,14 +111,25 @@ tom artesanal em vez de "flat corporativo".
 
 ## Botões
 
+Implementados como um único componente (`components/Button.tsx`, desde a
+Fase 9 — antes copiado em 6 lugares, ver
+[`../redesign/auditoria.md`](../redesign/auditoria.md#4-componentes-reutilizáveis-vs-redundantes)),
+com `variant="primary" | "secondary"`. Label em Bricolage Grotesque 600,
+`letter-spacing` levemente positivo (~0.01em) — separa visualmente "isto
+é um botão de marca" de um link comum, sem precisar de caixa alta.
+
 - **Primário** — fundo `sage-500`, texto `cream-300`, `radius-pill`,
   padding `12px 28px`, `shadow-sm` em repouso, `shadow-md` + `sage-700` no
   hover.
 - **Secundário** — fundo transparente, borda `1px solid sage-500`, texto
-  `sage-700`, `radius-pill`. Hover: fundo `sage-100`.
+  `sage-700`, `radius-pill`, sem sombra. Hover: fundo `sage-100`.
+  Especificado desde a Fase 2, mas nunca usado no código até a Fase 9.
 - **Botão flutuante (WhatsApp)** — circular (`border-radius: 999px`,
   largura = altura), fundo `sage-500`, ícone `cream-300`, `shadow-lg`,
-  fixo no canto inferior direito.
+  fixo no canto inferior direito. Componente próprio
+  (`components/WhatsAppButton.tsx`), fora do componente `Button` — forma
+  e função (ícone, sem label) são diferentes o suficiente para não
+  compartilhar a mesma implementação.
 
 ## Badges
 
@@ -129,7 +140,13 @@ redondo", "Docinho", "Recheio").
 ## Cards
 
 `radius-lg`, fundo `cream-300` sobre página branca (ou `white` sobre
-seções `cream-500`), `shadow-sm` em repouso subindo para `shadow-md` no
-hover, padding interno `24px`. Decoração opcional: mancha de aquarela
-verde (`sage-100`/`sage-300`, baixa opacidade) posicionada em um dos
-cantos, atrás do conteúdo.
+seções `cream-500`), padding interno `24px`. Decoração opcional: mancha
+de aquarela verde (`sage-100`/`sage-300`, baixa opacidade) posicionada em
+um dos cantos, atrás do conteúdo.
+
+**Repouso vs. active/hover (revisado na Fase 9):** em repouso, borda fina
+de 1px em `cream-700` (sobre fundo branco) ou `sage-100` (sobre fundo
+`cream-500`) em vez de sombra — ver justificativa em
+[`../redesign/direcao-artistica.md`](../redesign/direcao-artistica.md#32-cards--menos-dependência-de-sombra-mais-de-campo-de-cor--borda-fina).
+`shadow-md` entra só no active/hover, junto com leve escala
+(`scale(0.98)`), para dar feedback tátil sem já vir pesado em repouso.
