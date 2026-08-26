@@ -168,11 +168,15 @@ export default function Home() {
             Chama no WhatsApp — é o jeito mais rápido de confirmar sabores,
             tamanho e data de retirada.
           </p>
+          {/* ring-cream-300: sobre fundo sage-900, o contorno cream-300
+              garante contraste de borda >= 3:1 (WCAG 1.4.11) — sage-500
+              (fundo do botão) sozinho contra sage-900 fica em ~2.5:1,
+              baixo demais para depender só do preenchimento aqui. */}
           <Button
             variant="primary"
             href={linkWhatsApp(cardapio.comoEncomendar.contato.telefone)}
             external
-            className="mt-8"
+            className="ring-cream-300 ring-offset-sage-900 mt-8 ring-2 ring-offset-2"
           >
             Falar no WhatsApp
           </Button>
