@@ -3,21 +3,33 @@ import { cardapio } from "@/lib/cardapio";
 import { ProductCard } from "@/components/ProductCard";
 import { Badge } from "@/components/Badge";
 import { Button } from "@/components/Button";
+import { RevealOnScroll } from "@/components/RevealOnScroll";
 
 export const metadata: Metadata = {
   title: "Cardápio · Sasah Cakes",
 };
 
-// Cardápio — ver docs/design/wireframes.md ("Cardápio"). As três seções
-// (Redondos/Quadrados/Docinhos) ficam empilhadas em vez de em tabs que
-// escondem conteúdo atrás de JS — o wireframe original já permitia essa
-// abordagem para as duas de bolo; Docinhos entrou como uma terceira
-// seção na Fase 9 (redesign de marca — deixou de ser página própria, ver
-// docs/redesign/arquitetura.md "1.1"). `scroll-mt-24` nos ids de âncora
-// evita que o header sticky cubra o título ao navegar direto para uma
-// seção (ex: vindo do redirect de /docinhos). A navegação por
-// âncora/categoria (tabs) é adicionada na Etapa 4.5 — esta página já
-// fica funcional com ids simples antes disso.
+const CATEGORIAS = [
+  { href: "#bolos-redondos", label: "Bolos Redondos" },
+  { href: "#bolos-quadrados", label: "Bolos Quadrados" },
+  { href: "#docinhos", label: "Docinhos" },
+];
+
+// Cardápio — ver docs/design/wireframes.md ("Cardápio") e
+// docs/redesign/arquitetura.md ("3.2 Cardápio"). Três seções
+// (Redondos/Quadrados/Docinhos — Docinhos deixou de ser página própria
+// na Fase 9, ver "1.1"), empilhadas em vez de escondidas atrás de tabs
+// controladas por JS. A "navegação por categoria" pedida na Etapa 3 é só
+// uma barra de âncoras HTML puras (<a href="#id">) — sem estado de "aba
+// ativa" via scroll-spy: isso exigiria JS e um IntersectionObserver
+// extra só para destacar visualmente qual seção está no viewport, o que
+// não muda a funcionalidade (a pessoa já vê a seção na tela) e vai
+// contra a proporcionalidade de ferramental já seguida no projeto (ver
+// docs/design/motion-principles.md, mesma lógica de "CSS puro antes de
+// JS"). `scroll-smooth` (app/layout.tsx) mais `scroll-mt-24` em cada
+// seção cobre a UX de rolar suavemente até a seção certa, respeitando
+// prefers-reduced-motion nativamente (o navegador já pula a animação de
+// scroll-behavior:smooth quando reduced motion está ativo).
 export default function CardapioPage() {
   const { redondos, quadrados, recheiosDisponiveis } = cardapio.bolos;
   const { quantidade, preco, opcoesDeSabores, saboresDisponiveis } =
@@ -26,77 +38,112 @@ export default function CardapioPage() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-16 md:px-6">
       <h1 className="text-sage-900">Cardápio</h1>
+      <p className="text-ink-600 mt-3">
+        Bolos redondos, quadrados e pacotes de docinhos — escolha uma categoria
+        ou role a página.
+      </p>
 
-      <section id="bolos-redondos" className="mt-10 scroll-mt-24">
-        <h2 className="text-sage-900">Bolos Redondos</h2>
-        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {redondos.map((item) => (
-            <ProductCard
-              key={item.tamanho}
-              title={item.tamanho}
-              subtitle={`Rende ${item.rendimento}`}
-              price={item.preco}
-            />
-          ))}
-        </div>
-      </section>
+      {/* Barra de categorias — scroll horizontal no mobile (pills não
+          cabem todas na largura da tela), lado a lado no desktop. */}
+      <nav
+        aria-label="Categorias do cardápio"
+        className="mt-6 flex gap-3 overflow-x-auto pb-2 md:flex-wrap md:overflow-visible"
+      >
+        {CATEGORIAS.map((categoria) => (
+          <a
+            key={categoria.href}
+            href={categoria.href}
+            className="rounded-pill border-sage-300 text-sage-700 hover:bg-sage-100 font-body shrink-0 border px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors motion-reduce:transition-none"
+          >
+            {categoria.label}
+          </a>
+        ))}
+      </nav>
 
-      <section id="bolos-quadrados" className="mt-14 scroll-mt-24">
-        <h2 className="text-sage-900">Bolos Quadrados</h2>
-        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {quadrados.map((item) => (
-            <ProductCard
-              key={item.tamanho}
-              title={item.tamanho}
-              subtitle={`Rende ${item.rendimento}`}
-              price={item.preco}
-            />
-          ))}
-        </div>
-      </section>
-
-      <section className="mt-14">
-        <h2 className="text-sage-900">Recheios disponíveis</h2>
-        <p className="text-ink-600 mt-2">
-          Vale para os bolos redondos e quadrados.
-        </p>
-        <div className="mt-6 flex flex-wrap gap-3">
-          {recheiosDisponiveis.map((recheio) => (
-            <Badge key={recheio}>{recheio}</Badge>
-          ))}
-        </div>
-      </section>
-
-      <section id="docinhos" className="mt-14 scroll-mt-24">
-        <h2 className="text-sage-900">Docinhos</h2>
-        <div className="mt-6 flex justify-center">
-          <div className="w-full max-w-md">
-            <ProductCard
-              title={`${quantidade} docinhos`}
-              subtitle="Escolha entre 2 ou 4 sabores"
-              price={preco}
-            >
-              <ul className="border-cream-700 mt-4 space-y-2 border-t pt-4">
-                {opcoesDeSabores.map((opcao) => (
-                  <li key={opcao.quantidadeSabores} className="text-ink-900">
-                    <span className="text-sage-700 font-semibold">
-                      {opcao.quantidadeSabores} sabores
-                    </span>{" "}
-                    — {opcao.descricao}
-                  </li>
-                ))}
-              </ul>
-            </ProductCard>
+      <RevealOnScroll>
+        <section id="bolos-redondos" className="mt-10 scroll-mt-24">
+          <h2 className="text-sage-900">Bolos Redondos</h2>
+          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
+            {redondos.map((item) => (
+              <ProductCard
+                key={item.tamanho}
+                title={item.tamanho}
+                subtitle={`Rende ${item.rendimento}`}
+                price={item.preco}
+              />
+            ))}
           </div>
-        </div>
+        </section>
+      </RevealOnScroll>
 
-        <h3 className="text-sage-900 mt-8">Sabores disponíveis</h3>
-        <div className="mt-4 flex flex-wrap gap-3">
-          {saboresDisponiveis.map((sabor) => (
-            <Badge key={sabor}>{sabor}</Badge>
-          ))}
-        </div>
-      </section>
+      <RevealOnScroll>
+        <section
+          id="bolos-quadrados"
+          className="bg-cream-500 mt-14 scroll-mt-24 rounded-lg p-6 md:p-8"
+        >
+          <h2 className="text-sage-900">Bolos Quadrados</h2>
+          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
+            {quadrados.map((item) => (
+              <ProductCard
+                key={item.tamanho}
+                title={item.tamanho}
+                subtitle={`Rende ${item.rendimento}`}
+                price={item.preco}
+              />
+            ))}
+          </div>
+        </section>
+      </RevealOnScroll>
+
+      <RevealOnScroll>
+        <section className="mt-14">
+          <h2 className="text-sage-900">Recheios disponíveis</h2>
+          <p className="text-ink-600 mt-2">
+            Vale para os bolos redondos e quadrados.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            {recheiosDisponiveis.map((recheio) => (
+              <Badge key={recheio}>{recheio}</Badge>
+            ))}
+          </div>
+        </section>
+      </RevealOnScroll>
+
+      <RevealOnScroll>
+        <section
+          id="docinhos"
+          className="bg-cream-500 mt-14 scroll-mt-24 rounded-lg p-6 md:p-8"
+        >
+          <h2 className="text-sage-900">Docinhos</h2>
+          <div className="mt-6 flex justify-center">
+            <div className="w-full max-w-md">
+              <ProductCard
+                title={`${quantidade} docinhos`}
+                subtitle="Escolha entre 2 ou 4 sabores"
+                price={preco}
+              >
+                <ul className="border-cream-700 mt-4 space-y-2 border-t pt-4">
+                  {opcoesDeSabores.map((opcao) => (
+                    <li key={opcao.quantidadeSabores} className="text-ink-900">
+                      <span className="text-sage-700 font-semibold">
+                        {opcao.quantidadeSabores} sabores
+                      </span>{" "}
+                      — {opcao.descricao}
+                    </li>
+                  ))}
+                </ul>
+              </ProductCard>
+            </div>
+          </div>
+
+          <h3 className="text-sage-900 mt-8">Sabores disponíveis</h3>
+          <div className="mt-4 flex flex-wrap gap-3">
+            {saboresDisponiveis.map((sabor) => (
+              <Badge key={sabor}>{sabor}</Badge>
+            ))}
+          </div>
+        </section>
+      </RevealOnScroll>
 
       <div className="mt-14 text-center">
         <Button variant="primary" href="/como-encomendar">

@@ -32,6 +32,29 @@ test.describe("página Cardápio", () => {
   });
 });
 
+test.describe("barra de categorias do Cardápio (Fase 9)", () => {
+  for (const categoria of [
+    { label: "Bolos Redondos", id: "bolos-redondos" },
+    { label: "Bolos Quadrados", id: "bolos-quadrados" },
+    { label: "Docinhos", id: "docinhos" },
+  ]) {
+    test(`pill "${categoria.label}" rola até a seção correspondente`, async ({
+      page,
+    }) => {
+      await page.goto("/cardapio");
+      await page
+        .getByRole("navigation", { name: "Categorias do cardápio" })
+        .getByRole("link", { name: categoria.label })
+        .click();
+
+      await expect(page).toHaveURL(`/cardapio#${categoria.id}`);
+      await expect(
+        page.getByRole("heading", { level: 2, name: categoria.label }),
+      ).toBeInViewport();
+    });
+  }
+});
+
 // Docinhos é uma seção de /cardapio desde a Fase 9 (redesign de marca),
 // não uma página própria — ver docs/redesign/arquitetura.md "1.1".
 test.describe("seção Docinhos (dentro do Cardápio)", () => {

@@ -145,8 +145,14 @@ de aquarela verde (`sage-100`/`sage-300`, baixa opacidade) posicionada em
 um dos cantos, atrás do conteúdo.
 
 **Repouso vs. active/hover (revisado na Fase 9):** em repouso, borda fina
-de 1px em `cream-700` (sobre fundo branco) ou `sage-100` (sobre fundo
-`cream-500`) em vez de sombra — ver justificativa em
+de 1px em `cream-700` **e** `shadow-sm` (não `shadow-none`) — ver
+justificativa em
 [`../redesign/direcao-artistica.md`](../redesign/direcao-artistica.md#32-cards--menos-dependência-de-sombra-mais-de-campo-de-cor--borda-fina).
-`shadow-md` entra só no active/hover, junto com leve escala
-(`scale(0.98)`), para dar feedback tátil sem já vir pesado em repouso.
+A ideia original era substituir a sombra pela borda; na prática, toda a
+família `cream` tem luminância muito próxima entre si (`cream-300` sobre
+branco ou sobre `cream-500` mede ~1,1:1 de contraste — a borda sozinha
+não é suficiente pra separar o card do fundo em nenhum dos dois casos),
+então o `shadow-sm` residual continua sendo o que efetivamente define o
+contorno; a borda só reforça. `shadow-md` entra como reforço maior no
+active/hover, junto com leve escala (`scale(0.98)`), para dar feedback
+tátil.
