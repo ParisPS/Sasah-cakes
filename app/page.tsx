@@ -169,14 +169,22 @@ export default function Home() {
             tamanho e data de retirada.
           </p>
           {/* ring-cream-300: sobre fundo sage-900, o contorno cream-300
-              garante contraste de borda >= 3:1 (WCAG 1.4.11) — sage-500
-              (fundo do botão) sozinho contra sage-900 fica em ~2.5:1,
-              baixo demais para depender só do preenchimento aqui. */}
+              garante contraste de borda >= 3:1 (WCAG 1.4.11) — o fundo do
+              botão sozinho (sage-700 em repouso desde a correção de
+              contraste pós-Fase 9) fica em ~1.6:1 contra este fundo
+              sage-900, baixo demais para depender só do preenchimento
+              aqui; o ring é o que garante o contorno do botão.
+              md:hover:bg-sage-700! (com "!" para vencer o md:hover:bg-sage-900
+              do variant="primary"): nesta seção específica o hover padrão
+              do botão (sage-900) coincidiria exatamente com o fundo desta
+              seção, fazendo o preenchimento "sumir" ao passar o mouse —
+              aqui o feedback de hover vem só do ring engrossando
+              (ring-2 → ring-4), sem escurecer mais o preenchimento. */}
           <Button
             variant="primary"
             href={linkWhatsApp(cardapio.comoEncomendar.contato.telefone)}
             external
-            className="ring-cream-300 ring-offset-sage-900 mt-8 ring-2 ring-offset-2"
+            className="ring-cream-300 ring-offset-sage-900 md:hover:bg-sage-700! mt-8 ring-2 ring-offset-2 transition-[box-shadow,transform] md:hover:ring-4"
           >
             Falar no WhatsApp
           </Button>

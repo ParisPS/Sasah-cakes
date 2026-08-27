@@ -36,8 +36,13 @@ const BASE_CLASSES =
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   // Ação principal da página (ex: WhatsApp/encomendar) — ver
-  // docs/redesign/direcao-artistica.md ("3.1 Botão").
-  primary: "bg-sage-500 text-cream-300 active:bg-sage-700 md:hover:bg-sage-700",
+  // docs/redesign/direcao-artistica.md ("3.1 Botão"). Fundo sage-700 (não
+  // sage-500) desde a correção de contraste pós-Fase 9: cream-300 sobre
+  // sage-500 media 3.47:1 (abaixo do mínimo AA de 4.5:1 para texto);
+  // sobre sage-700 mede 5.40:1. Hover/active sobem para sage-900, um
+  // degrau a mais no mesmo tom, mantendo a progressão "escurece ao
+  // interagir". Ver docs/design/design-tokens.md ("Botões").
+  primary: "bg-sage-700 text-cream-300 active:bg-sage-900 md:hover:bg-sage-900",
   // Ação de navegação/exploração (ex: "ver mais fotos", "ver cardápio
   // completo") — nunca usada antes da Fase 9, apesar de já especificada
   // desde a Fase 2 (docs/design/design-tokens.md "Botões"). Sem sombra
