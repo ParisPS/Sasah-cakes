@@ -13,21 +13,21 @@ material da cliente.
 
 ### Sálvia (cor de marca / primária)
 
-| Token      | Hex       | Uso                                                          |
-| ---------- | --------- | ------------------------------------------------------------ |
-| `sage-900` | `#3F4A2E` | Texto sobre creme em títulos de destaque, ênfase forte       |
-| `sage-700` | `#5C6B41` | Hover/estado ativo de elementos primários, texto de link     |
-| `sage-500` | `#7C8A5E` | Cor de marca principal — botões, cabeçalhos de seção, ícones |
-| `sage-300` | `#A8B48A` | Bordas, divisores, estados secundários                       |
-| `sage-100` | `#DCE3CB` | Fundos suaves, hover de badges/cards                         |
+| Token      | Hex       | Uso                                                                                                                                |
+| ---------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `sage-900` | `#3F4A2E` | Texto sobre creme em títulos de destaque; hover/active do CTA principal e texto de badge (desde a correção de contraste da Fase 9) |
+| `sage-700` | `#5C6B41` | Fundo do CTA principal em repouso (desde a Fase 9), hover/estado ativo de elementos secundários, texto de link                     |
+| `sage-500` | `#7C8A5E` | Acento de marca — borda do botão secundário, indicador de carregamento (deixou de ser fundo de CTA na Fase 9, ver "Botões" abaixo) |
+| `sage-300` | `#A8B48A` | Bordas, divisores, estados secundários                                                                                             |
+| `sage-100` | `#DCE3CB` | Fundos suaves, hover de badges/cards                                                                                               |
 
 ### Creme / off-white
 
-| Token       | Hex       | Uso                                                |
-| ----------- | --------- | -------------------------------------------------- |
-| `cream-700` | `#E8DFC8` | Bordas e divisores sobre fundo branco              |
-| `cream-500` | `#F5EFDF` | Fundo de seções alternadas, texto sobre `sage-500` |
-| `cream-300` | `#FBF7EC` | Fundo de cards sobre branco                        |
+| Token       | Hex       | Uso                                   |
+| ----------- | --------- | ------------------------------------- |
+| `cream-700` | `#E8DFC8` | Bordas e divisores sobre fundo branco |
+| `cream-500` | `#F5EFDF` | Fundo de seções alternadas            |
+| `cream-300` | `#FBF7EC` | Fundo de cards sobre branco           |
 
 ### Base
 
@@ -122,7 +122,8 @@ com `variant="primary" | "secondary"`. Label em Bricolage Grotesque 600,
   texto `cream-300`, `radius-pill`, padding `12px 28px`, `shadow-sm` em
   repouso, `shadow-md` + `sage-900` no hover/active.
 - **Secundário** — fundo transparente, borda `1px solid sage-500`, texto
-  `sage-700`, `radius-pill`, sem sombra. Hover: fundo `sage-100`.
+  `sage-700`, `radius-pill`, sem sombra. Hover/active: fundo `sage-100` e
+  texto `sage-900` (não mais `sage-700` — ver nota de contraste abaixo).
   Especificado desde a Fase 2, mas nunca usado no código até a Fase 9.
 - **Botão flutuante (WhatsApp)** — circular (`border-radius: 999px`,
   largura = altura), fundo `sage-700` (mesma correção do botão primário),
@@ -145,11 +146,22 @@ a progressão "escurece ao interagir" com um degrau a mais no mesmo tom.
 borda do botão secundário, ícone de loading) — não foi removido, só
 deixou de ser fundo de CTA.
 
+**Segunda correção (revisão da Fase 9, Etapa 5):** o texto `sage-700` do
+botão secundário e das pills de filtro/categoria (Badge, Cardápio,
+`GaleriaFiltravel`) sobre o fundo `sage-100` do hover/active mede apenas
+4,37:1 — também abaixo do mínimo AA de 4,5:1, um achado mais sutil que
+passou despercebido na correção anterior por só aparecer em estados de
+interação, não em repouso. Corrigido subindo o texto para `sage-900`
+(7,13:1) nesses estados; o texto em repouso (sobre fundo branco/creme,
+sem esse problema) não muda.
+
 ## Badges
 
-Pill-shape (`radius-pill`), fundo `sage-100`, texto `sage-700`, peso 600,
-tamanho `14px`, padding `4px 12px`. Usadas para categorias (ex: "Bolo
-redondo", "Docinho", "Recheio").
+Pill-shape (`radius-pill`), fundo `sage-100`, texto `sage-900` (não
+`sage-700` — corrigido na revisão da Fase 9, Etapa 5: `sage-700` sobre
+`sage-100` mede 4,37:1, abaixo do mínimo AA; `sage-900` mede 7,13:1),
+peso 600, tamanho `14px`, padding `4px 12px`. Usadas para categorias (ex:
+"Bolo redondo", "Docinho", "Recheio").
 
 ## Cards
 

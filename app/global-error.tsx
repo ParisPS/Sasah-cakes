@@ -10,6 +10,13 @@ import * as Sentry from "@sentry/nextjs";
 // podem ter sido a causa da falha. Por isso usa estilo inline com as
 // cores da marca direto em hex, em vez das classes utilitárias. Ver
 // docs/OBSERVABILITY.md.
+//
+// #5C6B41 (sage-700) no botão abaixo, não #7C8A5E (sage-500): achado da
+// revisão da Fase 9 (Etapa 5) — por estar em hex solto, fora do
+// componente Button, este botão escapou da correção de contraste do CTA
+// principal (Issue #96/PR #97), que trocou sage-500 por sage-700 porque
+// cream-300 sobre sage-500 mede só 3.47:1 (abaixo do mínimo AA de
+// 4.5:1); sobre sage-700 mede 5.40:1.
 export default function GlobalError({
   error,
   reset,
@@ -71,7 +78,7 @@ export default function GlobalError({
                 onClick={() => reset()}
                 style={{
                   borderRadius: 9999,
-                  backgroundColor: "#7C8A5E",
+                  backgroundColor: "#5C6B41",
                   color: "#FBF7EC",
                   border: "none",
                   padding: "12px 28px",
