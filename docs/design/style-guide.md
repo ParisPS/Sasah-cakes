@@ -28,7 +28,9 @@ Este arquivo não repete os valores dos tokens — referencia-os pelo nome
 
 ### Card de produto
 
-Usado no Cardápio (tamanhos de bolo) e em Docinhos (pacote).
+Usado no Cardápio (tamanhos de bolo redondo/quadrado e pacote de
+docinhos — desde a Fase 9, Docinhos é uma seção do Cardápio, não uma
+página própria, ver [`../sitemap.md`](../sitemap.md)).
 
 - Estrutura: nome/tamanho (H4 ou H5) + rendimento (corpo, `ink-600`) +
   preço em destaque (H4, `sage-700`).
@@ -53,7 +55,9 @@ Usado para recheios, sabores de docinho e categorias de foto na galeria.
 
 Presente em **todas** as páginas, fixo no canto inferior direito.
 
-- Estilo: circular, fundo `sage-500`, ícone `cream-300`, `shadow-lg`.
+- Estilo: circular, fundo `sage-700` (não `sage-500` — corrigido na Fase
+  9 por contraste, ver [`design-tokens.md`](design-tokens.md#botões)),
+  ícone `cream-300`, `shadow-lg`.
 - Link direto para `wa.me` com o telefone de `content/cardapio.json`
   (`comoEncomendar.contato.telefone`), idealmente com mensagem
   pré-preenchida (ex: "Olá! Vi o site e quero fazer uma encomenda.").
@@ -63,10 +67,17 @@ Presente em **todas** as páginas, fixo no canto inferior direito.
 
 Usada na Home (preview) e na página Galeria (completa).
 
-- Item: foto (proporção fixa, placeholder `sage-100` até imagem real) +
-  badge de categoria sobreposto no canto inferior da foto.
-- Preview (Home): scroll horizontal no mobile, grid 4 colunas no desktop.
-- Completa (Galeria): grid 1 coluna no mobile, 3 colunas no desktop.
+- Item: foto (proporção fixa 3:4, moldura passe-partout `cream-300` ao
+  redor — desde a Fase 9) + badge de categoria sobreposto no canto
+  inferior da foto.
+- Preview (Home): scroll horizontal no mobile, grid 4 colunas no
+  desktop; sempre 4 fotos, uma amostra curada (não o portfólio inteiro —
+  ver `lib/cardapio.ts`, `amostraCuradaPortfolio`).
+- Completa (Galeria): grid 1 coluna no mobile, 3 colunas no desktop
+  (`grid-flow-dense`, com 1-2 fotos ocupando 2 colunas para variar o
+  tamanho de exibição sem variar o crop). Desde a Fase 9, tem um filtro
+  por categoria no topo (`components/GaleriaFiltravel.tsx`) em vez do
+  badge repetido em cada foto — o badge só aparece na Home.
 
 ### Cabeçalho (header)
 

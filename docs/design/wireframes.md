@@ -11,6 +11,16 @@ Convenção: cada wireframe é descrito primeiro na versão mobile (coluna
 Em todas as páginas, um **botão flutuante de WhatsApp** (`radius-pill`,
 circular) fica fixo no canto inferior direito, sempre visível.
 
+**Atualizado na Fase 9 (redesign de marca), Etapa 5:** os diagramas
+abaixo refletem a estrutura de 4 páginas do redesign (Docinhos virou
+seção do Cardápio, Contato foi absorvido por Como Encomendar — ver
+justificativa completa em
+[`../redesign/arquitetura.md`](../redesign/arquitetura.md) e a estrutura
+final em [`../sitemap.md`](../sitemap.md)). As páginas Docinhos e Contato
+da versão original (Fase 2) foram removidas deste documento — seu
+conteúdo aparece integrado nos wireframes de Cardápio e Como Encomendar,
+respectivamente.
+
 ---
 
 ## Home
@@ -20,130 +30,115 @@ circular) fica fixo no canto inferior direito, sempre visível.
 │ ☰   Sasah Cakes             │  header fixo, fundo branco
 ├─────────────────────────────┤
 │ 🌿 mancha aquarela (fundo)  │
-│                              │
-│   Bolos e docinhos feitos   │  H1, fundo sage-500 ou cream-500
+│                              │  fundo cream-500
+│   Bolos e docinhos feitos   │  H1 + frase de apoio
 │   à mão, com carinho        │
 │                              │
-│   [ Ver Cardápio ]          │  botão primário, pill
+│   [ Ver Cardápio ]          │  botão SECUNDÁRIO (navegação, não é a
+├─────────────────────────────┤  conversão final da página)
+│  Um gostinho do nosso        │  H2, fundo branco
+│  cardápio                    │
+│  [produto][produto][produto]│  3 produtos REAIS de cardapio.json (não
+│  R$ · R$ · R$                │  cards que só espelham a navegação)
+│  [ Ver cardápio completo ]   │  botão secundário
 ├─────────────────────────────┤
-│  Cardápio de Bolos    →     │  card 1 (link para /cardapio)
+│  Nosso Trabalho              │  H2, fundo cream-500
+│  [foto][foto][foto][foto] → │  scroll horizontal — amostra curada
+│  Ver galeria completa →     │  (4 fotos, não as 12 do portfólio)
 ├─────────────────────────────┤
-│  Docinhos              →    │  card 2 (link para /docinhos)
+│  Vamos combinar sua          │  H2, fundo sage-900 (cor cheia)
+│  encomenda?                  │  único CTA de conversão da Home
+│  [ Falar no WhatsApp ]       │  botão primário → wa.me
 ├─────────────────────────────┤
-│  Como Encomendar       →    │  card 3 (link para /como-encomendar)
-├─────────────────────────────┤
-│  Nosso Trabalho              │  H2
-│  [foto][foto][foto][foto] → │  scroll horizontal (preview galeria)
-│  Ver galeria completa →     │
-├─────────────────────────────┤
-│  Contato · Redes sociais    │  rodapé
+│  rodapé                      │
 └─────────────────────────────┘
-                          [💬]  ← WhatsApp flutuante
+                          [💬]  ← WhatsApp flutuante (chrome global)
 ```
 
-**Desktop (≥768px):** header com nav inline (Cardápio · Docinhos · Como
-Encomendar · Galeria · Contato) substituindo o `☰`. Os 3 cards de destaque
-(Cardápio/Docinhos/Como Encomendar) viram uma linha de 3 colunas. O preview
-de galeria vira grid de 4 colunas em vez de scroll horizontal.
+**Desktop (≥768px):** header com nav inline (Cardápio · Como Encomendar ·
+Galeria — 3 itens, não 5) substituindo o `☰`. Os 3 produtos em destaque
+viram uma linha de 3 colunas. O preview de galeria vira grid de 4 colunas
+em vez de scroll horizontal. Ver especificação completa em
+[`../redesign/arquitetura.md`](../redesign/arquitetura.md#31-home).
 
 ---
 
-## Cardápio
+## Cardápio (inclui Docinhos como categoria — Fase 9)
 
 ```
 ┌─────────────────────────────┐
 │ ☰   Sasah Cakes             │
 ├─────────────────────────────┤
-│  Cardápio                    │  H1
-│  [Redondos] [Quadrados]      │  tabs/toggle
-├─────────────────────────────┤
+│  Cardápio                    │  H1 + frase de apoio
+│  [Redondos][Quadrados][Doc.] │  barra de âncoras (pills, não tabs —
+├─────────────────────────────┤  rola até a seção, não troca conteúdo)
+│  Bolos Redondos               │  H2, #bolos-redondos
 │  ┌─────────────────────┐    │
 │  │ 15cm · 12 fatias     │    │  card de produto
 │  │ R$ 180,00            │    │
 │  └─────────────────────┘    │
-│  ┌─────────────────────┐    │
-│  │ 20cm · 25 fatias     │    │
-│  │ R$ 210,00            │    │
-│  └─────────────────────┘    │
 │  ... (demais tamanhos)      │
 ├─────────────────────────────┤
-│  Recheios disponíveis        │  H2
-│  (Amendoim)(Beijinho)(...)  │  badges pill, wrap
+│  Bolos Quadrados              │  H2, #bolos-quadrados, fundo cream-500
+│  ... (mesma estrutura)       │
 ├─────────────────────────────┤
-│  [ Quero Encomendar ]        │  CTA → /como-encomendar
+│  Recheios disponíveis        │  H2 — compartilhado entre Redondos e
+│  (Amendoim)(Beijinho)(...)  │  Quadrados, aparece uma vez só
 ├─────────────────────────────┤
-│  rodapé                      │
-└─────────────────────────────┘
-                          [💬]
-```
-
-**Desktop:** cards de tamanho em grid 3 colunas por tab (Redondos /
-Quadrados). Tabs podem virar duas seções lado a lado ou manter tabs no
-topo, conforme espaço.
-
----
-
-## Docinhos
-
-```
-┌─────────────────────────────┐
-│ ☰   Sasah Cakes             │
-├─────────────────────────────┤
-│  Docinhos                    │  H1
-├─────────────────────────────┤
+│  Docinhos                     │  H2, #docinhos, fundo cream-500
 │  ┌─────────────────────┐    │
-│  │ 100 docinhos          │    │  card de pacote (destaque)
+│  │ 100 docinhos          │    │  card de pacote (mesmo ProductCard)
 │  │ R$ 120,00             │    │
 │  │ 2 sabores (50 + 50)   │    │
-│  │  ou                   │    │
-│  │ 4 sabores (25 cada)   │    │
+│  │  ou 4 sabores (25 ea) │    │
 │  └─────────────────────┘    │
-├─────────────────────────────┤
-│  Sabores disponíveis         │  H2
+│  Sabores disponíveis         │
 │  (Beijinho)(Brigadeiro)(...)│  badges pill, wrap
 ├─────────────────────────────┤
-│  [ Quero Encomendar ]        │  CTA → /como-encomendar
+│  [ Quero Encomendar ]        │  CTA secundário → /como-encomendar
 ├─────────────────────────────┤
 │  rodapé                      │
 └─────────────────────────────┘
                           [💬]
 ```
 
-**Desktop:** card de pacote centralizado, largura máxima ~480px; badges de
-sabores em grid/wrap mais largo abaixo.
+**Desktop:** barra de categorias sem scroll (todas visíveis lado a lado);
+cards de tamanho em grid 3 colunas por seção. Ver especificação completa
+em [`../redesign/arquitetura.md`](../redesign/arquitetura.md#32-cardápio).
 
 ---
 
-## Como Encomendar
+## Como Encomendar (inclui Contato — Fase 9)
 
 ```
 ┌─────────────────────────────┐
 │ ☰   Sasah Cakes             │
 ├─────────────────────────────┤
-│  Como Encomendar              │  H1
+│  Como Encomendar              │  H1 + frase de apoio
 ├─────────────────────────────┤
 │  1  Escolha bolo/docinhos     │  passos numerados,
 │  2  Chame no WhatsApp         │  empilhados
 │  3  Pague 50% de sinal (Pix)  │
 │  4  Retire no local            │
-├─────────────────────────────┤
-│  📞 Samirah Carvalho Paula    │  bloco de contato, destaque
-│  (21) 98200-8885              │
-│  [ Chamar no WhatsApp ]       │  botão primário
-├─────────────────────────────┤
+├─────────────────────────────┤  bloco cream-500 a partir daqui
+│  📞 Samirah Carvalho Paula    │  bloco de contato, destaque (era a
+│  (21) 98200-8885              │  página /contato — absorvida aqui)
+│  [ Chamar no WhatsApp ]       │  único CTA primário de WhatsApp no
+├─────────────────────────────┤  corpo da página (rodapé não repete)
 │  💳 Pagamento via Pix          │  bloco info
 │  (chave = telefone acima)     │
 │  ⏱ Antecedência mínima: 4 dias│
 │  📍 Somente retirada no local  │
 ├─────────────────────────────┤
-│  rodapé                        │
-└─────────────────────────────┘
+│  rodapé (sem link de WhatsApp) │  só aqui — evita repetir o contato
+└─────────────────────────────┘  que a página já mostrou em destaque
                           [💬]
 ```
 
 **Desktop:** os 4 passos numerados podem virar uma linha horizontal de 4
 colunas (estilo "timeline"); bloco de contato e bloco de pagamento lado a
-lado em 2 colunas.
+lado em 2 colunas. Ver especificação completa em
+[`../redesign/arquitetura.md`](../redesign/arquitetura.md#34-como-encomendar-inclui-contato).
 
 ---
 
@@ -154,52 +149,28 @@ lado em 2 colunas.
 │ ☰   Sasah Cakes             │
 ├─────────────────────────────┤
 │  Nosso Trabalho               │  H1
-│  (fotos reais em breve)       │  nota, enquanto usa placeholders
+│  Fotos reais de trabalhos     │  status real (Fase 4), não mais nota
+│  entregues.                    │  de placeholder
 ├─────────────────────────────┤
-│  [ foto placeholder 01 ]      │  1 coluna no mobile
-│  (Bolo temático)               │  badge de categoria sobre a foto
-├─────────────────────────────┤
-│  [ foto placeholder 02 ]      │
-│  (Bolo futebol)                │
-├─────────────────────────────┤
-│  [ foto placeholder 03 ]      │
-│  (Bolo festa)                  │
-├─────────────────────────────┤
-│  [ foto placeholder 04 ]      │
-│  (Bandeja de docinhos)         │
+│ (Todos)(Redondos)(Quad.)(Doc)│  filtro por categoria (Fase 9) —
+├─────────────────────────────┤  substitui o badge repetido em cada foto
+│  [ foto real 01 ]             │  1 coluna no mobile, moldura
+│  [ foto real 02 ]             │  passe-partout ao redor de cada foto,
+│  [ foto real 03 ]             │  crop fixo 3:4 (nunca varia, mesmo no
+│  ... (12 fotos, ou menos      │  grid editorial do desktop)
+│      se um filtro < Todos)    │
 ├─────────────────────────────┤
 │  rodapé                        │
 └─────────────────────────────┘
                           [💬]
 ```
 
-**Desktop:** grid 3 colunas (estilo masonry/Pinterest opcional para
-variar alturas de foto).
-
----
-
-## Contato
-
-```
-┌─────────────────────────────┐
-│ ☰   Sasah Cakes             │
-├─────────────────────────────┤
-│  Contato                      │  H1
-├─────────────────────────────┤
-│  📞 Samirah Carvalho Paula    │  destaque central
-│  (21) 98200-8885              │
-│  [ Chamar no WhatsApp ]       │  botão primário
-├─────────────────────────────┤
-│  💳 Pagamento via Pix          │  nota reforçando
-│  📍 Retirada no local          │  (sem endereço público nesta fase)
-├─────────────────────────────┤
-│  rodapé · redes sociais        │
-└─────────────────────────────┘
-                          [💬]
-```
-
-**Desktop:** conteúdo centralizado em coluna única com largura máxima
-(~560px) — página é intencionalmente simples, não precisa de grid.
+**Desktop:** grid 3 colunas, `grid-flow-dense` — 1-2 fotos ocupam 2
+colunas (grid "editorial", só quando o filtro é "Todos") para variar o
+tamanho de exibição sem variar a proporção do recorte. Sem lightbox
+(decisão da Etapa 2, mantida na Etapa 3: as fotos são recortes de baixa
+resolução, ampliar evidenciaria isso). Ver especificação completa em
+[`../redesign/arquitetura.md`](../redesign/arquitetura.md#33-galeria).
 
 ---
 
@@ -212,5 +183,6 @@ variar alturas de foto).
   conforme indicado em cada página acima.
 - **Botão flutuante de WhatsApp:** sempre fixo no canto inferior direito,
   em todas as breakpoints.
-- **Imagens:** carregam em proporção fixa (evitar layout shift), com
-  placeholder de cor `sage-100` enquanto a imagem real não é fornecida.
+- **Imagens:** carregam em proporção fixa (evitar layout shift), com um
+  skeleton na paleta da marca (`sage-100`/`cream-500`) enquanto a foto
+  real carrega (`components/PortfolioImage.tsx`, desde a Fase 7).

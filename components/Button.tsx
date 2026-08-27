@@ -46,9 +46,12 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   // Ação de navegação/exploração (ex: "ver mais fotos", "ver cardápio
   // completo") — nunca usada antes da Fase 9, apesar de já especificada
   // desde a Fase 2 (docs/design/design-tokens.md "Botões"). Sem sombra
-  // nem fundo, para não competir visualmente com o primário.
+  // nem fundo, para não competir visualmente com o primário. Texto sobe
+  // de sage-700 para sage-900 no hover/active (achado da Etapa 5): o
+  // fundo que aparece nesse momento, sage-100, mede só 4.37:1 contra
+  // sage-700 — abaixo do mínimo AA de 4.5:1 — e 7.13:1 contra sage-900.
   secondary:
-    "border border-sage-500 text-sage-700 shadow-none active:bg-sage-100 md:hover:bg-sage-100 md:hover:shadow-none",
+    "border border-sage-500 text-sage-700 shadow-none active:bg-sage-100 active:text-sage-900 md:hover:bg-sage-100 md:hover:text-sage-900 md:hover:shadow-none",
 };
 
 /**

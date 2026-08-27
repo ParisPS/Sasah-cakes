@@ -46,7 +46,11 @@ export default function CardapioPage() {
       </p>
 
       {/* Barra de categorias — scroll horizontal no mobile (pills não
-          cabem todas na largura da tela), lado a lado no desktop. */}
+          cabem todas na largura da tela), lado a lado no desktop.
+          hover:text-sage-900 (achado da revisão da Fase 9, Etapa 5): o
+          fundo sage-100 do hover mede só 4.37:1 contra o texto sage-700
+          em repouso, abaixo do mínimo AA de 4.5:1 — 7.13:1 contra
+          sage-900. Mesmo par usado em components/GaleriaFiltravel.tsx. */}
       <nav
         aria-label="Categorias do cardápio"
         className="mt-6 flex gap-3 overflow-x-auto pb-2 md:flex-wrap md:overflow-visible"
@@ -55,7 +59,7 @@ export default function CardapioPage() {
           <a
             key={categoria.href}
             href={categoria.href}
-            className="rounded-pill border-sage-300 text-sage-700 hover:bg-sage-100 font-body shrink-0 border px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors motion-reduce:transition-none"
+            className="rounded-pill border-sage-300 text-sage-700 hover:bg-sage-100 hover:text-sage-900 font-body shrink-0 border px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors motion-reduce:transition-none"
           >
             {categoria.label}
           </a>
