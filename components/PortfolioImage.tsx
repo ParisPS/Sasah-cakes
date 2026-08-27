@@ -22,7 +22,7 @@ export function PortfolioImage({ src, alt, sizes }: PortfolioImageProps) {
     <>
       <div
         aria-hidden="true"
-        className={`from-sage-100 to-cream-500 absolute inset-0 bg-gradient-to-br transition-opacity duration-500 ease-out motion-reduce:transition-none ${
+        className={`from-sage-100 to-cream-500 absolute inset-0 bg-linear-to-br transition-opacity duration-500 ease-out motion-reduce:transition-none ${
           loaded
             ? "opacity-0"
             : "animate-pulse opacity-100 motion-reduce:animate-none"
