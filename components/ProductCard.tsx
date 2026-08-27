@@ -37,7 +37,7 @@ export function ProductCard({
       {/* Preço em destaque — mesma escala de H4 (ver design-tokens.md),
           mas sem tag <h4> duplicada por card para manter a hierarquia
           semântica do documento. */}
-      <p className="font-heading text-sage-700 mt-3 text-[19px] leading-[1.25] font-semibold md:text-[22px]">
+      <p className="font-heading text-sage-700 mt-3 text-[19px] leading-tight font-semibold md:text-[22px]">
         {formatarPreco(price)}
       </p>
       {children}
