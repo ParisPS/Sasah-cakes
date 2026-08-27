@@ -118,18 +118,32 @@ com `variant="primary" | "secondary"`. Label em Bricolage Grotesque 600,
 `letter-spacing` levemente positivo (~0.01em) — separa visualmente "isto
 é um botão de marca" de um link comum, sem precisar de caixa alta.
 
-- **Primário** — fundo `sage-500`, texto `cream-300`, `radius-pill`,
-  padding `12px 28px`, `shadow-sm` em repouso, `shadow-md` + `sage-700` no
-  hover.
+- **Primário** — fundo `sage-700` (não mais `sage-500`, ver nota abaixo),
+  texto `cream-300`, `radius-pill`, padding `12px 28px`, `shadow-sm` em
+  repouso, `shadow-md` + `sage-900` no hover/active.
 - **Secundário** — fundo transparente, borda `1px solid sage-500`, texto
   `sage-700`, `radius-pill`, sem sombra. Hover: fundo `sage-100`.
   Especificado desde a Fase 2, mas nunca usado no código até a Fase 9.
 - **Botão flutuante (WhatsApp)** — circular (`border-radius: 999px`,
-  largura = altura), fundo `sage-500`, ícone `cream-300`, `shadow-lg`,
-  fixo no canto inferior direito. Componente próprio
-  (`components/WhatsAppButton.tsx`), fora do componente `Button` — forma
-  e função (ícone, sem label) são diferentes o suficiente para não
-  compartilhar a mesma implementação.
+  largura = altura), fundo `sage-700` (mesma correção do botão primário),
+  ícone `cream-300`, `shadow-lg`, fixo no canto inferior direito.
+  Componente próprio (`components/WhatsAppButton.tsx`), fora do
+  componente `Button` — forma e função (ícone, sem label) são diferentes
+  o suficiente para não compartilhar a mesma implementação, mas usa o
+  mesmo par de cores de fundo/texto e por isso precisou da mesma
+  correção.
+
+**Correção de contraste (pós-Fase 9):** o fundo do botão primário era
+`sage-500`, com `cream-300` de texto — medindo apenas 3,47:1 de
+contraste, abaixo do mínimo AA de 4,5:1 para texto normal (achado
+documentado, mas não corrigido, na Etapa 4 do redesign, ver
+[`../redesign/arquitetura.md`](../redesign/arquitetura.md)). Trocado para
+`sage-700`, que mede 5,40:1 sobre `cream-300` — passa AA com folga.
+Hover/active subiram de `sage-700` para `sage-900` (8,80:1), preservando
+a progressão "escurece ao interagir" com um degrau a mais no mesmo tom.
+`sage-500` continua definido na paleta e em uso em outros contextos (ex:
+borda do botão secundário, ícone de loading) — não foi removido, só
+deixou de ser fundo de CTA.
 
 ## Badges
 

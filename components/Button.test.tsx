@@ -36,7 +36,7 @@ describe("Button", () => {
   it("aplica classes diferentes para as variantes primária e secundária", () => {
     const { rerender } = render(<Button href="/cardapio">Primário</Button>);
     const primario = screen.getByRole("link", { name: "Primário" });
-    expect(primario.className).toContain("bg-sage-500");
+    expect(primario.className).toContain("bg-sage-700");
 
     rerender(
       <Button href="/cardapio" variant="secondary">
