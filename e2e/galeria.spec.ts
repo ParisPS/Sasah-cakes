@@ -68,7 +68,12 @@ test.describe("página Galeria", () => {
     // 4 da prévia de galeria + 3 fotos de produto em destaque (uma por
     // categoria: bolo redondo, bolo quadrado, docinho) = 7 imagens do
     // portfólio na Home, sempre menos que as 12 da Galeria completa.
-    const fotos = page.locator("main img");
+    // Filtro por src (não só "main img"): a Fase 10 adicionou o mascote
+    // de corpo inteiro ao hero, uma <img> a mais em <main> que não é do
+    // portfólio e não deve entrar nessa contagem. "portfolio" (sem
+    // barras) casa tanto com o path cru quanto com a URL otimizada do
+    // next/image (/_next/image?url=%2Fportfolio%2F...).
+    const fotos = page.locator('main img[src*="portfolio"]');
     await expect(fotos).toHaveCount(7);
   });
 });
