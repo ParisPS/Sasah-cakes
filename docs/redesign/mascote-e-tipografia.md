@@ -8,9 +8,9 @@ reabre a paleta sálvia/creme definida em
 o rosa do mascote como acento pontual, já presente na ilustração
 original, sem expandir seu uso a outros elementos do site.
 
-Este arquivo é escrito incrementalmente ao longo dos PRs desta fase —
-cada seção abaixo é adicionada/expandida conforme a entrega
-correspondente é mergeada.
+As quatro seções abaixo (tipografia, mascote/selo, hero, fotos
+placeholder) correspondem às quatro entregas de código da fase,
+implementadas e documentadas incrementalmente em PRs separados.
 
 ## 1. Tipografia — Titan One substitui a Fraunces
 
@@ -61,7 +61,7 @@ Três arquivos, três recortes do mesmo personagem, um propósito cada:
 | Arquivo                                  | Conteúdo                                                                                                                                                        | Uso                                                                                                       |
 | ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `public/brand/mascote-selo.png`          | Selo circular completo, com o texto "SASAH CAKES" e "FEITO A MÃO COM CARINHO" em arco, borda tracejada e anel sálvia — como um selo/carimbo vintage de padaria. | Logo do Header e do Footer (`components/Header.tsx`, `components/Footer.tsx`); fonte do `apple-icon.png`. |
-| `public/brand/mascote-corpo-inteiro.png` | Personagem sozinho, corpo inteiro, sem o selo/texto ao redor.                                                                                                   | Hero da Home (Issue #102).                                                                                |
+| `public/brand/mascote-corpo-inteiro.png` | Personagem sozinho, corpo inteiro, sem o selo/texto ao redor.                                                                                                   | Hero da Home (`app/page.tsx`, ver seção 3 abaixo).                                                        |
 | `public/brand/favicon-source.png`        | Recorte fechado no busto/rosto do personagem, sem o selo.                                                                                                       | Fonte do `app/icon.png` (favicon).                                                                        |
 
 ### Logo (Header/Footer)
@@ -150,7 +150,7 @@ lacuna que o placeholder deveria preencher ali.
 Dentro do Cardápio, cada foto aparece **uma vez no topo da seção da
 categoria** (acima da grade de `ProductCard`), não repetida em cada
 card individual de tamanho/preço. Isso segue diretamente a restrição
-desta fase: a foto ilustra a categoria em geral (“um bolo redondo”),
+desta fase: a foto ilustra a categoria em geral ("um bolo redondo"),
 não afirma nada sobre um tamanho/preço específico da lista abaixo dela
 — repetir a mesma foto em cada card (ex: nos 3 cards de bolo redondo)
 sugeriria uma correspondência 1:1 entre foto e item que não existe.
