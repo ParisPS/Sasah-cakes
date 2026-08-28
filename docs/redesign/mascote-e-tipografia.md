@@ -42,11 +42,63 @@ estilo "rubber hose" do personagem.
 - **Maiúsculas:** Titan One já é visualmente "caixa alta" por desenho de
   glifo (não tem uma forma minúscula distinta da maiúscula) — nenhum
   `text-transform: uppercase` foi adicionado, o texto continua digitado
-  normalmente no HTML (import ante para SEO/leitura por leitor de tela).
+  normalmente no HTML (importante para SEO/leitura por leitor de tela).
 
 ## 2. Mascote e selo
 
-_(preenchido no PR de logo/favicon — Issue #101)_
+O mascote é uma fatia de bolo antropomorfizada (olhos, braços, mãos com
+luva, acenando/segurando um batedor de arame), desenhada no estilo
+"rubber hose" — traço grosso preto/sálvia, cores chapadas, sem
+gradientes — a mesma linguagem visual de personagens de desenho animado
+retrô dos anos 1930. O rosa (cobertura/calda derretendo no topo,
+~`#D55E78` — medido diretamente do PNG) é o único uso desse tom no site
+inteiro — não é um token de paleta novo (não existe em
+`design-tokens.md`), é um acento pontual já embutido na ilustração, e
+não é reaproveitado em nenhum outro lugar da UI.
+
+Três arquivos, três recortes do mesmo personagem, um propósito cada:
+
+| Arquivo                                  | Conteúdo                                                                                                                                                        | Uso                                                                                                       |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `public/brand/mascote-selo.png`          | Selo circular completo, com o texto "SASAH CAKES" e "FEITO A MÃO COM CARINHO" em arco, borda tracejada e anel sálvia — como um selo/carimbo vintage de padaria. | Logo do Header e do Footer (`components/Header.tsx`, `components/Footer.tsx`); fonte do `apple-icon.png`. |
+| `public/brand/mascote-corpo-inteiro.png` | Personagem sozinho, corpo inteiro, sem o selo/texto ao redor.                                                                                                   | Hero da Home (Issue #102).                                                                                |
+| `public/brand/favicon-source.png`        | Recorte fechado no busto/rosto do personagem, sem o selo.                                                                                                       | Fonte do `app/icon.png` (favicon).                                                                        |
+
+### Logo (Header/Footer)
+
+O wordmark de texto "Sasah Cakes" (`font-heading`, ver seção 1) foi
+substituído pelo selo em ambos os lugares onde aparecia:
+
+- **Header:** `mascote-selo.png` dentro do link para `/`, 48px
+  (mobile) / 56px (desktop) — tamanho de "esta é a marca", sem competir
+  com os 3 itens de navegação ao lado. `alt="Sasah Cakes"` funciona como
+  nome acessível do link: os testes E2E que localizam o logo por
+  `getByRole("link", { name: "Sasah Cakes" })` continuam passando sem
+  alteração, porque o nome acessível de um link cujo único conteúdo é
+  uma imagem vem do `alt` dela.
+- **Footer:** mesmo selo, 80px, centralizado — funciona como um "carimbo"
+  de fechamento da página. O nome da marca continua existindo como
+  texto de verdade na linha de copyright logo abaixo (nenhuma
+  informação passou a existir só dentro de uma imagem).
+
+### Favicon e apple-touch-icon
+
+Convenção de arquivo do Next.js App Router — nenhum código de
+configuração explícito, os arquivos abaixo já viram os `<link>` de
+`<head>` corretos automaticamente:
+
+- **`app/icon.png`** (256×256, gerado a partir de
+  `public/brand/favicon-source.png`) — favicon. O recorte fechado no
+  rosto do personagem foi escolhido especificamente para isso: em 16–32px
+  (tamanho real de exibição de um favicon), um selo inteiro com texto
+  ficaria ilegível, mas o rosto/confete de cobertura ainda formam uma
+  forma reconhecível.
+- **`app/apple-icon.png`** (180×180, tamanho exato recomendado pela
+  Apple, gerado a partir de `public/brand/mascote-selo.png`) — nesse
+  tamanho maior, o selo completo com o texto ainda é legível.
+- O `app/favicon.ico` anterior (o triângulo genérico do template inicial
+  do Next.js/Vercel, nunca substituído por uma marca própria) foi
+  removido — `app/icon.png` o substitui integralmente.
 
 ## 3. Hero da Home
 
