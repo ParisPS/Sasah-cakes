@@ -49,35 +49,40 @@ nenhum token de erro/validação é definido nesta fase. Ver nota em
 
 ## Tipografia
 
-Revisada na **Fase 9** (redesign de marca) — decisão e justificativa
-completa em
-[`../redesign/direcao-artistica.md`](../redesign/direcao-artistica.md#1-tipografia).
-Fontes via Google Fonts.
+Revisada na **Fase 9** (redesign de marca) e novamente na **Fase 10**
+(mascote e tipografia) — decisão e justificativa completa em
+[`../redesign/direcao-artistica.md`](../redesign/direcao-artistica.md#1-tipografia)
+(Fase 9) e
+[`../redesign/mascote-e-tipografia.md`](../redesign/mascote-e-tipografia.md#1-tipografia--titan-one-substitui-a-fraunces)
+(Fase 10). Fontes via Google Fonts.
 
-- **Display** — [Fraunces](https://fonts.google.com/specimen/Fraunces),
-  peso 600–700. Serifada bold, com personalidade artesanal. Reservada
-  para H1–H3, hero, e a exceção do preço em destaque (ver escala
-  abaixo).
-  - Fallback: `Georgia, 'Times New Roman', serif`
+- **Display** — [Titan One](https://fonts.google.com/specimen/Titan+One)
+  (substituiu a Fraunces na Fase 10), peso único 400. Display bold,
+  arredondada, só maiúsculas por desenho — combina com o mascote
+  ilustrado em estilo retrô "rubber hose". Reservada para H1–H4, hero, e
+  a exceção do preço em destaque (ver escala abaixo). Como só existe em
+  peso 400, nenhum heading nesta fonte usa `font-bold`/`font-semibold` —
+  todos em `font-normal` explicitamente.
+  - Fallback: `'Arial Black', 'Helvetica Neue', sans-serif`
 - **Funcional** —
   [Bricolage Grotesque](https://fonts.google.com/specimen/Bricolage+Grotesque),
   peso 400–600 (trocou a Lora na Fase 9). Grotesca com detalhes
-  orgânicos — corpo de texto, nav, botões, badges e H4–H6.
+  orgânicos — corpo de texto, nav, botões, badges e H5–H6.
   - Fallback: `-apple-system, 'Segoe UI', sans-serif`
 
 ### Escala tipográfica
 
 | Nível                           | Fonte               | Peso | Desktop | Mobile | Line-height |
 | ------------------------------- | ------------------- | ---- | ------- | ------ | ----------- |
-| H1                              | Fraunces            | 700  | 56px    | 36px   | 1.1         |
-| H2                              | Fraunces            | 700  | 40px    | 28px   | 1.15        |
-| H3                              | Fraunces            | 600  | 28px    | 22px   | 1.2         |
-| H4                              | Bricolage Grotesque | 600  | 22px    | 19px   | 1.25        |
+| H1                              | Titan One           | 400  | 56px    | 36px   | 1.1         |
+| H2                              | Titan One           | 400  | 40px    | 28px   | 1.15        |
+| H3                              | Titan One           | 400  | 28px    | 22px   | 1.2         |
+| H4                              | Titan One           | 400  | 22px    | 19px   | 1.25        |
 | H5                              | Bricolage Grotesque | 600  | 18px    | 17px   | 1.3         |
 | H6                              | Bricolage Grotesque | 600  | 16px    | 15px   | 1.3         |
 | Corpo                           | Bricolage Grotesque | 400  | 16px    | 16px   | 1.6         |
 | Legenda                         | Bricolage Grotesque | 500  | 14px    | 13px   | 1.5         |
-| **Preço em destaque (exceção)** | **Fraunces**        | 600  | 22px    | 19px   | 1.25        |
+| **Preço em destaque (exceção)** | **Titan One**       | 400  | 22px    | 19px   | 1.25        |
 
 ## Espaçamentos
 

@@ -36,8 +36,9 @@ export function ProductCard({
       <p className="caption mt-1">{subtitle}</p>
       {/* Preço em destaque — mesma escala de H4 (ver design-tokens.md),
           mas sem tag <h4> duplicada por card para manter a hierarquia
-          semântica do documento. */}
-      <p className="font-heading text-sage-700 mt-3 text-[19px] leading-tight font-semibold md:text-[22px]">
+          semântica do documento. font-normal: Titan One só existe em
+          peso 400 (Fase 10) — ver nota em app/globals.css. */}
+      <p className="font-heading text-sage-700 mt-3 text-[19px] leading-tight font-normal md:text-[22px]">
         {formatarPreco(price)}
       </p>
       {children}

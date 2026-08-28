@@ -16,7 +16,11 @@ export function Header() {
         <Link
           href="/"
           onClick={() => setOpen(false)}
-          className="font-heading text-sage-700 text-xl font-bold"
+          // font-normal: Titan One (Fase 10) só existe em peso 400 — ver
+          // nota em app/globals.css. Este wordmark de texto é temporário
+          // aqui — vira o selo ilustrado do mascote na Fase 10 (ver
+          // docs/redesign/mascote-e-tipografia.md).
+          className="font-heading text-sage-700 text-xl font-normal"
         >
           Sasah Cakes
         </Link>

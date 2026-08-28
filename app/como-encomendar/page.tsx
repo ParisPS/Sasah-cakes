@@ -40,7 +40,9 @@ export default function ComoEncomendarPage() {
               key={passo.numero}
               className="bg-cream-300 rounded-lg p-6 shadow-sm"
             >
-              <span className="font-heading text-sage-700 text-2xl font-bold">
+              {/* font-normal: Titan One (Fase 10) só existe em peso 400 —
+                  ver nota em app/globals.css. */}
+              <span className="font-heading text-sage-700 text-2xl font-normal">
                 {passo.numero}
               </span>
               <p className="text-ink-900 mt-2">{passo.texto}</p>
