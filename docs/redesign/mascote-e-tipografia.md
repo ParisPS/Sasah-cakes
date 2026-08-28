@@ -129,4 +129,43 @@ o mascote solto, só o selo no Header/Footer).
 
 ## 4. Fotos placeholder (`public/produtos-ia/`)
 
-_(preenchido no PR de fotos placeholder — Issue #103)_
+**Três arquivos, todos PLACEHOLDER TEMPORÁRIO gerado por IA — a
+substituir por fotografia profissional real assim que houver:**
+
+| Arquivo                                | Categoria ilustrada | Usado em                                         |
+| -------------------------------------- | ------------------- | ------------------------------------------------ |
+| `public/produtos-ia/bolo-redondo.jpg`  | Bolo redondo        | `app/cardapio/page.tsx`, seção "Bolos Redondos"  |
+| `public/produtos-ia/bolo-quadrado.jpg` | Bolo quadrado       | `app/cardapio/page.tsx`, seção "Bolos Quadrados" |
+| `public/produtos-ia/docinhos.jpg`      | Docinhos            | `app/cardapio/page.tsx`, seção "Docinhos"        |
+
+### Onde entram (e onde não entram)
+
+O Cardápio é o único lugar que recebeu fotos placeholder: antes da Fase
+10, nenhum `ProductCard` do Cardápio tinha foto (só texto —
+nome/rendimento/preço). A Home **não** foi tocada por essas 3 fotos —
+seus produtos em destaque já mostram fotos reais do portfólio (via
+`primeiraFotoDaCategoria`, ver `lib/cardapio.ts`), então já não havia a
+lacuna que o placeholder deveria preencher ali.
+
+Dentro do Cardápio, cada foto aparece **uma vez no topo da seção da
+categoria** (acima da grade de `ProductCard`), não repetida em cada
+card individual de tamanho/preço. Isso segue diretamente a restrição
+desta fase: a foto ilustra a categoria em geral (“um bolo redondo”),
+não afirma nada sobre um tamanho/preço específico da lista abaixo dela
+— repetir a mesma foto em cada card (ex: nos 3 cards de bolo redondo)
+sugeriria uma correspondência 1:1 entre foto e item que não existe.
+
+### Como identificar e trocar depois
+
+Cada uso tem um comentário no código, logo acima do `<Image>`
+correspondente em `app/cardapio/page.tsx`, com a frase "PLACEHOLDER
+TEMPORÁRIO" — buscar por esse termo no repositório localiza os 3
+pontos de troca. Nenhum rótulo "placeholder" aparece na página em si
+(nem visualmente, nem no texto alternativo `alt`) — o `alt` de cada
+imagem é uma descrição literal do que aparece nela, no mesmo estilo dos
+`alt` das fotos reais do portfólio em `content/cardapio.json`.
+
+Ao substituir por fotografia real, o padrão de moldura (passe-partout
+`cream-300` + fundo `sage-100`, ver `components/GallerySection.tsx`) e
+o container `aspect-video` continuam funcionando sem alteração — só a
+prop `src` (e o `alt`) de cada `<Image>` precisa mudar.
