@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { cardapio } from "@/lib/cardapio";
 import { ProductCard } from "@/components/ProductCard";
 import { Badge } from "@/components/Badge";
@@ -69,6 +70,24 @@ export default function CardapioPage() {
       <RevealOnScroll>
         <section id="bolos-redondos" className="mt-10 scroll-mt-24">
           <h2 className="text-sage-900">Bolos Redondos</h2>
+          {/* public/produtos-ia/bolo-redondo.jpg — PLACEHOLDER TEMPORÁRIO
+              gerado por IA, a ser substituído por fotografia profissional
+              real assim que houver (ver docs/redesign/mascote-e-tipografia.md
+              "4"). Ilustra a categoria em geral, não um tamanho/preço
+              específico da lista abaixo — por isso aparece uma vez no topo
+              da seção, não repetido em cada ProductCard. Nenhum card do
+              Cardápio tinha foto até a Fase 10. */}
+          <div className="bg-cream-300 mt-6 rounded-md p-2">
+            <div className="bg-sage-100 relative aspect-video overflow-hidden rounded-sm">
+              <Image
+                src="/produtos-ia/bolo-redondo.jpg"
+                alt="Bolo redondo com cobertura rosa e calda escorrendo pelas laterais, com uma fatia cortada mostrando as camadas"
+                fill
+                sizes="(min-width: 768px) 896px, 100vw"
+                className="object-cover"
+              />
+            </div>
+          </div>
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
             {redondos.map((item) => (
               <ProductCard
@@ -88,6 +107,19 @@ export default function CardapioPage() {
           className="bg-cream-500 mt-14 scroll-mt-24 rounded-lg p-6 md:p-8"
         >
           <h2 className="text-sage-900">Bolos Quadrados</h2>
+          {/* public/produtos-ia/bolo-quadrado.jpg — mesmo raciocínio do
+              placeholder de Bolos Redondos acima. */}
+          <div className="bg-cream-300 mt-6 rounded-md p-2">
+            <div className="bg-sage-100 relative aspect-video overflow-hidden rounded-sm">
+              <Image
+                src="/produtos-ia/bolo-quadrado.jpg"
+                alt="Bolo quadrado com cobertura na cor caramelo, cortado ao meio mostrando as camadas e o recheio"
+                fill
+                sizes="(min-width: 768px) 896px, 100vw"
+                className="object-cover"
+              />
+            </div>
+          </div>
           <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3">
             {quadrados.map((item) => (
               <ProductCard
@@ -121,6 +153,19 @@ export default function CardapioPage() {
           className="bg-cream-500 mt-14 scroll-mt-24 rounded-lg p-6 md:p-8"
         >
           <h2 className="text-sage-900">Docinhos</h2>
+          {/* public/produtos-ia/docinhos.jpg — mesmo raciocínio do
+              placeholder de Bolos Redondos acima. */}
+          <div className="bg-cream-300 mt-6 rounded-md p-2">
+            <div className="bg-sage-100 relative aspect-video overflow-hidden rounded-sm">
+              <Image
+                src="/produtos-ia/docinhos.jpg"
+                alt="Três brigadeiros cobertos de granulado, servidos numa bandeja de metal"
+                fill
+                sizes="(min-width: 768px) 896px, 100vw"
+                className="object-cover"
+              />
+            </div>
+          </div>
           <div className="mt-6 flex justify-center">
             <div className="w-full max-w-md">
               <ProductCard
