@@ -102,7 +102,30 @@ configuração explícito, os arquivos abaixo já viram os `<link>` de
 
 ## 3. Hero da Home
 
-_(preenchido no PR do hero — Issue #102)_
+`public/brand/mascote-corpo-inteiro.png` entra no hero da Home como o
+único "momento" de marca do personagem fora do selo — não é repetido em
+nenhuma outra página (Cardápio, Galeria, Como Encomendar continuam sem
+o mascote solto, só o selo no Header/Footer).
+
+- **Mobile (sem espaço lateral sobrando):** o texto do hero já ocupa a
+  largura útil da tela centralizado — não há onde ancorar o personagem
+  ao lado sem sobrepor o H1/parágrafo/botão. Ele entra em fluxo normal,
+  centralizado, logo abaixo do botão "Ver Cardápio", num tamanho
+  pequeno (160px).
+- **A partir do `md` (768px):** o personagem sai do fluxo do texto e
+  vira um elemento "flutuante" ancorado ao canto inferior direito da
+  seção inteira — a mesma lógica das manchas de aquarela decorativas já
+  existentes no hero, só que com o mascote em vez de uma mancha de cor.
+  Cresce progressivamente (224px no `md`, 288px no `lg`) para
+  acompanhar o espaço lateral que sobra ao redor do texto centralizado
+  (`max-w-2xl`) em telas maiores.
+- **Um único elemento** (`<Image>`) cobre os dois casos via classes
+  responsivas do Tailwind (`relative` → `md:absolute`), evitando
+  duplicar a mesma imagem em dois lugares do DOM.
+- **`alt=""`:** decorativo — a ilustração não carrega nenhuma
+  informação que o H1 e o parágrafo de apoio já não digam por texto.
+- Testado em 390px, 768px, 1280px e 1920px — em nenhum caso o
+  personagem sobrepõe o H1, o parágrafo ou o botão "Ver Cardápio".
 
 ## 4. Fotos placeholder (`public/produtos-ia/`)
 

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { GallerySection } from "@/components/GallerySection";
 import { PortfolioImage } from "@/components/PortfolioImage";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
@@ -106,6 +107,28 @@ export default function Home() {
             Ver Cardápio
           </Button>
         </div>
+
+        {/* Mascote de corpo inteiro — "momento" de marca da Home, não
+            repetido em outras páginas (Fase 10, ver
+            docs/redesign/mascote-e-tipografia.md "3"). Um único
+            elemento: em fluxo (position: relative) e centralizado no
+            mobile, abaixo do botão — não há espaço lateral sobrando ao
+            lado do texto centralizado numa tela estreita. A partir do
+            md, vira um elemento "flutuante" ancorado ao canto inferior
+            direito da SEÇÃO inteira (não do bloco de texto, mais
+            estreito) — mesma lógica das manchas de aquarela decorativas
+            acima, só que com o personagem em vez de uma mancha de cor;
+            com o texto em max-w-2xl centralizado, sobra espaço lateral
+            suficiente no desktop para o mascote não competir com
+            H1/CTA. alt="": decorativo, não carrega informação que o
+            H1/parágrafo já não digam. */}
+        <Image
+          src="/brand/mascote-corpo-inteiro.png"
+          alt=""
+          width={1055}
+          height={1023}
+          className="relative z-10 mx-auto mt-10 h-40 w-40 md:absolute md:right-4 md:bottom-0 md:mx-0 md:mt-0 md:h-56 md:w-56 lg:right-12 lg:h-72 lg:w-72"
+        />
       </section>
 
       {/* Produtos em destaque */}
