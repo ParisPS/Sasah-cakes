@@ -34,10 +34,13 @@
   /* Tipografia — famílias carregadas via next/font/google em app/layout.tsx.
    * font-body é a fonte FUNCIONAL (Bricolage Grotesque desde a Fase 9 —
    * ver docs/redesign/direcao-artistica.md "1.2"), usada em corpo de
-   * texto, nav, botões, badges e H4–H6. font-heading (Fraunces) fica
-   * reservada para H1–H3 e para a exceção do preço em destaque (ver
-   * components/ProductCard.tsx). */
-  --font-heading: var(--font-fraunces), Georgia, "Times New Roman", serif;
+   * texto, nav, botões, badges e H5–H6. font-heading (Titan One desde a
+   * Fase 10, substitui a Fraunces — ver
+   * docs/redesign/mascote-e-tipografia.md) fica reservada para H1–H4
+   * (H4 = nomes de produto, único uso hoje — ver
+   * components/ProductCard.tsx) e para a exceção do preço em destaque. */
+  --font-heading:
+    var(--font-titan-one), "Arial Black", "Helvetica Neue", sans-serif;
   --font-body: var(--font-bricolage), -apple-system, "Segoe UI", sans-serif;
 
   /* Border-radius */
@@ -58,22 +61,31 @@
   }
 
   /* Escala tipográfica — mobile primeiro, breakpoint desktop em md (768px),
-     conforme docs/design/design-tokens.md e docs/design/wireframes.md. */
+     conforme docs/design/design-tokens.md e docs/design/wireframes.md.
+     H1-H4 em font-normal (não font-bold/font-semibold como na Fraunces):
+     Titan One só existe no Google Fonts em peso 400 — pedir 600/700
+     forçaria negrito sintético do navegador sobre uma fonte que já é
+     "black"/bold por desenho, distorcendo o traço. Ver
+     docs/redesign/mascote-e-tipografia.md. */
   h1 {
-    @apply font-heading text-[36px] leading-[1.1] font-bold md:text-[56px];
+    @apply font-heading text-[36px] leading-[1.1] font-normal md:text-[56px];
   }
   h2 {
-    @apply font-heading text-[28px] leading-[1.15] font-bold md:text-[40px];
+    @apply font-heading text-[28px] leading-[1.15] font-normal md:text-[40px];
   }
   h3 {
-    @apply font-heading text-[22px] leading-[1.2] font-semibold md:text-[28px];
+    @apply font-heading text-[22px] leading-[1.2] font-normal md:text-[28px];
   }
-  /* H4–H6 usam a fonte funcional, não a Fraunces — Fase 9 (redesign de
-     marca): nomes de card de produto e headings menores viram texto de
-     catálogo escaneável (lógica Krispy Kreme), não display de marca. Ver
-     docs/redesign/direcao-artistica.md "1.3". */
+  /* H4 volta a usar a fonte display na Fase 10 (mascote e tipografia) —
+     único uso hoje é o nome de produto em components/ProductCard.tsx, e
+     o mascote/selo pede mais personalidade de marca no nome do produto
+     do que a leitura "catálogo escaneável" da Fase 9 (Titan One é caixa
+     alta por natureza — text-transform não é necessário aqui). Ver
+     docs/redesign/mascote-e-tipografia.md. H5-H6 continuam na fonte
+     funcional (sem uso hoje no código, mas mantidos definidos para a
+     escala tipográfica). */
   h4 {
-    @apply font-body text-[19px] leading-tight font-semibold md:text-[22px];
+    @apply font-heading text-[19px] leading-tight font-normal md:text-[22px];
   }
   h5 {
     @apply font-body text-[17px] leading-[1.3] font-semibold md:text-[18px];
