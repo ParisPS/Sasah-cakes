@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { NAV_LINKS } from "@/lib/nav";
 
@@ -13,16 +14,23 @@ export function Header() {
   return (
     <header className="border-cream-700 sticky top-0 z-40 border-b bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4 md:px-6">
-        <Link
-          href="/"
-          onClick={() => setOpen(false)}
-          // font-normal: Titan One (Fase 10) só existe em peso 400 — ver
-          // nota em app/globals.css. Este wordmark de texto é temporário
-          // aqui — vira o selo ilustrado do mascote na Fase 10 (ver
-          // docs/redesign/mascote-e-tipografia.md).
-          className="font-heading text-sage-700 text-xl font-normal"
-        >
-          Sasah Cakes
+        {/* Selo do mascote substitui o wordmark de texto — Fase 10 (ver
+            docs/redesign/mascote-e-tipografia.md "2"). alt descritivo
+            ("Sasah Cakes") funciona como nome acessível do link — os
+            testes E2E que localizam o logo por getByRole("link", {name:
+            "Sasah Cakes"}) continuam funcionando sem alteração.
+            h-12/h-14 (48/56px): legível como marca no header sem ficar
+            grande a ponto de competir com a nav. priority: acima da
+            dobra em toda página, carrega sem lazy-loading. */}
+        <Link href="/" onClick={() => setOpen(false)} className="shrink-0">
+          <Image
+            src="/brand/mascote-selo.png"
+            alt="Sasah Cakes"
+            width={624}
+            height={630}
+            priority
+            className="h-12 w-12 md:h-14 md:w-14"
+          />
         </Link>
 
         {/* Nav inline — desktop */}

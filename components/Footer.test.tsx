@@ -38,11 +38,14 @@ describe("Footer", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("sempre mostra o nome da marca e o copyright", () => {
+  it("sempre mostra o selo do mascote e o copyright", () => {
     vi.mocked(usePathname).mockReturnValue("/como-encomendar");
     render(<Footer />);
 
-    expect(screen.getByText("Sasah Cakes")).toBeInTheDocument();
+    // O wordmark de texto virou o selo do mascote na Fase 10 (ver
+    // docs/redesign/mascote-e-tipografia.md "2") — alt descritivo no
+    // lugar do texto "Sasah Cakes" que existia antes.
+    expect(screen.getByAltText("Sasah Cakes")).toBeInTheDocument();
     expect(screen.getByText(/feito à mão, com carinho/i)).toBeInTheDocument();
   });
 });

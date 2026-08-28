@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cardapio, linkWhatsApp } from "@/lib/cardapio";
 
@@ -20,11 +21,17 @@ export function Footer() {
   return (
     <footer className="border-cream-700 bg-cream-500 border-t">
       <div className="mx-auto max-w-5xl px-4 py-12 text-center md:px-6">
-        {/* font-normal: Titan One (Fase 10) só existe em peso 400 — ver
-            nota em app/globals.css. */}
-        <p className="font-heading text-sage-700 text-lg font-normal">
-          Sasah Cakes
-        </p>
+        {/* Selo do mascote substitui o wordmark de texto — Fase 10 (ver
+            docs/redesign/mascote-e-tipografia.md "2"), mesmo raciocínio
+            do Header. O nome da marca continua existindo como texto de
+            verdade na linha de copyright abaixo. */}
+        <Image
+          src="/brand/mascote-selo.png"
+          alt="Sasah Cakes"
+          width={624}
+          height={630}
+          className="mx-auto h-20 w-20"
+        />
         {mostrarWhatsApp && (
           <>
             <p className="caption mt-2">

@@ -81,9 +81,14 @@ Usada na Home (preview) e na página Galeria (completa).
 
 ### Cabeçalho (header)
 
-- Mobile: logo/nome à esquerda + ícone `☰` à direita, abrindo menu.
+- Mobile: logo à esquerda + ícone `☰` à direita, abrindo menu.
 - Desktop (≥768px): nav inline substitui o `☰`.
 - Fixo no topo (`position: sticky`) em ambas as versões.
+- **Logo:** selo do mascote (`public/brand/mascote-selo.png`, Fase 10 —
+  ver [`../redesign/mascote-e-tipografia.md`](../redesign/mascote-e-tipografia.md#2-mascote-e-selo)),
+  não mais um wordmark de texto. 48px no mobile, 56px no desktop —
+  legível como marca sem competir com a navegação. Mesmo selo, menor
+  (80px), centralizado no rodapé.
 
 ## Motion / animações de interface
 
