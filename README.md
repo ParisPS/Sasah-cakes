@@ -48,18 +48,20 @@ e2e/                 # testes end-to-end (Playwright)
 | 5 — Qualidade             | ✅ concluída | Lint/formatação, testes unitários e E2E, CI obrigatório no GitHub Actions                                                                                                                                                   | [`docs/TESTING.md`](docs/TESTING.md)                                                   |
 | 6 — Observabilidade       | ✅ concluída | Captura de erros em produção (client/server/edge) via Sentry                                                                                                                                                                | [`docs/OBSERVABILITY.md`](docs/OBSERVABILITY.md)                                       |
 | 7 — Motion                | ✅ concluída | Skeleton loading, animações de entrada ao rolar, menu mobile animado e feedback entre rotas, todos respeitando `prefers-reduced-motion`                                                                                     | [`docs/design/motion-principles.md`](docs/design/motion-principles.md)                 |
-| 8 — Formulário de pedido  | ⏸️ pausada   | Ainda não iniciada — decisões de UX em aberto                                                                                                                                                                               | —                                                                                      |
+| 8 — Formulário de pedido  | ✅ concluída | Formulário de pedido em `/como-encomendar` (categoria, tamanho/sabores, data com validação de antecedência mínima, nome, observações), CTA primário; botão genérico de WhatsApp virou CTA secundário para dúvidas           | [`docs/fase8-formulario-pedido.md`](docs/fase8-formulario-pedido.md)                   |
 | 9 — Redesign de marca     | ✅ concluída | Nova tipografia (Bricolage Grotesque), redistribuição da paleta, componente `Button` único, consolidação de 6 para 4 páginas (Docinhos e Contato absorvidos, com redirects 301) e correção de contraste AA do CTA principal | [`docs/redesign/`](docs/redesign/)                                                     |
 | 10 — Mascote e tipografia | ✅ concluída | Mascote ilustrado (selo/logo no Header e Footer, favicon, personagem de corpo inteiro no hero da Home), tipografia display Titan One e fotos placeholder de produto no Cardápio                                             | [`docs/redesign/mascote-e-tipografia.md`](docs/redesign/mascote-e-tipografia.md)       |
 
 ## Pendências conhecidas
 
-- **`SENTRY_AUTH_TOKEN` não configurado na Vercel** — sem ele, os source
-  maps não são enviados e os stack traces no Sentry aparecem minificados.
-- **Fase 8 (formulário de pedido) pausada** — decisões de UX ainda em
-  aberto antes de iniciar a implementação.
 - **Domínio próprio não configurado** (opcional) — hoje o site roda só no
   domínio padrão da Vercel.
+- **Confirmação final do upload de source maps do Sentry em produção**
+  — `SENTRY_AUTH_TOKEN` está configurado na Vercel e o bug que
+  silenciava os logs de upload foi corrigido (ver
+  [`docs/OBSERVABILITY.md`](docs/OBSERVABILITY.md), "Troubleshooting"),
+  mas falta conferir o Build Log de um deploy de Production real para
+  confirmar que o upload em si teve sucesso.
 
 ## Fluxo de contribuição
 
