@@ -56,12 +56,6 @@ e2e/                 # testes end-to-end (Playwright)
 
 - **Domínio próprio não configurado** (opcional) — hoje o site roda só no
   domínio padrão da Vercel.
-- **Confirmação final do upload de source maps do Sentry em produção**
-  — `SENTRY_AUTH_TOKEN` está configurado na Vercel e o bug que
-  silenciava os logs de upload foi corrigido (ver
-  [`docs/OBSERVABILITY.md`](docs/OBSERVABILITY.md), "Troubleshooting"),
-  mas falta conferir o Build Log de um deploy de Production real para
-  confirmar que o upload em si teve sucesso.
 
 ## Fluxo de contribuição
 
