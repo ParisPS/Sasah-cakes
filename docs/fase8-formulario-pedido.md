@@ -33,10 +33,17 @@ testada em `lib/pedido.test.ts`) e
 tudo vem de [`content/cardapio.json`](../content/cardapio.json) via
 `lib/cardapio.ts`.
 
-1. **Categoria** (obrigatório, pills em radiogroup): Bolo Redondo, Bolo
-   Quadrado ou Docinhos — agrupada num `<fieldset>`/`<legend>` "Produto"
-   junto com os campos condicionais abaixo, que mudam conforme a
-   escolha:
+1. **Produto** (obrigatório, pills em checkboxes independentes — não
+   radio): Bolo Redondo, Bolo Quadrado e Docinhos podem ser marcados
+   juntos na mesma encomenda — no máximo **um item por categoria**
+   (não dá pra pedir dois Bolos Redondos diferentes no mesmo pedido; se
+   precisar de dois tamanhos diferentes da mesma categoria, ainda
+   precisa de duas conversas/encomendas separadas). Cada categoria
+   marcada abre seu próprio `<fieldset>`/`<legend>` aninhado dentro do
+   `<fieldset>`/`<legend>` "Produto", com os campos daquela categoria —
+   os blocos das categorias marcadas ficam visualmente separados uns
+   dos outros (cada um num card próprio) e podem aparecer ao mesmo
+   tempo:
    - **Bolo Redondo/Quadrado:** Tamanho (`<select>`, opções reais da
      categoria) + Recheio (`<select>`, lista real de
      `recheiosDisponiveis`).
@@ -45,27 +52,37 @@ tudo vem de [`content/cardapio.json`](../content/cardapio.json) via
      unidade escolhida, cada um excluindo dinamicamente os sabores já
      escolhidos nos outros campos (nunca é possível escolher o mesmo
      sabor duas vezes na mesma encomenda).
-2. **Data desejada** (obrigatório, `<input type="date">`): `min` é
-   `dataMinimaPermitida()` — hoje + a antecedência mínima real lida de
+2. **Data desejada** (obrigatório, `<input type="date">`, único e
+   compartilhado pelo pedido inteiro — uma só data de retirada, mesmo
+   com várias categorias marcadas): `min` é `dataMinimaPermitida()` —
+   hoje + a antecedência mínima real lida de
    `comoEncomendar.antecedenciaMinima` (4 dias, no conteúdo atual, mas
    lido do JSON, não hardcodado). Escolher uma data mais próxima mostra
    o erro "Encomendas precisam de no mínimo N dias de antecedência." em
    tempo real, sem esperar o envio do formulário.
-3. **Nome** (obrigatório, texto).
+3. **Nome** (obrigatório, texto, único e compartilhado).
 4. **Observações / tema do bolo** (opcional, `<textarea>`, até 300
-   caracteres, com contador visível).
+   caracteres, com contador visível, único e compartilhado — não é um
+   campo por item).
 5. **Botão "Enviar Pedido"** (variante `primary` de
    [`components/Button.tsx`](../components/Button.tsx)): desabilitado
    até `normalizarRascunho()` (lib/pedido.ts) conseguir montar um pedido
-   completo e válido a partir do que foi preenchido. Ao clicar, monta a
-   mensagem (`montarMensagemPedido()`) e abre `linkWhatsApp()`
-   (`lib/cardapio.ts` — o telefone de contato central, nunca hardcodado
-   de novo) numa nova aba.
+   completo e válido a partir do que foi preenchido — pelo menos uma
+   categoria marcada e totalmente preenchida (marcar uma categoria e
+   deixá-la pela metade invalida o pedido inteiro, não só aquele item).
+   Ao clicar, monta a mensagem (`montarMensagemPedido()`) e abre
+   `linkWhatsApp()` (`lib/cardapio.ts` — o telefone de contato central,
+   nunca hardcodado de novo) numa nova aba.
 
 ## Formato da mensagem gerada
 
-Ordem fixa: saudação → categoria e detalhes → data desejada →
-observações (só se preenchidas) → nome. Exemplo de bolo:
+`montarMensagemPedido()` (lib/pedido.ts) tem dois formatos, escolhidos
+pela quantidade de itens marcados:
+
+**Um item só** — formato "achatado" (idêntico ao de antes da
+multi-categoria, para não mudar a mensagem de quem sempre pediu uma
+coisa só): saudação → categoria e detalhes → data desejada →
+observações (só se preenchidas) → nome.
 
 ```
 Olá! Gostaria de fazer uma encomenda:
@@ -73,22 +90,32 @@ Olá! Gostaria de fazer uma encomenda:
 Categoria: Bolo Redondo
 Tamanho: 20cm
 Recheio: Brigadeiro
+
 Data desejada: 25/12/2026
 Observações: Tema festa junina
 Nome: Maria Teste
 ```
 
-Exemplo de docinhos (a descrição da quantidade também vem do JSON, não é
-um texto fixo no código):
+**Vários itens** — cada categoria marcada vira um item numerado
+("1)", "2)", …), separado por linha em branco, seguido de
+data/observações/nome (únicos, nunca repetidos por item):
 
 ```
-Olá! Gostaria de fazer uma encomenda:
+Olá! Gostaria de fazer uma encomenda com 2 itens:
 
-Categoria: Docinhos
+1) Bolo Redondo
+Tamanho: 20cm
+Recheio: Brigadeiro
+
+2) Docinhos
 Sabores: 4 sabores (25 unidades de cada sabor) — Beijinho, Brigadeiro, Cajuzinho, Churros
+
 Data desejada: 25/12/2026
 Nome: Ana Teste
 ```
+
+A descrição da quantidade de sabores ("25 unidades de cada sabor")
+também vem de `content/cardapio.json`, não é um texto fixo no código.
 
 ## CTA primário vs. secundário
 
@@ -116,20 +143,40 @@ quem for mexer na página depois.
 
 ## Acessibilidade
 
-- `<fieldset>`/`<legend>` agrupando "Produto" (categoria + seus campos
-  condicionais).
+- `<fieldset>`/`<legend>` agrupando "Produto" (as 3 categorias); cada
+  categoria marcada abre seu próprio `<fieldset>`/`<legend>` **aninhado**
+  nomeado pela categoria ("Bolo Redondo", "Bolo Quadrado", "Docinhos") —
+  o agrupamento aninhado é o que permite dois campos com o mesmo rótulo
+  visível ("Tamanho", "Recheio") conviverem na mesma página sem
+  ambiguidade: o nome acessível de cada campo inclui o grupo que o
+  contém.
+- Categorias usam `<input type="checkbox">` (múltipla escolha), não
+  `type="radio"` (escolha única) — trocado quando a Fase 8 passou a
+  permitir mais de uma categoria por pedido.
 - Todo campo tem `<label htmlFor>` associado; campos obrigatórios têm
   `*` visível no label e uma frase de abertura explicando a convenção
   ("Campos marcados com \* (obrigatório) são obrigatórios.").
 - Erros (data inválida) usam `aria-describedby` + `role="alert"` no
   parágrafo de erro, e `aria-invalid="true"` no campo.
 - Navegação por teclado: os pills de categoria/quantidade de sabores são
-  `<input type="radio">` reais, só visualmente escondidos via `sr-only`
-  — cada `<label>` que os envolve tem `position: relative` para que o
-  input absolutamente posicionado fique contido dentro do próprio pill
-  (sem isso, o scroll automático do navegador ao focar via Tab levaria
-  para o canto errado da página). Foco visível via `has-[:focus-visible]`
-  no pill.
+  `<input type="checkbox">`/`<input type="radio">` reais, só
+  visualmente escondidos via `sr-only` — cada `<label>` que os envolve
+  tem `position: relative` para que o input absolutamente posicionado
+  fique contido dentro do próprio pill (sem isso, o scroll automático do
+  navegador ao focar via Tab levaria para o canto errado da página).
+  Foco visível via `has-[:focus-visible]` no pill.
+- **Categoria desmarcada fica genuinamente fora do alcance do
+  teclado.** O bloco de campos de cada categoria usa a mesma animação
+  de altura via CSS grid (`grid-template-rows` de `0fr` a `1fr`,
+  `overflow-hidden`) do menu mobile em `components/Header.tsx` — mas
+  `overflow-hidden` só esconde a _pintura_, o campo continua com seu
+  tamanho "natural" por baixo do clipe. Sem tratamento adicional, um
+  `<select>` de uma categoria desmarcada continuaria alcançável via Tab
+  mesmo invisível na tela (achado durante a implementação, verificado
+  com um teste de foco por teclado). Corrigido com o atributo `inert` no
+  wrapper do bloco (mesmo padrão já usado em `Header.tsx`): tira o
+  conteúdo escondido da árvore de acessibilidade e do foco por teclado,
+  mesmo continuando no DOM para a transição poder animar a saída.
 - Nenhuma cor nova foi criada para indicar erro — a Fase 2 não definiu
   um token de validação (ver `docs/design/design-tokens.md`), e esta
   fase não inventa um. Um campo inválido usa borda mais grossa em
@@ -139,15 +186,18 @@ quem for mexer na página depois.
 
 ## Testes
 
-- **Unitário** (`lib/pedido.test.ts`, Vitest): 23 testes cobrindo
-  `normalizarRascunho` (bolo redondo/quadrado, docinhos com 2 e 4
-  sabores, todos os casos inválidos), validação de data mínima e o texto
-  exato de `montarMensagemPedido` para cada categoria.
+- **Unitário** (`lib/pedido.test.ts`, Vitest): 26 testes cobrindo
+  `normalizarRascunho` (cada categoria sozinha, combinações de 2 e das 3
+  juntas, categoria marcada e incompleta invalidando o pedido inteiro,
+  todos os casos inválidos) e o texto exato de `montarMensagemPedido`
+  nos dois formatos (item único "achatado" e múltiplos itens numerados).
 - **E2E** (`e2e/pedido.spec.ts`, Playwright, mobile 390px + desktop
-  1280px): preenche o formulário fim a fim para cada categoria e
-  confirma que o link `wa.me` aberto contém os dados corretos; confirma
-  que uma data abaixo do mínimo mostra o erro e mantém o botão
-  desabilitado; confirma que o CTA secundário continua funcional.
+  1280px, 18 testes): fluxo de uma categoria só (sem regressão do
+  comportamento original) para as 3 categorias; Bolo Redondo + Docinhos
+  juntos; as 3 categorias juntas; desmarcar uma categoria remove seus
+  dados da mensagem; marcar uma categoria e deixá-la incompleta mantém
+  o botão desabilitado mesmo com outra completa; validação de data
+  mínima; CTA secundário.
 
 ## O que NÃO mudou
 

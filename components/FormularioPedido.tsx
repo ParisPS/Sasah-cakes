@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { cardapio, linkWhatsApp } from "@/lib/cardapio";
+import { cardapio, linkWhatsApp, type TamanhoBolo } from "@/lib/cardapio";
 import {
   dataMinimaPermitida,
   LABEL_CATEGORIA_PEDIDO,
@@ -10,7 +10,7 @@ import {
   OBSERVACOES_MAX_LENGTH,
   RASCUNHO_PEDIDO_VAZIO,
   validarDataDesejada,
-  type CategoriaPedido,
+  type RascunhoItemBolo,
   type RascunhoPedido,
 } from "@/lib/pedido";
 import { Button } from "@/components/Button";
@@ -30,12 +30,6 @@ const CAMPO_CLASSES =
 const CAMPO_INVALIDO_CLASSES = "border-2 border-sage-700";
 const ERRO_CLASSES = "text-sage-900 mt-1.5 text-sm font-semibold";
 
-const CATEGORIAS: CategoriaPedido[] = [
-  "bolo-redondo",
-  "bolo-quadrado",
-  "docinhos",
-];
-
 function classesPill(selecionado: boolean): string {
   // `relative`: o <input> real fica visualmente escondido via `sr-only`
   // (position: absolute) — sem um ancestral posicionado, ele escaparia
@@ -51,11 +45,109 @@ function classesPill(selecionado: boolean): string {
     : `${base} border-sage-300 text-sage-700 hover:bg-sage-100 hover:text-sage-900`;
 }
 
+// Transição de altura ao aparecer os campos de uma categoria marcada —
+// docs/design/motion-principles.md (duration-300, ease-in-out, mesmo
+// padrão do menu mobile em components/Header.tsx, incluindo o `inert`:
+// o truque de grid-rows só esconde visualmente via `overflow-hidden` —
+// os campos continuam com seu tamanho "natural" por baixo do clipe, e
+// sem `inert` ficariam alcançáveis por Tab mesmo escondidos. `inert`
+// tira o bloco fechado da árvore de acessibilidade e do foco por
+// teclado, mesmo com o nó continuando no DOM). Cada categoria tem seu
+// próprio wrapper (não um único compartilhado): com múltiplas
+// categorias marcáveis ao mesmo tempo, cada bloco precisa expandir/
+// recolher de forma independente dos outros.
+function BlocoExpansivel({
+  aberto,
+  children,
+}: {
+  aberto: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      inert={!aberto}
+      className={`grid overflow-hidden transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none ${
+        aberto ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+      }`}
+    >
+      <div className="min-h-0">{children}</div>
+    </div>
+  );
+}
+
+type BlocoBoloProps = {
+  idPrefix: string;
+  opcoesTamanho: TamanhoBolo[];
+  slot: RascunhoItemBolo;
+  onChange: (slot: RascunhoItemBolo) => void;
+};
+
+// Bolo Redondo e Bolo Quadrado pedem exatamente os mesmos dois campos
+// (tamanho + recheio), só a lista de tamanhos reais muda — extraído
+// para não duplicar o JSX entre as duas categorias.
+function BlocoBolo({
+  idPrefix,
+  opcoesTamanho,
+  slot,
+  onChange,
+}: BlocoBoloProps) {
+  return (
+    <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div>
+        <label htmlFor={`${idPrefix}-tamanho`} className={LABEL_CLASSES}>
+          Tamanho <span aria-hidden="true">*</span>
+        </label>
+        <select
+          id={`${idPrefix}-tamanho`}
+          required
+          value={slot.tamanho}
+          onChange={(e) => onChange({ ...slot, tamanho: e.target.value })}
+          className={`${CAMPO_CLASSES} mt-1.5`}
+        >
+          <option value="">Selecione o tamanho</option>
+          {opcoesTamanho.map((opcao) => (
+            <option key={opcao.tamanho} value={opcao.tamanho}>
+              {opcao.tamanho} ({opcao.rendimento})
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label htmlFor={`${idPrefix}-recheio`} className={LABEL_CLASSES}>
+          Recheio <span aria-hidden="true">*</span>
+        </label>
+        <select
+          id={`${idPrefix}-recheio`}
+          required
+          value={slot.recheio}
+          onChange={(e) => onChange({ ...slot, recheio: e.target.value })}
+          className={`${CAMPO_CLASSES} mt-1.5`}
+        >
+          <option value="">Selecione o recheio</option>
+          {cardapio.bolos.recheiosDisponiveis.map((recheio) => (
+            <option key={recheio} value={recheio}>
+              {recheio}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+}
+
 /**
  * Formulário de pedido — CTA primário de /como-encomendar desde a Fase
  * 8 (ver docs/fase8-formulario-pedido.md). Monta a mensagem via
  * lib/pedido.ts e abre o WhatsApp já preenchido — sem backend, API
  * route ou persistência: tudo roda no navegador do cliente.
+ *
+ * Multi-categoria: até um item por categoria pode ser marcado na mesma
+ * encomenda (ex: Bolo Redondo + Docinhos) — cada categoria é um
+ * checkbox independente (não radio: a Fase 8 original só permitia
+ * escolher uma categoria por vez), cada uma revelando seu próprio
+ * bloco de campos num <fieldset> aninhado. Data, nome e observações
+ * continuam únicos para o pedido inteiro.
  */
 export function FormularioPedido() {
   const [rascunho, setRascunho] = useState<RascunhoPedido>(
@@ -74,37 +166,51 @@ export function FormularioPedido() {
 
   const dadosCompletos = normalizarRascunho(rascunho);
 
-  function handleCategoriaChange(categoria: CategoriaPedido) {
-    // Troca de categoria reseta só os campos condicionais dela (tamanho/
-    // recheio/sabores) — data, nome e observações já preenchidos não se
-    // perdem, não têm relação com a categoria escolhida.
+  function handleToggleBolo(
+    chave: "bolosRedondo" | "bolosQuadrado",
+    marcado: boolean,
+  ) {
     setRascunho((r) => ({
-      ...RASCUNHO_PEDIDO_VAZIO,
-      categoria,
-      dataDesejada: r.dataDesejada,
-      nome: r.nome,
-      observacoes: r.observacoes,
+      ...r,
+      [chave]: marcado
+        ? { ...r[chave], marcado: true }
+        : { marcado: false, tamanho: "", recheio: "" },
+    }));
+  }
+
+  function handleToggleDocinhos(marcado: boolean) {
+    setRascunho((r) => ({
+      ...r,
+      docinhos: marcado
+        ? { ...r.docinhos, marcado: true }
+        : { marcado: false, quantidadeSabores: null, sabores: [] },
     }));
   }
 
   function handleQuantidadeSaboresChange(quantidade: 2 | 4) {
     setRascunho((r) => ({
       ...r,
-      quantidadeSabores: quantidade,
-      sabores: Array.from({ length: quantidade }, (_, i) => r.sabores[i] ?? ""),
+      docinhos: {
+        ...r.docinhos,
+        quantidadeSabores: quantidade,
+        sabores: Array.from(
+          { length: quantidade },
+          (_, i) => r.docinhos.sabores[i] ?? "",
+        ),
+      },
     }));
   }
 
   function handleSaborChange(indice: number, valor: string) {
     setRascunho((r) => {
-      const sabores = [...r.sabores];
+      const sabores = [...r.docinhos.sabores];
       sabores[indice] = valor;
-      return { ...r, sabores };
+      return { ...r, docinhos: { ...r.docinhos, sabores } };
     });
   }
 
   function opcoesSaborDisponiveis(indice: number): string[] {
-    const escolhidosEmOutroCampo = rascunho.sabores.filter(
+    const escolhidosEmOutroCampo = rascunho.docinhos.sabores.filter(
       (sabor, i) => i !== indice && sabor,
     );
     return cardapio.docinhos.saboresDisponiveis.filter(
@@ -134,168 +240,155 @@ export function FormularioPedido() {
       <fieldset className="mt-6 border-0 p-0">
         <legend className="font-body text-ink-900 text-base font-semibold">
           Produto <span aria-hidden="true">*</span>
-          <span className="sr-only"> (obrigatório)</span>
+          <span className="sr-only"> (obrigatório) — marque um ou mais</span>
         </legend>
+        <p className="text-ink-600 mt-1 text-sm">
+          Pode marcar mais de uma categoria na mesma encomenda.
+        </p>
 
-        <div
-          role="radiogroup"
-          aria-label="Categoria"
-          className="mt-3 flex flex-wrap gap-3"
-        >
-          {CATEGORIAS.map((categoria) => (
-            <label
-              key={categoria}
-              className={classesPill(rascunho.categoria === categoria)}
+        <div className="mt-3 flex flex-wrap gap-3">
+          <label className={classesPill(rascunho.bolosRedondo.marcado)}>
+            <input
+              type="checkbox"
+              checked={rascunho.bolosRedondo.marcado}
+              onChange={(e) =>
+                handleToggleBolo("bolosRedondo", e.target.checked)
+              }
+              className="sr-only"
+            />
+            {LABEL_CATEGORIA_PEDIDO["bolo-redondo"]}
+          </label>
+          <label className={classesPill(rascunho.bolosQuadrado.marcado)}>
+            <input
+              type="checkbox"
+              checked={rascunho.bolosQuadrado.marcado}
+              onChange={(e) =>
+                handleToggleBolo("bolosQuadrado", e.target.checked)
+              }
+              className="sr-only"
+            />
+            {LABEL_CATEGORIA_PEDIDO["bolo-quadrado"]}
+          </label>
+          <label className={classesPill(rascunho.docinhos.marcado)}>
+            <input
+              type="checkbox"
+              checked={rascunho.docinhos.marcado}
+              onChange={(e) => handleToggleDocinhos(e.target.checked)}
+              className="sr-only"
+            />
+            {LABEL_CATEGORIA_PEDIDO["docinhos"]}
+          </label>
+        </div>
+
+        <BlocoExpansivel aberto={rascunho.bolosRedondo.marcado}>
+          <fieldset className="bg-cream-300 mt-4 rounded-md border-0 p-4">
+            <legend className="font-body text-sage-700 px-1 text-sm font-semibold">
+              {LABEL_CATEGORIA_PEDIDO["bolo-redondo"]}
+            </legend>
+            <BlocoBolo
+              idPrefix="pedido-bolo-redondo"
+              opcoesTamanho={cardapio.bolos.redondos}
+              slot={rascunho.bolosRedondo}
+              onChange={(slot) =>
+                setRascunho((r) => ({ ...r, bolosRedondo: slot }))
+              }
+            />
+          </fieldset>
+        </BlocoExpansivel>
+
+        <BlocoExpansivel aberto={rascunho.bolosQuadrado.marcado}>
+          <fieldset className="bg-cream-300 mt-4 rounded-md border-0 p-4">
+            <legend className="font-body text-sage-700 px-1 text-sm font-semibold">
+              {LABEL_CATEGORIA_PEDIDO["bolo-quadrado"]}
+            </legend>
+            <BlocoBolo
+              idPrefix="pedido-bolo-quadrado"
+              opcoesTamanho={cardapio.bolos.quadrados}
+              slot={rascunho.bolosQuadrado}
+              onChange={(slot) =>
+                setRascunho((r) => ({ ...r, bolosQuadrado: slot }))
+              }
+            />
+          </fieldset>
+        </BlocoExpansivel>
+
+        <BlocoExpansivel aberto={rascunho.docinhos.marcado}>
+          <fieldset className="bg-cream-300 mt-4 rounded-md border-0 p-4">
+            <legend className="font-body text-sage-700 px-1 text-sm font-semibold">
+              {LABEL_CATEGORIA_PEDIDO["docinhos"]}
+            </legend>
+
+            <span className={LABEL_CLASSES}>
+              Quantidade de sabores <span aria-hidden="true">*</span>
+            </span>
+            <div
+              role="radiogroup"
+              aria-label="Quantidade de sabores"
+              className="mt-1.5 flex flex-wrap gap-3"
             >
-              <input
-                type="radio"
-                name="pedido-categoria"
-                value={categoria}
-                checked={rascunho.categoria === categoria}
-                onChange={() => handleCategoriaChange(categoria)}
-                required
-                className="sr-only"
-              />
-              {LABEL_CATEGORIA_PEDIDO[categoria]}
-            </label>
-          ))}
-        </div>
-
-        {/* Transição de altura ao aparecer os campos condicionais da
-            categoria escolhida — docs/design/motion-principles.md
-            (duration-300, ease-in-out, mesmo padrão do menu mobile em
-            components/Header.tsx). */}
-        <div
-          className={`grid overflow-hidden transition-[grid-template-rows] duration-300 ease-in-out motion-reduce:transition-none ${
-            rascunho.categoria ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-          }`}
-        >
-          <div className="min-h-0">
-            {(rascunho.categoria === "bolo-redondo" ||
-              rascunho.categoria === "bolo-quadrado") && (
-              <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div>
-                  <label htmlFor="pedido-tamanho" className={LABEL_CLASSES}>
-                    Tamanho <span aria-hidden="true">*</span>
-                  </label>
-                  <select
-                    id="pedido-tamanho"
-                    required
-                    value={rascunho.tamanho}
-                    onChange={(e) =>
-                      setRascunho((r) => ({ ...r, tamanho: e.target.value }))
-                    }
-                    className={`${CAMPO_CLASSES} mt-1.5`}
-                  >
-                    <option value="">Selecione o tamanho</option>
-                    {(rascunho.categoria === "bolo-redondo"
-                      ? cardapio.bolos.redondos
-                      : cardapio.bolos.quadrados
-                    ).map((opcao) => (
-                      <option key={opcao.tamanho} value={opcao.tamanho}>
-                        {opcao.tamanho} ({opcao.rendimento})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="pedido-recheio" className={LABEL_CLASSES}>
-                    Recheio <span aria-hidden="true">*</span>
-                  </label>
-                  <select
-                    id="pedido-recheio"
-                    required
-                    value={rascunho.recheio}
-                    onChange={(e) =>
-                      setRascunho((r) => ({ ...r, recheio: e.target.value }))
-                    }
-                    className={`${CAMPO_CLASSES} mt-1.5`}
-                  >
-                    <option value="">Selecione o recheio</option>
-                    {cardapio.bolos.recheiosDisponiveis.map((recheio) => (
-                      <option key={recheio} value={recheio}>
-                        {recheio}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            )}
-
-            {rascunho.categoria === "docinhos" && (
-              <div className="mt-4">
-                <span className={LABEL_CLASSES}>
-                  Quantidade de sabores <span aria-hidden="true">*</span>
-                </span>
-                <div
-                  role="radiogroup"
-                  aria-label="Quantidade de sabores"
-                  className="mt-1.5 flex flex-wrap gap-3"
+              {cardapio.docinhos.opcoesDeSabores.map((opcao) => (
+                <label
+                  key={opcao.quantidadeSabores}
+                  className={classesPill(
+                    rascunho.docinhos.quantidadeSabores ===
+                      opcao.quantidadeSabores,
+                  )}
                 >
-                  {cardapio.docinhos.opcoesDeSabores.map((opcao) => (
-                    <label
-                      key={opcao.quantidadeSabores}
-                      className={classesPill(
-                        rascunho.quantidadeSabores === opcao.quantidadeSabores,
-                      )}
-                    >
-                      <input
-                        type="radio"
-                        name="pedido-quantidade-sabores"
-                        value={opcao.quantidadeSabores}
-                        checked={
-                          rascunho.quantidadeSabores === opcao.quantidadeSabores
-                        }
-                        onChange={() =>
-                          handleQuantidadeSaboresChange(
-                            opcao.quantidadeSabores as 2 | 4,
-                          )
-                        }
-                        required
-                        className="sr-only"
-                      />
-                      {opcao.quantidadeSabores} sabores ({opcao.descricao})
-                    </label>
-                  ))}
-                </div>
+                  <input
+                    type="radio"
+                    name="pedido-quantidade-sabores"
+                    value={opcao.quantidadeSabores}
+                    checked={
+                      rascunho.docinhos.quantidadeSabores ===
+                      opcao.quantidadeSabores
+                    }
+                    onChange={() =>
+                      handleQuantidadeSaboresChange(
+                        opcao.quantidadeSabores as 2 | 4,
+                      )
+                    }
+                    required={rascunho.docinhos.marcado}
+                    className="sr-only"
+                  />
+                  {opcao.quantidadeSabores} sabores ({opcao.descricao})
+                </label>
+              ))}
+            </div>
 
-                {rascunho.quantidadeSabores !== null && (
-                  <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                    {Array.from({ length: rascunho.quantidadeSabores }).map(
-                      (_, indice) => (
-                        <div key={indice}>
-                          <label
-                            htmlFor={`pedido-sabor-${indice}`}
-                            className={LABEL_CLASSES}
-                          >
-                            Sabor {indice + 1} <span aria-hidden="true">*</span>
-                          </label>
-                          <select
-                            id={`pedido-sabor-${indice}`}
-                            required
-                            value={rascunho.sabores[indice] ?? ""}
-                            onChange={(e) =>
-                              handleSaborChange(indice, e.target.value)
-                            }
-                            className={`${CAMPO_CLASSES} mt-1.5`}
-                          >
-                            <option value="">Selecione o sabor</option>
-                            {opcoesSaborDisponiveis(indice).map((sabor) => (
-                              <option key={sabor} value={sabor}>
-                                {sabor}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      ),
-                    )}
+            {rascunho.docinhos.quantidadeSabores !== null && (
+              <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                {Array.from({
+                  length: rascunho.docinhos.quantidadeSabores,
+                }).map((_, indice) => (
+                  <div key={indice}>
+                    <label
+                      htmlFor={`pedido-sabor-${indice}`}
+                      className={LABEL_CLASSES}
+                    >
+                      Sabor {indice + 1} <span aria-hidden="true">*</span>
+                    </label>
+                    <select
+                      id={`pedido-sabor-${indice}`}
+                      required
+                      value={rascunho.docinhos.sabores[indice] ?? ""}
+                      onChange={(e) =>
+                        handleSaborChange(indice, e.target.value)
+                      }
+                      className={`${CAMPO_CLASSES} mt-1.5`}
+                    >
+                      <option value="">Selecione o sabor</option>
+                      {opcoesSaborDisponiveis(indice).map((sabor) => (
+                        <option key={sabor} value={sabor}>
+                          {sabor}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                )}
+                ))}
               </div>
             )}
-          </div>
-        </div>
+          </fieldset>
+        </BlocoExpansivel>
       </fieldset>
 
       <div className="mt-6">

@@ -1,13 +1,14 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 import { cardapio } from "@/lib/cardapio";
 import { antecedenciaMinimaDias, dataMinimaPermitida } from "@/lib/pedido";
 
 // Testes E2E do formulário de pedido (Fase 8, ver
-// docs/fase8-formulario-pedido.md) — Issue #116. Cobre o que os testes
-// unitários de lib/pedido.test.ts não cobrem: o fluxo real no navegador
-// (categoria → campos condicionais → data → nome → link wa.me aberto).
-// Datas nunca são hardcodadas: derivadas de lib/pedido.ts, a mesma fonte
-// de verdade que o próprio formulário usa.
+// docs/fase8-formulario-pedido.md) — Issue #116, multi-categoria
+// adicionada depois (ver a mesma doc). Cobre o que os testes unitários
+// de lib/pedido.test.ts não cobrem: o fluxo real no navegador
+// (categorias marcadas → campos condicionais de cada uma → data → nome
+// → link wa.me aberto). Datas nunca são hardcodadas: derivadas de
+// lib/pedido.ts, a mesma fonte de verdade que o próprio formulário usa.
 
 function hojeISO(): string {
   const hoje = new Date();
@@ -45,21 +46,49 @@ async function abrirFormulario(page: Page) {
   await page.waitForTimeout(600);
 }
 
-test.describe("formulário de pedido — bolo (redondo e quadrado)", () => {
+// Marca (ou desmarca) o checkbox de uma categoria. Clica no <label>
+// visível, não no <input type="checkbox"> escondido via sr-only
+// (getByRole("checkbox", ...)): mesmo posicionado corretamente (ver
+// nota de `relative` em components/FormularioPedido.tsx), um elemento
+// de 1x1px faz o hit-test do navegador resolver o clique para o próprio
+// <label> ancestral em vez do <input>, travando a espera de
+// actionability do Playwright indefinidamente — artefato já visto neste
+// projeto com os antigos pills de rádio. `page.getByText(label, {exact:
+// true})` sozinho também não serve: cada categoria marcada abre um
+// <fieldset><legend>{label}</legend> com o MESMO texto, então depois de
+// marcar uma categoria `getByText` fica ambíguo (pill + legend). Filtrar
+// por tag `label` evita as duas ciladas de uma vez.
+function pillCategoria(page: Page, label: string): Locator {
+  return page.locator("label", { hasText: label });
+}
+
+// O <fieldset><legend> aninhado de cada categoria marcada vira um grupo
+// nomeado pelo texto do <legend> — escopar por ele evita ambiguidade:
+// "Tamanho"/"Recheio" existem uma vez por categoria de bolo no DOM o
+// tempo todo (só ficam `inert` quando a categoria não está marcada,
+// nunca desmontados — RascunhoPedido preserva um "slot" por categoria),
+// então `page.getByLabel("Tamanho")` sozinho bateria em mais de um
+// elemento assim que qualquer categoria estiver marcada.
+function grupoCategoria(page: Page, label: string): Locator {
+  return page.getByRole("group", { name: label });
+}
+
+test.describe("formulário de pedido — uma categoria só (fluxo original, sem regressão)", () => {
   for (const { label, opcoes } of [
     { label: "Bolo Redondo", opcoes: cardapio.bolos.redondos },
     { label: "Bolo Quadrado", opcoes: cardapio.bolos.quadrados },
   ]) {
-    test(`preenche ${label} e abre o WhatsApp com os dados corretos`, async ({
+    test(`preenche só ${label} e abre o WhatsApp com os dados corretos`, async ({
       page,
     }) => {
       await abrirFormulario(page);
 
-      await page.getByText(label, { exact: true }).click();
+      await pillCategoria(page, label).click();
 
+      const grupo = grupoCategoria(page, label);
       const tamanho = opcoes[0];
-      await page.getByLabel("Tamanho").selectOption(tamanho.tamanho);
-      await page
+      await grupo.getByLabel("Tamanho").selectOption(tamanho.tamanho);
+      await grupo
         .getByLabel("Recheio")
         .selectOption(cardapio.bolos.recheiosDisponiveis[0]);
       await page.locator("#pedido-data").fill(DATA_VALIDA);
@@ -77,6 +106,9 @@ test.describe("formulário de pedido — bolo (redondo e quadrado)", () => {
       expect(url).toContain(
         `phone=55${cardapio.comoEncomendar.contato.telefone.replace(/\D/g, "")}`,
       );
+      // Formato "achatado" (não numerado): só existe quando há 1 item só.
+      expect(url).not.toContain("com 2 itens");
+      expect(url).not.toContain("1)");
       expect(url).toContain(`Categoria: ${label}`);
       expect(url).toContain(`Tamanho: ${tamanho.tamanho}`);
       expect(url).toContain(
@@ -85,15 +117,13 @@ test.describe("formulário de pedido — bolo (redondo e quadrado)", () => {
       expect(url).toContain("Nome: Maria Teste");
     });
   }
-});
 
-test.describe("formulário de pedido — docinhos", () => {
-  test("preenche docinhos com 4 sabores sem duplicar e abre o WhatsApp com os dados corretos", async ({
+  test("preenche só Docinhos (4 sabores, sem duplicar) e abre o WhatsApp com os dados corretos", async ({
     page,
   }) => {
     await abrirFormulario(page);
 
-    await page.getByText("Docinhos", { exact: true }).click();
+    await pillCategoria(page, "Docinhos").click();
     await page.getByText(/^4 sabores/).click();
 
     const sabores = cardapio.docinhos.saboresDisponiveis.slice(0, 4);
@@ -125,17 +155,160 @@ test.describe("formulário de pedido — docinhos", () => {
   });
 });
 
+test.describe("formulário de pedido — múltiplas categorias juntas", () => {
+  test("Bolo Redondo + Docinhos juntos geram uma mensagem numerada com os 2 itens", async ({
+    page,
+  }) => {
+    await abrirFormulario(page);
+
+    await pillCategoria(page, "Bolo Redondo").click();
+    const grupoRedondo = grupoCategoria(page, "Bolo Redondo");
+    await grupoRedondo
+      .getByLabel("Tamanho")
+      .selectOption(cardapio.bolos.redondos[0].tamanho);
+    await grupoRedondo
+      .getByLabel("Recheio")
+      .selectOption(cardapio.bolos.recheiosDisponiveis[0]);
+
+    await pillCategoria(page, "Docinhos").click();
+    await page.getByText(/^2 sabores/).click();
+    const sabores = cardapio.docinhos.saboresDisponiveis.slice(0, 2);
+    const selects = page.locator('select[id^="pedido-sabor-"]');
+    await selects.nth(0).selectOption(sabores[0]);
+    await selects.nth(1).selectOption(sabores[1]);
+
+    await page.locator("#pedido-data").fill(DATA_VALIDA);
+    await page.getByLabel("Nome").fill("Cliente Combo");
+
+    const [popup] = await Promise.all([
+      page.waitForEvent("popup"),
+      page.getByRole("button", { name: "Enviar Pedido" }).click(),
+    ]);
+
+    const url = decodificarUrlFormulario(popup.url());
+    expect(url).toContain("encomenda com 2 itens");
+    expect(url).toContain("1) Bolo Redondo");
+    expect(url).toContain(`Tamanho: ${cardapio.bolos.redondos[0].tamanho}`);
+    expect(url).toContain("2) Docinhos");
+    expect(url).toContain(sabores.join(", "));
+    expect(url).toContain("Nome: Cliente Combo");
+    // Data e nome aparecem uma única vez (compartilhados), não por item.
+    expect(url.match(/Nome:/g)).toHaveLength(1);
+    expect(url.match(/Data desejada:/g)).toHaveLength(1);
+  });
+
+  test("as 3 categorias juntas geram uma mensagem numerada com os 3 itens", async ({
+    page,
+  }) => {
+    await abrirFormulario(page);
+
+    await pillCategoria(page, "Bolo Redondo").click();
+    await grupoCategoria(page, "Bolo Redondo")
+      .getByLabel("Tamanho")
+      .selectOption(cardapio.bolos.redondos[0].tamanho);
+    await grupoCategoria(page, "Bolo Redondo")
+      .getByLabel("Recheio")
+      .selectOption(cardapio.bolos.recheiosDisponiveis[0]);
+
+    await pillCategoria(page, "Bolo Quadrado").click();
+    await grupoCategoria(page, "Bolo Quadrado")
+      .getByLabel("Tamanho")
+      .selectOption(cardapio.bolos.quadrados[0].tamanho);
+    await grupoCategoria(page, "Bolo Quadrado")
+      .getByLabel("Recheio")
+      .selectOption(cardapio.bolos.recheiosDisponiveis[1]);
+
+    await pillCategoria(page, "Docinhos").click();
+    await page.getByText(/^4 sabores/).click();
+    const sabores = cardapio.docinhos.saboresDisponiveis.slice(0, 4);
+    const selects = page.locator('select[id^="pedido-sabor-"]');
+    for (let i = 0; i < sabores.length; i++) {
+      await selects.nth(i).selectOption(sabores[i]);
+    }
+
+    await page.locator("#pedido-data").fill(DATA_VALIDA);
+    await page.getByLabel("Nome").fill("Festa Grande");
+
+    const [popup] = await Promise.all([
+      page.waitForEvent("popup"),
+      page.getByRole("button", { name: "Enviar Pedido" }).click(),
+    ]);
+
+    const url = decodificarUrlFormulario(popup.url());
+    expect(url).toContain("encomenda com 3 itens");
+    expect(url).toContain("1) Bolo Redondo");
+    expect(url).toContain("2) Bolo Quadrado");
+    expect(url).toContain("3) Docinhos");
+    expect(url.match(/Nome:/g)).toHaveLength(1);
+  });
+
+  test("desmarcar uma categoria some com seus campos e não entra mais na mensagem", async ({
+    page,
+  }) => {
+    await abrirFormulario(page);
+
+    await pillCategoria(page, "Bolo Redondo").click();
+    await grupoCategoria(page, "Bolo Redondo")
+      .getByLabel("Tamanho")
+      .selectOption(cardapio.bolos.redondos[0].tamanho);
+    await grupoCategoria(page, "Bolo Redondo")
+      .getByLabel("Recheio")
+      .selectOption(cardapio.bolos.recheiosDisponiveis[0]);
+
+    await pillCategoria(page, "Bolo Quadrado").click();
+    // Desmarca de novo, deixando só o Bolo Redondo.
+    await pillCategoria(page, "Bolo Quadrado").click();
+
+    await page.locator("#pedido-data").fill(DATA_VALIDA);
+    await page.getByLabel("Nome").fill("Maria Teste");
+
+    const [popup] = await Promise.all([
+      page.waitForEvent("popup"),
+      page.getByRole("button", { name: "Enviar Pedido" }).click(),
+    ]);
+
+    const url = decodificarUrlFormulario(popup.url());
+    expect(url).not.toContain("Bolo Quadrado");
+    expect(url).not.toContain("itens"); // formato achatado, só 1 item
+    expect(url).toContain("Categoria: Bolo Redondo");
+  });
+
+  test("marcar uma categoria e deixá-la incompleta mantém o botão desabilitado mesmo com outra completa", async ({
+    page,
+  }) => {
+    await abrirFormulario(page);
+
+    await pillCategoria(page, "Bolo Redondo").click();
+    await grupoCategoria(page, "Bolo Redondo")
+      .getByLabel("Tamanho")
+      .selectOption(cardapio.bolos.redondos[0].tamanho);
+    await grupoCategoria(page, "Bolo Redondo")
+      .getByLabel("Recheio")
+      .selectOption(cardapio.bolos.recheiosDisponiveis[0]);
+
+    // Marca Docinhos mas não escolhe quantidade/sabores — fica incompleto.
+    await pillCategoria(page, "Docinhos").click();
+
+    await page.locator("#pedido-data").fill(DATA_VALIDA);
+    await page.getByLabel("Nome").fill("Maria Teste");
+
+    await expect(
+      page.getByRole("button", { name: "Enviar Pedido" }),
+    ).toBeDisabled();
+  });
+});
+
 test.describe("formulário de pedido — validação de data mínima", () => {
   test("data abaixo da antecedência mínima mostra erro e mantém o botão desabilitado", async ({
     page,
   }) => {
     await abrirFormulario(page);
 
-    await page.getByText("Bolo Redondo", { exact: true }).click();
-    await page
+    await pillCategoria(page, "Bolo Redondo").click();
+    await grupoCategoria(page, "Bolo Redondo")
       .getByLabel("Tamanho")
       .selectOption(cardapio.bolos.redondos[0].tamanho);
-    await page
+    await grupoCategoria(page, "Bolo Redondo")
       .getByLabel("Recheio")
       .selectOption(cardapio.bolos.recheiosDisponiveis[0]);
     await page.getByLabel("Nome").fill("Maria Teste");

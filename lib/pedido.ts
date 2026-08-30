@@ -1,11 +1,12 @@
 import { cardapio } from "@/lib/cardapio";
 
-// Formulário de pedido (Fase 8, ver docs/fase8-formulario-pedido.md) —
-// monta uma mensagem de WhatsApp a partir dos dados preenchidos. Nenhum
-// dado é inventado aqui: categorias, tamanhos, recheios e sabores só
-// existem porque vêm de content/cardapio.json via lib/cardapio.ts. Sem
-// backend, API route ou persistência — tudo roda no navegador do
-// cliente (ver docs/fase8-formulario-pedido.md, "Por que sem backend").
+// Formulário de pedido (Fase 8, ver docs/fase8-formulario-pedido.md;
+// multi-categoria adicionada depois, ver a mesma doc) — monta uma
+// mensagem de WhatsApp a partir dos dados preenchidos. Nenhum dado é
+// inventado aqui: categorias, tamanhos, recheios e sabores só existem
+// porque vêm de content/cardapio.json via lib/cardapio.ts. Sem backend,
+// API route ou persistência — tudo roda no navegador do cliente (ver
+// docs/fase8-formulario-pedido.md, "Por que sem backend").
 
 export type CategoriaPedido = "bolo-redondo" | "bolo-quadrado" | "docinhos";
 
@@ -22,52 +23,72 @@ export const LABEL_CATEGORIA_PEDIDO: Record<CategoriaPedido, string> = {
 /** Limite de caracteres do campo opcional de observações/tema do bolo. */
 export const OBSERVACOES_MAX_LENGTH = 300;
 
-export type DadosPedidoBolo = {
+export type ItemPedidoBolo = {
   categoria: "bolo-redondo" | "bolo-quadrado";
   tamanho: string;
   recheio: string;
-  dataDesejada: string;
-  nome: string;
-  observacoes?: string;
 };
 
-export type DadosPedidoDocinhos = {
+export type ItemPedidoDocinhos = {
   categoria: "docinhos";
   quantidadeSabores: 2 | 4;
   sabores: string[];
+};
+
+/** Um produto dentro do pedido. Uma encomenda pode ter até um item por
+ * categoria (ex: um Bolo Redondo + um Docinhos), nunca dois itens da
+ * mesma categoria — ver `RascunhoPedido`, que reflete isso tendo um
+ * único "slot" por categoria em vez de uma lista livre. */
+export type ItemPedido = ItemPedidoBolo | ItemPedidoDocinhos;
+
+/** Dados de um pedido já completo e válido — só existe depois de passar
+ * por `normalizarRascunho`. `dataDesejada`, `nome` e `observacoes` são
+ * únicos e compartilhados por todo o pedido (uma só data de retirada,
+ * um só pedido) mesmo quando `itens` tem mais de um produto.
+ * `dataDesejada` no formato ISO `yyyy-mm-dd` (mesmo formato do valor de
+ * um <input type="date">). */
+export type DadosPedido = {
+  /** Sempre não-vazio — `normalizarRascunho` devolve `null` se nenhuma
+   * categoria estiver marcada. */
+  itens: ItemPedido[];
   dataDesejada: string;
   nome: string;
   observacoes?: string;
 };
 
-/** Dados de um pedido já completo e válido — só existe depois de passar
- * por `normalizarRascunho`. `dataDesejada` no formato ISO `yyyy-mm-dd`
- * (mesmo formato do valor de um <input type="date">). */
-export type DadosPedido = DadosPedidoBolo | DadosPedidoDocinhos;
-
-/** Estado do formulário enquanto o cliente ainda está preenchendo —
- * todos os campos começam vazios/nulos, mesmo os obrigatórios. Nunca é
- * usado para montar a mensagem diretamente: primeiro passa por
- * `normalizarRascunho`, que só devolve um `DadosPedido` quando tudo que
- * é obrigatório está preenchido e válido. */
-export type RascunhoPedido = {
-  categoria: CategoriaPedido | "";
+export type RascunhoItemBolo = {
+  marcado: boolean;
   tamanho: string;
   recheio: string;
+};
+
+export type RascunhoItemDocinhos = {
+  marcado: boolean;
   quantidadeSabores: 2 | 4 | null;
   /** Um item por sabor escolhido, na ordem dos campos do formulário. */
   sabores: string[];
+};
+
+/** Estado do formulário enquanto o cliente ainda está preenchendo. Cada
+ * categoria tem seu próprio "slot" independente (`marcado` + seus
+ * campos), em vez de um único campo `categoria` compartilhado — é assim
+ * que várias categorias marcadas ao mesmo tempo convivem no mesmo
+ * rascunho. Nunca é usado para montar a mensagem diretamente: primeiro
+ * passa por `normalizarRascunho`, que só devolve um `DadosPedido`
+ * quando pelo menos uma categoria está marcada e totalmente preenchida. */
+export type RascunhoPedido = {
+  bolosRedondo: RascunhoItemBolo;
+  bolosQuadrado: RascunhoItemBolo;
+  docinhos: RascunhoItemDocinhos;
   dataDesejada: string;
   nome: string;
   observacoes: string;
 };
 
 export const RASCUNHO_PEDIDO_VAZIO: RascunhoPedido = {
-  categoria: "",
-  tamanho: "",
-  recheio: "",
-  quantidadeSabores: null,
-  sabores: [],
+  bolosRedondo: { marcado: false, tamanho: "", recheio: "" },
+  bolosQuadrado: { marcado: false, tamanho: "", recheio: "" },
+  docinhos: { marcado: false, quantidadeSabores: null, sabores: [] },
   dataDesejada: "",
   nome: "",
   observacoes: "",
@@ -138,77 +159,132 @@ export function validarDataDesejada(
   return { valida: true };
 }
 
+function normalizarItemBolo(
+  categoria: "bolo-redondo" | "bolo-quadrado",
+  slot: RascunhoItemBolo,
+): ItemPedidoBolo | null {
+  const tamanho = slot.tamanho.trim();
+  const recheio = slot.recheio.trim();
+  if (!tamanho || !recheio) return null;
+  return { categoria, tamanho, recheio };
+}
+
+function normalizarItemDocinhos(
+  slot: RascunhoItemDocinhos,
+): ItemPedidoDocinhos | null {
+  if (!slot.quantidadeSabores) return null;
+
+  const sabores = slot.sabores.map((s) => s.trim()).filter(Boolean);
+  if (sabores.length !== slot.quantidadeSabores) return null;
+  if (new Set(sabores).size !== sabores.length) return null; // sabor repetido
+
+  return {
+    categoria: "docinhos",
+    quantidadeSabores: slot.quantidadeSabores,
+    sabores,
+  };
+}
+
 /** Valida e normaliza um rascunho em preenchimento para um pedido
- * completo — devolve `null` se qualquer campo obrigatório (dependendo
- * da categoria) estiver faltando, com data inválida, ou com sabores
- * duplicados/incompletos. É a única porta de entrada para produzir um
- * `DadosPedido`: nem a UI nem os testes montam esse tipo à mão. */
+ * completo — devolve `null` se: nenhuma categoria estiver marcada; a
+ * data estiver inválida; o nome estiver vazio; ou qualquer categoria
+ * MARCADA estiver com campos obrigatórios faltando (marcar uma
+ * categoria e deixá-la pela metade invalida o pedido inteiro, não só
+ * aquele item — evita enviar uma mensagem incompleta sem o cliente
+ * perceber). É a única porta de entrada para produzir um `DadosPedido`:
+ * nem a UI nem os testes montam esse tipo à mão. */
 export function normalizarRascunho(
   rascunho: RascunhoPedido,
   hoje: Date = new Date(),
 ): DadosPedido | null {
   const nome = rascunho.nome.trim();
-  if (!rascunho.categoria || !nome) return null;
+  if (!nome) return null;
   if (!validarDataDesejada(rascunho.dataDesejada, hoje).valida) return null;
 
-  const observacoes = rascunho.observacoes.trim() || undefined;
+  const itens: ItemPedido[] = [];
 
-  if (rascunho.categoria === "docinhos") {
-    if (!rascunho.quantidadeSabores) return null;
-
-    const sabores = rascunho.sabores.map((s) => s.trim()).filter(Boolean);
-    if (sabores.length !== rascunho.quantidadeSabores) return null;
-    if (new Set(sabores).size !== sabores.length) return null; // sabor repetido
-
-    return {
-      categoria: "docinhos",
-      quantidadeSabores: rascunho.quantidadeSabores,
-      sabores,
-      dataDesejada: rascunho.dataDesejada,
-      nome,
-      observacoes,
-    };
+  for (const [categoria, slot] of [
+    ["bolo-redondo", rascunho.bolosRedondo],
+    ["bolo-quadrado", rascunho.bolosQuadrado],
+  ] as const) {
+    if (!slot.marcado) continue;
+    const item = normalizarItemBolo(categoria, slot);
+    if (!item) return null; // marcado mas incompleto
+    itens.push(item);
   }
 
-  const tamanho = rascunho.tamanho.trim();
-  const recheio = rascunho.recheio.trim();
-  if (!tamanho || !recheio) return null;
+  if (rascunho.docinhos.marcado) {
+    const item = normalizarItemDocinhos(rascunho.docinhos);
+    if (!item) return null;
+    itens.push(item);
+  }
+
+  if (itens.length === 0) return null; // nenhuma categoria marcada
 
   return {
-    categoria: rascunho.categoria,
-    tamanho,
-    recheio,
+    itens,
     dataDesejada: rascunho.dataDesejada,
     nome,
-    observacoes,
+    observacoes: rascunho.observacoes.trim() || undefined,
   };
 }
 
-/** Monta a mensagem de texto do pedido, na ordem: saudação, categoria e
- * detalhes (tamanho/recheio ou sabores), data desejada, observações (se
- * houver) e nome — pronta para virar o `text` de um link `wa.me` (ver
- * `linkWhatsApp` em lib/cardapio.ts). Só aceita um `DadosPedido` já
- * validado por `normalizarRascunho` — não faz nenhuma validação própria. */
-export function montarMensagemPedido(dados: DadosPedido): string {
-  const linhas = [
-    "Olá! Gostaria de fazer uma encomenda:",
-    "",
-    `Categoria: ${LABEL_CATEGORIA_PEDIDO[dados.categoria]}`,
-  ];
-
-  if (dados.categoria === "docinhos") {
+/** Linhas de detalhe de um único item (sem a saudação/data/nome, que
+ * são do pedido inteiro, não do item). Reaproveitada tanto no caso de
+ * um único item (formato "achatado", igual ao de antes da
+ * multi-categoria) quanto no de vários itens (formato numerado). */
+function linhasItem(item: ItemPedido): string[] {
+  if (item.categoria === "docinhos") {
     const opcao = cardapio.docinhos.opcoesDeSabores.find(
-      (o) => o.quantidadeSabores === dados.quantidadeSabores,
+      (o) => o.quantidadeSabores === item.quantidadeSabores,
     );
     const detalheQuantidade = opcao
-      ? `${dados.quantidadeSabores} sabores (${opcao.descricao})`
-      : `${dados.quantidadeSabores} sabores`;
-    linhas.push(`Sabores: ${detalheQuantidade} — ${dados.sabores.join(", ")}`);
-  } else {
-    linhas.push(`Tamanho: ${dados.tamanho}`, `Recheio: ${dados.recheio}`);
+      ? `${item.quantidadeSabores} sabores (${opcao.descricao})`
+      : `${item.quantidadeSabores} sabores`;
+    return [
+      `Categoria: ${LABEL_CATEGORIA_PEDIDO[item.categoria]}`,
+      `Sabores: ${detalheQuantidade} — ${item.sabores.join(", ")}`,
+    ];
   }
 
-  linhas.push(`Data desejada: ${formatarDataBR(dados.dataDesejada)}`);
+  return [
+    `Categoria: ${LABEL_CATEGORIA_PEDIDO[item.categoria]}`,
+    `Tamanho: ${item.tamanho}`,
+    `Recheio: ${item.recheio}`,
+  ];
+}
+
+/** Monta a mensagem de texto do pedido, pronta para virar o `text` de
+ * um link `wa.me` (ver `linkWhatsApp` em lib/cardapio.ts). Só aceita um
+ * `DadosPedido` já validado por `normalizarRascunho` — não faz nenhuma
+ * validação própria.
+ *
+ * Um único item: formato "achatado" (igual ao de antes da
+ * multi-categoria) — saudação, categoria e detalhes, data, observações
+ * (se houver), nome.
+ *
+ * Vários itens: cada um numerado ("1) Bolo Redondo", "2) Docinhos", …),
+ * separado por linha em branco, seguido de data/observações/nome —
+ * únicos e compartilhados por todo o pedido, nunca repetidos por item. */
+export function montarMensagemPedido(dados: DadosPedido): string {
+  const linhas: string[] = [];
+
+  if (dados.itens.length === 1) {
+    linhas.push("Olá! Gostaria de fazer uma encomenda:", "");
+    linhas.push(...linhasItem(dados.itens[0]));
+  } else {
+    linhas.push(
+      `Olá! Gostaria de fazer uma encomenda com ${dados.itens.length} itens:`,
+      "",
+    );
+    dados.itens.forEach((item, indice) => {
+      linhas.push(`${indice + 1}) ${LABEL_CATEGORIA_PEDIDO[item.categoria]}`);
+      linhas.push(...linhasItem(item).slice(1)); // sem repetir "Categoria: X" (já é o título numerado)
+      if (indice < dados.itens.length - 1) linhas.push("");
+    });
+  }
+
+  linhas.push("", `Data desejada: ${formatarDataBR(dados.dataDesejada)}`);
 
   if (dados.observacoes) {
     linhas.push(`Observações: ${dados.observacoes}`);
