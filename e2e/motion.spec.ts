@@ -156,7 +156,14 @@ test.describe("sem layout shift perceptível (CLS)", () => {
   });
 
   test("Galeria ao carregar as fotos (skeleton → imagem)", async ({ page }) => {
-    test.setTimeout(60_000); // carregar 12 fotos reais pode levar um tempo
+    // 60s estourava de forma consistente sob a contenção de CPU real dos
+    // runners compartilhados do GitHub Actions (Issue #120) — inclusive
+    // numa execução de `main` sem nenhuma mudança relacionada à Galeria,
+    // então não era uma regressão de código. Localmente (sem a mesma
+    // contenção) o teste sempre passou bem abaixo de 60s. 120s dá margem
+    // real sem enfraquecer a asserção em si (ainda exige as 12 fotos
+    // carregadas e CLS < 0.1).
+    test.setTimeout(120_000);
     const cls = await measureCls(page, "/galeria", async () => {
       // No mobile, o grid vira 1 coluna — a página fica bem mais alta, e
       // as últimas fotos ficam longe o suficiente da viewport inicial
