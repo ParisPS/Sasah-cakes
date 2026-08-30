@@ -20,15 +20,23 @@ const LABEL_CLASSES = "font-body block text-sm font-medium text-ink-900";
 // Cor de erro: a Fase 2 não definiu um token de validação (ver
 // docs/design/design-tokens.md, nota no fim de "Paleta de cores") — a
 // Fase 8 não inventa uma cor nova (restrição não-negociável). Em vez
-// disso, um campo inválido usa borda mais grossa em sage-700 (já existe
-// na paleta) e a mensagem de erro usa sage-900 em negrito — a diferença
-// de peso/traço já distingue do texto de apoio (ink-600, regular), sem
-// depender só de cor para transmitir "isto é um erro" (acessibilidade:
-// não depender só de cor).
+// disso, um campo inválido usa borda mais grossa (já existe na paleta)
+// e a mensagem de erro usa negrito — a diferença de peso/traço já
+// distingue do texto de apoio (ink-600, regular), sem depender só de
+// cor para transmitir "isto é um erro" (acessibilidade: não depender
+// só de cor).
+//
+// Dark mode (Fase 11): a borda inválida usa sage-300 (não sage-700) —
+// sage-700 (fixo nos dois temas) mede só ~3.06:1 contra o bg branco do
+// campo no escuro, abaixo da margem confortável para um indicador de
+// UI; sage-300 mede ~8:1. O texto de erro usa sage-100 no escuro (era
+// sage-900 no claro) pelo mesmo motivo dos headings — ver
+// docs/design/design-tokens.md ("Dark mode").
 const CAMPO_CLASSES =
   "w-full rounded-sm border border-cream-700 bg-white px-4 py-2.5 text-ink-900 transition-colors focus:border-sage-500 focus:ring-2 focus:ring-sage-500 focus:outline-none motion-reduce:transition-none";
-const CAMPO_INVALIDO_CLASSES = "border-2 border-sage-700";
-const ERRO_CLASSES = "text-sage-900 mt-1.5 text-sm font-semibold";
+const CAMPO_INVALIDO_CLASSES = "dark:border-sage-300 border-2 border-sage-700";
+const ERRO_CLASSES =
+  "text-sage-900 dark:text-sage-100 mt-1.5 text-sm font-semibold";
 
 function classesPill(selecionado: boolean): string {
   // `relative`: o <input> real fica visualmente escondido via `sr-only`
@@ -38,11 +46,17 @@ function classesPill(selecionado: boolean): string {
   // ao focar o campo via teclado (o foco pareceria "pular" para o topo
   // da página em vez de ficar no pill). `relative` no <label> faz o
   // input absoluto ficar contido dentro do próprio pill.
+  //
+  // Dark mode: selecionado usa text-on-accent (texto claro fixo sobre
+  // fundo sage saturado, também fixo). Não selecionado usa
+  // dark:text-sage-300 em repouso, com dark:hover: reafirmando
+  // sage-900 no hover (mesmo par sage-900-sobre-sage-100, também
+  // fixo, do claro) — ver docs/design/design-tokens.md ("Dark mode").
   const base =
     "rounded-pill font-body has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-sage-500 has-[:focus-visible]:ring-offset-2 relative cursor-pointer border px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors motion-reduce:transition-none";
   return selecionado
-    ? `${base} border-sage-700 bg-sage-700 text-cream-300`
-    : `${base} border-sage-300 text-sage-700 hover:bg-sage-100 hover:text-sage-900`;
+    ? `${base} border-sage-700 bg-sage-700 text-on-accent`
+    : `${base} border-sage-300 text-sage-700 dark:text-sage-300 hover:bg-sage-100 hover:text-sage-900 dark:hover:text-sage-900`;
 }
 
 // Transição de altura ao aparecer os campos de uma categoria marcada —
@@ -282,7 +296,7 @@ export function FormularioPedido() {
 
         <BlocoExpansivel aberto={rascunho.bolosRedondo.marcado}>
           <fieldset className="bg-cream-300 mt-4 rounded-md border-0 p-4">
-            <legend className="font-body text-sage-700 px-1 text-sm font-semibold">
+            <legend className="font-body text-sage-700 dark:text-sage-300 px-1 text-sm font-semibold">
               {LABEL_CATEGORIA_PEDIDO["bolo-redondo"]}
             </legend>
             <BlocoBolo
@@ -298,7 +312,7 @@ export function FormularioPedido() {
 
         <BlocoExpansivel aberto={rascunho.bolosQuadrado.marcado}>
           <fieldset className="bg-cream-300 mt-4 rounded-md border-0 p-4">
-            <legend className="font-body text-sage-700 px-1 text-sm font-semibold">
+            <legend className="font-body text-sage-700 dark:text-sage-300 px-1 text-sm font-semibold">
               {LABEL_CATEGORIA_PEDIDO["bolo-quadrado"]}
             </legend>
             <BlocoBolo
@@ -314,7 +328,7 @@ export function FormularioPedido() {
 
         <BlocoExpansivel aberto={rascunho.docinhos.marcado}>
           <fieldset className="bg-cream-300 mt-4 rounded-md border-0 p-4">
-            <legend className="font-body text-sage-700 px-1 text-sm font-semibold">
+            <legend className="font-body text-sage-700 dark:text-sage-300 px-1 text-sm font-semibold">
               {LABEL_CATEGORIA_PEDIDO["docinhos"]}
             </legend>
 

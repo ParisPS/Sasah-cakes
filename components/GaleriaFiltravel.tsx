@@ -66,8 +66,8 @@ export function GaleriaFiltravel({
               // sage-900.
               className={`rounded-pill font-body border px-4 py-2 text-sm font-semibold transition-colors motion-reduce:transition-none ${
                 ativo
-                  ? "bg-sage-700 border-sage-700 text-cream-300"
-                  : "border-sage-300 text-sage-700 hover:bg-sage-100 hover:text-sage-900"
+                  ? "bg-sage-700 border-sage-700 text-on-accent"
+                  : "border-sage-300 text-sage-700 dark:text-sage-300 hover:bg-sage-100 hover:text-sage-900 dark:hover:text-sage-900"
               }`}
             >
               {opcao.label}

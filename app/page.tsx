@@ -93,7 +93,7 @@ export default function Home() {
         />
 
         <div className="relative mx-auto max-w-2xl">
-          <h1 className="text-sage-900">
+          <h1 className="text-sage-900 dark:text-sage-100">
             Bolos e docinhos feitos à mão, com carinho
           </h1>
           <p className="text-ink-600 mt-6 text-lg">
@@ -134,7 +134,9 @@ export default function Home() {
       {/* Produtos em destaque */}
       <section className="mx-auto max-w-5xl px-4 py-16 md:px-6">
         <RevealOnScroll>
-          <h2 className="text-sage-900">Um gostinho do nosso cardápio</h2>
+          <h2 className="text-sage-900 dark:text-sage-100">
+            Um gostinho do nosso cardápio
+          </h2>
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
             {PRODUTOS_DESTAQUE.map((produto) => (
               <div key={produto.title}>
@@ -168,7 +170,7 @@ export default function Home() {
       {/* Preview de galeria */}
       <section className="bg-cream-500 px-4 py-16 md:px-6">
         <RevealOnScroll className="mx-auto max-w-5xl">
-          <h2 className="text-sage-900">Nosso Trabalho</h2>
+          <h2 className="text-sage-900 dark:text-sage-100">Nosso Trabalho</h2>
           <div className="mt-8">
             <GallerySection variant="preview" itens={AMOSTRA_GALERIA} />
           </div>
@@ -186,13 +188,16 @@ export default function Home() {
           distribuição de paleta da Etapa 2 (~10% sálvia saturada). */}
       <section className="bg-sage-900 px-4 py-16 text-center md:px-6">
         <RevealOnScroll className="mx-auto max-w-2xl">
-          <h2 className="text-cream-300">Vamos combinar sua encomenda?</h2>
-          <p className="text-cream-300/80 mt-4">
+          <h2 className="text-on-accent">Vamos combinar sua encomenda?</h2>
+          <p className="text-on-accent/80 mt-4">
             Chama no WhatsApp — é o jeito mais rápido de confirmar sabores,
             tamanho e data de retirada.
           </p>
-          {/* ring-cream-300: sobre fundo sage-900, o contorno cream-300
-              garante contraste de borda >= 3:1 (WCAG 1.4.11) — o fundo do
+          {/* ring-on-accent (dark mode, Fase 11: era ring-cream-300 — na
+              mesma linha de raciocínio de on-accent em
+              docs/design/design-tokens.md, fixo nos dois temas): sobre
+              fundo sage-900, o contorno garante contraste de borda >=
+              3:1 (WCAG 1.4.11) — o fundo do
               botão sozinho (sage-700 em repouso desde a correção de
               contraste pós-Fase 9) fica em ~1.6:1 contra este fundo
               sage-900, baixo demais para depender só do preenchimento
@@ -207,7 +212,7 @@ export default function Home() {
             variant="primary"
             href={linkWhatsApp(cardapio.comoEncomendar.contato.telefone)}
             external
-            className="ring-cream-300 ring-offset-sage-900 md:hover:bg-sage-700! mt-8 ring-2 ring-offset-2 transition-[box-shadow,transform] md:hover:ring-4"
+            className="ring-on-accent ring-offset-sage-900 md:hover:bg-sage-700! mt-8 ring-2 ring-offset-2 transition-[box-shadow,transform] md:hover:ring-4"
           >
             Falar no WhatsApp
           </Button>

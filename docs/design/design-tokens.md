@@ -114,6 +114,125 @@ tom artesanal em vez de "flat corporativo".
 | `shadow-md` | `0 6px 16px rgba(63, 74, 46, 0.14)`  | Cards em hover, dropdowns           |
 | `shadow-lg` | `0 16px 32px rgba(63, 74, 46, 0.18)` | Modais, botão flutuante de WhatsApp |
 
+## Dark mode (Fase 11)
+
+Opção de tema escuro deliberada — não um "inverter cores" genérico.
+Implementação técnica: variante `dark:` do Tailwind v4 baseada em
+CLASSE (`@custom-variant dark (&:where(.dark, .dark *));` em
+`app/globals.css`), não só `prefers-color-scheme` — o site precisa de 3
+estados (claro / escuro / seguir sistema) com escolha manual persistida
+(`components/ThemeToggle.tsx` + `lib/tema.ts`, localStorage), e uma
+media query sozinha só cobre "seguir sistema". A classe `.dark` fica em
+`<html>`, aplicada por um script inline `beforeInteractive`
+(`app/layout.tsx`) antes da primeira pintura (evita flash de tema
+errado) e mantida pelo `ThemeToggle` depois de montado.
+
+### Por que sálvia (sage-100 a 900) fica FIXA nos dois temas
+
+Ao contrário de branco/creme/ink (que invertem — ver tabela abaixo),
+nenhum tom de sálvia muda de valor entre claro e escuro. Duas razões:
+
+1. **Boa parte do uso já é como fundo de elemento saturado** (botão
+   primário, botão flutuante do WhatsApp, pill de categoria/filtro
+   selecionado — todos `sage-700`/`sage-900`), sempre pareado com um
+   texto claro fixo (`on-accent`, ver abaixo). Escurecer ainda mais um
+   fundo que já é escuro por natureza (ex: `sage-900` ainda mais escuro
+   no tema escuro) não ajudaria, e mudar o par de cores quebraria o
+   contraste calibrado.
+2. **Onde sálvia aparece como TEXTO direto sobre um fundo neutro**
+   (headings, links, labels) o problema é o oposto: testado com o
+   valor claro sem mudança nenhuma, `sage-900`/`sage-700` como texto
+   sobre os novos fundos escuros medem só ~3:1 (abaixo do mínimo AA) —
+   contraste calculado, não assumido (ver tabela de verificação
+   abaixo). A correção não é redefinir o token (quebraria o papel de
+   fundo do item 1), e sim os componentes aplicarem um override
+   `dark:text-sage-300` (no lugar de `sage-700`) ou
+   `dark:text-sage-100` (no lugar de `sage-900`) — reaproveitando tons
+   que **já existem** na paleta e **já são claros o bastante** para
+   funcionar como texto sobre fundo escuro, em vez de inventar cor
+   nova. `sage-100`/`sage-300`/`sage-500` como fundo/borda (Badge,
+   bordas de pill, ring de foco) também ficam fixos — já são claros o
+   bastante para continuarem funcionando nos dois temas sem mudança.
+
+### `on-accent` — por que é um token à parte
+
+`cream-300` tem dois papéis que entram em conflito num tema escuro:
+como **superfície** (fundo de card) precisa escurecer; como **texto**
+sobre um botão/pill de fundo sálvia saturado precisa continuar claro
+nos dois temas (o fundo sálvia por trás também não muda — item 1
+acima). A mesma variável CSS não pode satisfazer os dois ao mesmo
+tempo. `--color-on-accent` (`#FBF7EC`, igual ao `cream-300` claro,
+fixo) resolve isso: um token dedicado só para "texto/ícone sobre uma
+superfície de sage saturada", nunca usado como fundo em lugar nenhum.
+
+### Tabela de tokens claro → escuro
+
+| Token       | Claro     | Escuro    | Observação                                             |
+| ----------- | --------- | --------- | ------------------------------------------------------ |
+| `sage-100`  | `#DCE3CB` | `#DCE3CB` | Fixo — ver "Por que sálvia fica fixa" acima            |
+| `sage-300`  | `#A8B48A` | `#A8B48A` | Fixo                                                   |
+| `sage-500`  | `#7C8A5E` | `#7C8A5E` | Fixo                                                   |
+| `sage-700`  | `#5C6B41` | `#5C6B41` | Fixo — como TEXTO usa override `dark:text-sage-300`    |
+| `sage-900`  | `#3F4A2E` | `#3F4A2E` | Fixo — como TEXTO usa override `dark:text-sage-100`    |
+| `cream-700` | `#E8DFC8` | `#84754F` | Borda/divisor                                          |
+| `cream-500` | `#F5EFDF` | `#221D15` | Fundo de seção alternada                               |
+| `cream-300` | `#FBF7EC` | `#2A241A` | Fundo de card — como TEXTO usa `on-accent` (ver acima) |
+| `white`     | `#FFFFFF` | `#1C1812` | Fundo geral da página                                  |
+| `ink-900`   | `#2E2A20` | `#F2ECDD` | Texto principal                                        |
+| `ink-600`   | `#6B6455` | `#B6AC98` | Texto secundário                                       |
+| `on-accent` | `#FBF7EC` | `#FBF7EC` | Fixo — texto/ícone sobre fundo sage saturado           |
+
+Implementado em `app/globals.css`: os neutros (branco/creme/ink) são
+redefinidos dentro de um bloco `.dark { ... }` — toda utility que já
+existe (`bg-white`, `text-ink-900` etc.) passa a resolver
+automaticamente para o valor escuro, sem editar nenhum componente. Só
+os poucos casos de sálvia-como-texto (listados acima) precisam de um
+override `dark:` explícito no componente.
+
+### Verificação de contraste (WCAG AA)
+
+Mesmo rigor da auditoria da Fase 9 — nenhum par foi assumido, todos
+calculados (luminância relativa + razão de contraste, fórmula WCAG).
+Texto normal ≥ 4,5:1, UI/borda ≥ 3:1:
+
+| Par                                                             | Contraste | Mínimo |
+| --------------------------------------------------------------- | --------- | ------ |
+| Texto principal (`ink-900` escuro) sobre página                 | 14,99:1   | 4,5:1  |
+| Texto secundário (`ink-600` escuro) sobre página                | 7,86:1    | 4,5:1  |
+| Texto secundário sobre card (`cream-300` escuro)                | 6,84:1    | 4,5:1  |
+| Texto principal sobre card                                      | 13,05:1   | 4,5:1  |
+| Borda (`cream-700` escuro) sobre página                         | 3,90:1    | 3:1    |
+| Borda (`cream-700` escuro) sobre card                           | 3,40:1    | 3:1    |
+| Heading (`dark:text-sage-100`) sobre página                     | 13,37:1   | 4,5:1  |
+| Heading (`dark:text-sage-100`) sobre card                       | 11,64:1   | 4,5:1  |
+| Label/link (`dark:text-sage-300`) sobre página                  | 8,04:1    | 4,5:1  |
+| Label/link (`dark:text-sage-300`) sobre card                    | 7,00:1    | 4,5:1  |
+| Label/link (`dark:text-sage-300`) sobre seção alternada         | 7,62:1    | 4,5:1  |
+| Badge: `sage-900` sobre `sage-100` (par fixo, self-consistente) | 7,13:1    | 4,5:1  |
+| Botão primário: `on-accent` sobre `sage-700` (fixo)             | 5,40:1    | 4,5:1  |
+| Botão primário hover: `on-accent` sobre `sage-900` (fixo)       | 8,80:1    | 4,5:1  |
+| Botão secundário: borda `sage-500` (fixo) sobre página          | 4,76:1    | 3:1    |
+| Campo de formulário inválido: borda `dark:border-sage-300`      | 8,04:1    | 3:1    |
+| Pill não selecionado: borda `sage-300` (fixo) sobre card        | 7,00:1    | 3:1    |
+
+**Achado descartado durante a auditoria:** a primeira tentativa para o
+campo inválido usava `dark:border-sage-700` (mantendo o mesmo token do
+claro) — mede só ~3,06:1 contra o fundo branco do campo no escuro,
+tecnicamente acima do mínimo de 3:1 mas com margem apertada demais para
+um indicador de UI. Trocado para `dark:border-sage-300` (8,04:1) —
+mesmo raciocínio de "sálvia como texto/indicador precisa de um tom
+claro fixo" do resto da auditoria.
+
+**Fora do escopo de contraste, de propósito:** as imagens raster do
+mascote/selo (`public/brand/*.png`) têm fundo creme "gravado" no
+próprio arquivo — aparecem como um selo/emblema sobre o fundo escuro
+(padrão comum de logo em dark mode), não recolorizáveis via CSS. Não
+foram reprocessadas nesta fase. `app/global-error.tsx` (fallback de
+erro do layout raiz, com CSS inline autossuficiente — ver
+`docs/OBSERVABILITY.md`) também fica fora: ele existe justamente para
+não depender de `globals.css`/Tailwind, que pode ser a causa da falha
+que o aciona.
+
 ## Botões
 
 Implementados como um único componente (`components/Button.tsx`, desde a

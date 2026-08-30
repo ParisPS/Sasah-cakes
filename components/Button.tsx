@@ -48,7 +48,7 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   // sobre sage-700 mede 5.40:1. Hover/active sobem para sage-900, um
   // degrau a mais no mesmo tom, mantendo a progressão "escurece ao
   // interagir". Ver docs/design/design-tokens.md ("Botões").
-  primary: "bg-sage-700 text-cream-300 active:bg-sage-900 md:hover:bg-sage-900",
+  primary: "bg-sage-700 text-on-accent active:bg-sage-900 md:hover:bg-sage-900",
   // Ação de navegação/exploração (ex: "ver mais fotos", "ver cardápio
   // completo") — nunca usada antes da Fase 9, apesar de já especificada
   // desde a Fase 2 (docs/design/design-tokens.md "Botões"). Sem sombra
@@ -56,8 +56,18 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   // de sage-700 para sage-900 no hover/active (achado da Etapa 5): o
   // fundo que aparece nesse momento, sage-100, mede só 4.37:1 contra
   // sage-700 — abaixo do mínimo AA de 4.5:1 — e 7.13:1 contra sage-900.
+  //
+  // Dark mode (Fase 11): sage-500/700/900/100 são fixos nos dois temas
+  // (ver docs/design/design-tokens.md "Dark mode") — só o texto sage-700
+  // em REPOUSO (sem fundo, direto sobre a página) precisa de
+  // dark:text-sage-300 pra continuar legível quando a página escurece.
+  // active:/hover: já ficam sobre bg-sage-100 (também fixo) — o par
+  // sage-900-sobre-sage-100 não muda de tom entre temas, então
+  // dark:active:/dark:md:hover: só reafirmam sage-900 (evita qualquer
+  // ambiguidade de ordem de cascata com o dark:text-sage-300 da linha
+  // de repouso, que não deveria vencer aqui).
   secondary:
-    "border border-sage-500 text-sage-700 shadow-none active:bg-sage-100 active:text-sage-900 md:hover:bg-sage-100 md:hover:text-sage-900 md:hover:shadow-none",
+    "border border-sage-500 text-sage-700 dark:text-sage-300 shadow-none active:bg-sage-100 active:text-sage-900 dark:active:text-sage-900 md:hover:bg-sage-100 md:hover:text-sage-900 dark:md:hover:text-sage-900 md:hover:shadow-none",
 };
 
 /**

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { NAV_LINKS } from "@/lib/nav";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 // Header sticky — ver docs/design/style-guide.md ("Componentes
 // recorrentes" → "Cabeçalho (header)"). Mobile: logo + ☰ que abre o menu;
@@ -39,43 +40,51 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="font-body text-ink-900 hover:text-sage-700 font-medium transition-colors motion-reduce:transition-none"
+              className="font-body text-ink-900 hover:text-sage-700 dark:hover:text-sage-300 font-medium transition-colors motion-reduce:transition-none"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        {/* Botão hamburguer — mobile */}
-        <button
-          type="button"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-controls="menu-mobile"
-          aria-label={open ? "Fechar menu" : "Abrir menu"}
-          className="text-sage-700 grid text-2xl active:opacity-70 md:hidden"
-        >
-          {/* Duas camadas sobrepostas (grid + mesma célula) em vez de
-              trocar o texto na hora — permite um fade/rotate suave entre
-              ☰ e ✕ em vez de um corte seco. Ver
-              docs/design/motion-principles.md (duration-200, ease-in-out). */}
-          <span
-            aria-hidden="true"
-            className={`col-start-1 row-start-1 transition-all duration-200 ease-in-out motion-reduce:transition-none ${
-              open ? "rotate-45 opacity-0" : "rotate-0 opacity-100"
-            }`}
+        <div className="flex items-center gap-3 md:gap-4">
+          {/* Dark mode (Fase 11) — sempre visível (não some no mobile
+              como a nav, que vira o menu ☰): é um controle curto o
+              bastante pra caber ao lado do hambúrguer sem disputar
+              espaço. */}
+          <ThemeToggle />
+
+          {/* Botão hamburguer — mobile */}
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-controls="menu-mobile"
+            aria-label={open ? "Fechar menu" : "Abrir menu"}
+            className="dark:text-sage-300 text-sage-700 grid text-2xl active:opacity-70 md:hidden"
           >
-            ☰
-          </span>
-          <span
-            aria-hidden="true"
-            className={`col-start-1 row-start-1 transition-all duration-200 ease-in-out motion-reduce:transition-none ${
-              open ? "rotate-0 opacity-100" : "-rotate-45 opacity-0"
-            }`}
-          >
-            ✕
-          </span>
-        </button>
+            {/* Duas camadas sobrepostas (grid + mesma célula) em vez de
+                trocar o texto na hora — permite um fade/rotate suave entre
+                ☰ e ✕ em vez de um corte seco. Ver
+                docs/design/motion-principles.md (duration-200, ease-in-out). */}
+            <span
+              aria-hidden="true"
+              className={`col-start-1 row-start-1 transition-all duration-200 ease-in-out motion-reduce:transition-none ${
+                open ? "rotate-45 opacity-0" : "rotate-0 opacity-100"
+              }`}
+            >
+              ☰
+            </span>
+            <span
+              aria-hidden="true"
+              className={`col-start-1 row-start-1 transition-all duration-200 ease-in-out motion-reduce:transition-none ${
+                open ? "rotate-0 opacity-100" : "-rotate-45 opacity-0"
+              }`}
+            >
+              ✕
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* Menu mobile — sempre no DOM (não condicional) para poder animar

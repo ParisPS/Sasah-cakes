@@ -22,7 +22,11 @@ export function WhatsAppButton() {
       // abaixo do mínimo AA de 4.5:1. Este botão não passa pelo
       // componente Button (é fixo/flutuante, ícone em vez de texto), mas
       // usa o mesmo par de cores e precisa da mesma correção.
-      className="rounded-pill bg-sage-700 text-cream-300 md:hover:bg-sage-900 fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center shadow-lg transition-transform active:scale-95 motion-reduce:transition-none"
+      //
+      // text-on-accent (não text-cream-300): ícone sobre um fundo sage
+      // fixo nos dois temas (dark mode, Fase 11) — ver
+      // docs/design/design-tokens.md ("Dark mode").
+      className="rounded-pill bg-sage-700 text-on-accent md:hover:bg-sage-900 fixed right-6 bottom-6 z-50 flex h-14 w-14 items-center justify-center shadow-lg transition-transform active:scale-95 motion-reduce:transition-none"
     >
       <svg
         viewBox="0 0 32 32"
