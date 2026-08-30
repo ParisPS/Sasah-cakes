@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { cardapio, linkWhatsApp } from "@/lib/cardapio";
 import { Button } from "@/components/Button";
 import { RevealOnScroll } from "@/components/RevealOnScroll";
+import { FormularioPedido } from "@/components/FormularioPedido";
 
 export const metadata: Metadata = {
   title: "Como Encomendar · Sasah Cakes",
@@ -22,6 +23,15 @@ const PASSOS = [
 // abertura + RevealOnScroll + alternância de fundo (branco → cream-500)
 // aplicadas aqui na varredura final da Fase 9, fechando o "degradê de
 // capricho" da auditoria também nesta página.
+//
+// Fase 8 (formulário de pedido, ver docs/fase8-formulario-pedido.md):
+// o formulário (FormularioPedido) passa a ser o CTA PRIMÁRIO da página
+// — pensado para quem já sabe o que quer encomendar. O botão genérico
+// "Falar no WhatsApp", que antes vivia dentro do card de Contato como
+// CTA primário, virou CTA SECUNDÁRIO (variante `secondary`) para quem
+// só quer tirar uma dúvida antes de decidir — por isso saiu do card de
+// Contato (que ficaria com dois CTAs concorrentes) e foi reposicionado
+// para perto do topo, junto da frase de abertura.
 export default function ComoEncomendarPage() {
   const { contato, pagamento, entrega, antecedenciaMinima, sinal } =
     cardapio.comoEncomendar;
@@ -32,6 +42,16 @@ export default function ComoEncomendarPage() {
       <p className="text-ink-600 mt-3">
         Quatro passos simples, do cardápio até a retirada do seu pedido.
       </p>
+
+      <div className="mt-6">
+        <Button
+          variant="secondary"
+          href={linkWhatsApp(contato.telefone)}
+          external
+        >
+          Prefere só tirar uma dúvida? Fale direto no WhatsApp
+        </Button>
+      </div>
 
       <RevealOnScroll>
         <ol className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-4">
@@ -52,22 +72,27 @@ export default function ComoEncomendarPage() {
       </RevealOnScroll>
 
       <RevealOnScroll>
-        <div className="bg-cream-500 mt-14 grid grid-cols-1 gap-6 rounded-lg p-6 md:grid-cols-2 md:p-8">
-          <div className="rounded-lg bg-white p-8 text-center shadow-sm">
+        <div className="bg-cream-500 mt-14 rounded-lg p-6 shadow-sm md:p-8">
+          <h2 className="text-sage-900">Faça seu pedido</h2>
+          <p className="text-ink-600 mt-2">
+            Preencha os dados abaixo — vamos abrir o WhatsApp com sua encomenda
+            já pronta para enviar.
+          </p>
+          <div className="mt-6 rounded-lg bg-white p-6 shadow-sm md:p-8">
+            <FormularioPedido />
+          </div>
+        </div>
+      </RevealOnScroll>
+
+      <RevealOnScroll>
+        <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-2">
+          <div className="bg-cream-300 rounded-lg p-8 text-center shadow-sm">
             <h2 className="text-sage-900">Contato</h2>
             <p className="text-ink-900 mt-3">{contato.nome}</p>
             <p className="text-ink-600">{contato.telefone}</p>
-            <Button
-              variant="primary"
-              href={linkWhatsApp(contato.telefone)}
-              external
-              className="mt-6"
-            >
-              Chamar no WhatsApp
-            </Button>
           </div>
 
-          <div className="rounded-lg bg-white p-8 shadow-sm">
+          <div className="bg-cream-300 rounded-lg p-8 shadow-sm">
             <h2 className="text-sage-900">Pagamento e retirada</h2>
             <ul className="text-ink-900 mt-4 space-y-3">
               <li>
