@@ -16,6 +16,7 @@ type ButtonAsLink = ButtonOwnProps & {
   external?: boolean;
   onClick?: () => void;
   type?: never;
+  disabled?: never;
   "data-testid"?: string;
   "aria-label"?: string;
 };
@@ -25,6 +26,11 @@ type ButtonAsButton = ButtonOwnProps & {
   external?: never;
   onClick?: () => void;
   type?: "button" | "submit";
+  /** Só faz sentido na variante <button> — um link desabilitado não tem
+   * equivalente semântico nativo em HTML (ver Fase 8, formulário de
+   * pedido: "Enviar Pedido" fica desabilitado até os campos obrigatórios
+   * estarem preenchidos). */
+  disabled?: boolean;
   "data-testid"?: string;
   "aria-label"?: string;
 };
@@ -32,7 +38,7 @@ type ButtonAsButton = ButtonOwnProps & {
 type ButtonProps = ButtonAsLink | ButtonAsButton;
 
 const BASE_CLASSES =
-  "rounded-pill font-body inline-block px-7 py-3 text-center font-semibold tracking-[0.01em] shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md motion-reduce:transition-none md:hover:shadow-md";
+  "rounded-pill font-body inline-block px-7 py-3 text-center font-semibold tracking-[0.01em] shadow-sm transition-[box-shadow,transform] active:scale-[0.98] active:shadow-md motion-reduce:transition-none md:hover:shadow-md disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none disabled:active:scale-100";
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   // Ação principal da página (ex: WhatsApp/encomendar) — ver
@@ -72,6 +78,7 @@ export function Button({
   external,
   onClick,
   type,
+  disabled,
   ...rest
 }: ButtonProps) {
   const classes = `${BASE_CLASSES} ${VARIANT_CLASSES[variant]} ${className}`;
@@ -103,6 +110,7 @@ export function Button({
     <button
       type={type ?? "button"}
       onClick={onClick}
+      disabled={disabled}
       className={classes}
       {...rest}
     >
