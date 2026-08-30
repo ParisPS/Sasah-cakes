@@ -141,6 +141,24 @@ files`, `Bundled N files`/`Uploaded N files` (sucesso) ou um erro
 explícito do `sentry-cli` (ex: token inválido, projeto/org incorretos)
 — não mais silêncio total.
 
+### Confirmado em produção
+
+O Build Log do deployment de produção do commit `94608fc` (o próprio
+commit da correção acima) mostrou o upload com sucesso:
+
+```
+Uploaded files to Sentry
+Organization: paris-1c
+Projects: javascript-nextjs
+Release: 94608fc87535155d6556246b7b41f2d26e44d3a6
+```
+
+Confirma as duas pontas: o `SENTRY_AUTH_TOKEN` configurado na Vercel é
+válido, e a correção do `silent` de fato parou de esconder a saída do
+Sentry nos Build Logs de produção. Stack traces de erros capturados a
+partir desse deploy já mostram arquivo/linha do código-fonte, não do
+bundle minificado (ver "Como interpretar um alerta" acima).
+
 ## Considerações futuras (não aplicado por ora)
 
 Fora de escopo da Fase 6 — registrado para não se perder, não para ser
