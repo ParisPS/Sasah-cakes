@@ -216,7 +216,10 @@ describe("normalizarRascunho", () => {
         },
         HOJE,
       );
-      expect(resultado?.sabores).toHaveLength(4);
+      expect(resultado?.categoria).toBe("docinhos");
+      if (resultado?.categoria === "docinhos") {
+        expect(resultado.sabores).toHaveLength(4);
+      }
     });
   });
 });
