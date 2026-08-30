@@ -38,15 +38,34 @@ const nextConfig: NextConfig = {
 // legíveis em produção) e injeta a instrumentação necessária. Sem
 // SENTRY_AUTH_TOKEN no ambiente (ex: localmente, ou no CI), o upload é
 // simplesmente pulado — o build continua funcionando normalmente. Ver
-// docs/OBSERVABILITY.md.
+// docs/OBSERVABILITY.md ("Troubleshooting: confirmando o upload de
+// source maps").
 export default withSentryConfig(nextConfig, {
   org: "paris-1c",
   project: "javascript-nextjs",
   authToken: process.env.SENTRY_AUTH_TOKEN,
 
-  // Só loga o processo de upload fora do CI, pra não poluir os logs do
-  // GitHub Actions.
-  silent: !!process.env.CI,
+  // Explícito em vez de depender do default implícito do pacote: com
+  // Turbopack (o bundler padrão do Next.js 16, usado neste projeto), o
+  // upload de source map só acontece através deste hook — sem ele, o
+  // caminho tradicional de upload via config de Webpack nunca roda
+  // porque não há build de Webpack para injetar. @sentry/nextjs
+  // 10.71.0+ já assume `true` como default quando detecta Turbopack,
+  // então isto não muda o comportamento atual — só documenta a
+  // intenção em vez de depender de um default implícito que pode mudar
+  // em versões futuras do pacote.
+  useRunAfterProductionCompileHook: true,
+
+  // Só loga o processo de upload fora do CI do GitHub Actions (`!!process.env.CI`
+  // sozinho pegaria a Vercel também — ela também define `CI=1` no
+  // ambiente de build, não é exclusivo do GitHub Actions. Isso estava
+  // silenciando por engano toda confirmação/erro do upload de source
+  // map nos Build Logs da própria Vercel, mesmo com um
+  // SENTRY_AUTH_TOKEN válido configurado lá. `VERCEL` é uma variável de
+  // sistema documentada da Vercel — exclui explicitamente esse
+  // ambiente do silêncio pensado só para não poluir os logs do GitHub
+  // Actions, onde não há token real configurado mesmo).
+  silent: !!process.env.CI && !process.env.VERCEL,
 
   // Não envia telemetria sobre o próprio build para a Sentry.
   telemetry: false,
