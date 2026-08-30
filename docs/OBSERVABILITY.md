@@ -102,6 +102,45 @@ confirmados no painel do Sentry, e removido antes do merge final — não
 deixado oculto, porque uma rota que dispara um 500 de propósito fica
 acessível por URL direta mesmo sem link em nenhum menu.
 
+## Troubleshooting: confirmando o upload de source maps
+
+`SENTRY_AUTH_TOKEN` configurado na Vercel (Production) não bastava para
+ver confirmação do upload de source maps nos Build Logs — nenhuma linha
+do Sentry aparecia, nem de sucesso nem de erro. Investigação (ver
+Issue #110):
+
+- **Não era o pacote:** `@sentry/nextjs` 10.71.0 (bem acima do mínimo
+  10.13.0 que introduziu a opção) já assume
+  `useRunAfterProductionCompileHook: true` como default quando detecta
+  Turbopack (o bundler padrão do Next.js 16, usado neste projeto) —
+  confirmado lendo o código-fonte do pacote e testando localmente
+  (`next build` com um token inválido de propósito, só para forçar o
+  caminho de upload sem enviar nada de verdade): o hook roda e tenta o
+  upload normalmente, falhando apenas por token inválido, como
+  esperado. A opção agora está explícita em `next.config.ts` mesmo
+  assim — documenta a intenção em vez de depender de um default
+  implícito que pode mudar em versões futuras do pacote, mas não era a
+  causa do silêncio.
+- **Era o `silent`:** a config tinha `silent: !!process.env.CI`, pensado
+  para não poluir os logs do GitHub Actions (onde não há
+  `SENTRY_AUTH_TOKEN` real configurado mesmo). Só que a Vercel **também**
+  define `CI=1` no ambiente de build — não é uma variável exclusiva do
+  GitHub Actions. Isso silenciava por engano toda saída do Sentry
+  (sucesso ou erro) também nos Build Logs da própria Vercel, mesmo com
+  um token válido configurado lá. Reproduzido localmente: com `CI=1`
+  sozinho, nenhuma linha do Sentry aparece no build; sem essa variável,
+  aparecem normalmente.
+- **Correção:** `silent: !!process.env.CI && !process.env.VERCEL` —
+  `VERCEL` é uma variável de sistema documentada da própria Vercel,
+  definida em todo build/runtime dela. Continua silencioso só no
+  GitHub Actions; a Vercel volta a mostrar a saída completa do Sentry.
+
+Se precisar confirmar de novo no futuro que o upload está funcionando,
+o Build Log da Vercel deve mostrar linhas como `Found N source map
+files`, `Bundled N files`/`Uploaded N files` (sucesso) ou um erro
+explícito do `sentry-cli` (ex: token inválido, projeto/org incorretos)
+— não mais silêncio total.
+
 ## Considerações futuras (não aplicado por ora)
 
 Fora de escopo da Fase 6 — registrado para não se perder, não para ser
