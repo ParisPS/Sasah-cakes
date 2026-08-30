@@ -41,7 +41,7 @@ export function Footer() {
               href={linkWhatsApp(contato.telefone)}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-body text-sage-700 mt-4 inline-block underline underline-offset-4"
+              className="font-body text-sage-700 dark:text-sage-300 mt-4 inline-block underline underline-offset-4"
             >
               Fale no WhatsApp
             </a>

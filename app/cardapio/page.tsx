@@ -40,7 +40,7 @@ export default function CardapioPage() {
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-16 md:px-6">
-      <h1 className="text-sage-900">Cardápio</h1>
+      <h1 className="text-sage-900 dark:text-sage-100">Cardápio</h1>
       <p className="text-ink-600 mt-3">
         Bolos redondos, quadrados e pacotes de docinhos — escolha uma categoria
         ou role a página.
@@ -60,7 +60,7 @@ export default function CardapioPage() {
           <a
             key={categoria.href}
             href={categoria.href}
-            className="rounded-pill border-sage-300 text-sage-700 hover:bg-sage-100 hover:text-sage-900 font-body shrink-0 border px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors motion-reduce:transition-none"
+            className="rounded-pill border-sage-300 text-sage-700 dark:text-sage-300 hover:bg-sage-100 hover:text-sage-900 dark:hover:text-sage-900 font-body shrink-0 border px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors motion-reduce:transition-none"
           >
             {categoria.label}
           </a>
@@ -69,7 +69,7 @@ export default function CardapioPage() {
 
       <RevealOnScroll>
         <section id="bolos-redondos" className="mt-10 scroll-mt-24">
-          <h2 className="text-sage-900">Bolos Redondos</h2>
+          <h2 className="text-sage-900 dark:text-sage-100">Bolos Redondos</h2>
           {/* public/produtos-ia/bolo-redondo.jpg — PLACEHOLDER TEMPORÁRIO
               gerado por IA, a ser substituído por fotografia profissional
               real assim que houver (ver docs/redesign/mascote-e-tipografia.md
@@ -106,7 +106,7 @@ export default function CardapioPage() {
           id="bolos-quadrados"
           className="bg-cream-500 mt-14 scroll-mt-24 rounded-lg p-6 md:p-8"
         >
-          <h2 className="text-sage-900">Bolos Quadrados</h2>
+          <h2 className="text-sage-900 dark:text-sage-100">Bolos Quadrados</h2>
           {/* public/produtos-ia/bolo-quadrado.jpg — mesmo raciocínio do
               placeholder de Bolos Redondos acima. */}
           <div className="bg-cream-300 mt-6 rounded-md p-2">
@@ -135,7 +135,9 @@ export default function CardapioPage() {
 
       <RevealOnScroll>
         <section className="mt-14">
-          <h2 className="text-sage-900">Recheios disponíveis</h2>
+          <h2 className="text-sage-900 dark:text-sage-100">
+            Recheios disponíveis
+          </h2>
           <p className="text-ink-600 mt-2">
             Vale para os bolos redondos e quadrados.
           </p>
@@ -152,7 +154,7 @@ export default function CardapioPage() {
           id="docinhos"
           className="bg-cream-500 mt-14 scroll-mt-24 rounded-lg p-6 md:p-8"
         >
-          <h2 className="text-sage-900">Docinhos</h2>
+          <h2 className="text-sage-900 dark:text-sage-100">Docinhos</h2>
           {/* public/produtos-ia/docinhos.jpg — mesmo raciocínio do
               placeholder de Bolos Redondos acima. */}
           <div className="bg-cream-300 mt-6 rounded-md p-2">
@@ -176,7 +178,7 @@ export default function CardapioPage() {
                 <ul className="border-cream-700 mt-4 space-y-2 border-t pt-4">
                   {opcoesDeSabores.map((opcao) => (
                     <li key={opcao.quantidadeSabores} className="text-ink-900">
-                      <span className="text-sage-700 font-semibold">
+                      <span className="text-sage-700 dark:text-sage-300 font-semibold">
                         {opcao.quantidadeSabores} sabores
                       </span>{" "}
                       — {opcao.descricao}
@@ -187,7 +189,9 @@ export default function CardapioPage() {
             </div>
           </div>
 
-          <h3 className="text-sage-900 mt-8">Sabores disponíveis</h3>
+          <h3 className="text-sage-900 dark:text-sage-100 mt-8">
+            Sabores disponíveis
+          </h3>
           <div className="mt-4 flex flex-wrap gap-3">
             {saboresDisponiveis.map((sabor) => (
               <Badge key={sabor}>{sabor}</Badge>

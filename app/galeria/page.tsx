@@ -26,7 +26,7 @@ const FOTOS_EM_DESTAQUE = [
 export default function GaleriaPage() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-16 md:px-6">
-      <h1 className="text-sage-900">Nosso Trabalho</h1>
+      <h1 className="text-sage-900 dark:text-sage-100">Nosso Trabalho</h1>
       <p className="text-ink-600 mt-3">{cardapio.portfolio.status}</p>
 
       <RevealOnScroll className="mt-10">

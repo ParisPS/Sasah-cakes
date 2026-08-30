@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Titan_One, Bricolage_Grotesque } from "next/font/google";
+import Script from "next/script";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { SCRIPT_INLINE_TEMA } from "@/lib/tema";
 import "./globals.css";
 
 // Fonte display — Fase 10 (mascote e tipografia), substitui a Fraunces.
@@ -54,6 +56,14 @@ export default function RootLayout({
       className={`${titanOne.variable} ${bricolage.variable} scroll-smooth`}
     >
       <body className="antialiased">
+        {/* Dark mode (Fase 11) — aplica a classe `dark` em <html> antes
+            da primeira pintura, evitando um flash do tema claro antes
+            de escurecer. beforeInteractive: o Next.js garante que esse
+            script roda antes da hidratação e antes do conteúdo da
+            página ser pintado. Ver lib/tema.ts (SCRIPT_INLINE_TEMA). */}
+        <Script id="tema-inline" strategy="beforeInteractive">
+          {SCRIPT_INLINE_TEMA}
+        </Script>
         <Header />
         {children}
         <Footer />

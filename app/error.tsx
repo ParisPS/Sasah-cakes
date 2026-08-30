@@ -23,7 +23,9 @@ export default function Error({
   return (
     <main className="bg-cream-500 flex min-h-[60vh] items-center justify-center px-4 py-24 text-center">
       <div className="max-w-md rounded-lg bg-white p-10 shadow-md">
-        <h1 className="text-sage-900">Ops, algo deu errado</h1>
+        <h1 className="text-sage-900 dark:text-sage-100">
+          Ops, algo deu errado
+        </h1>
         <p className="text-ink-600 mt-4">
           Não foi possível carregar esta página. Nosso time já foi avisado —
           tente novamente em instantes.

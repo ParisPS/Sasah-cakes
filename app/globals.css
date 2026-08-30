@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+/* Dark mode (Fase 11) — variante `dark:` baseada em CLASSE (não só
+ * `prefers-color-scheme`), porque o site precisa de 3 estados (claro /
+ * escuro / seguir sistema) com escolha manual persistida — uma media
+ * query sozinha só dá conta do "seguir sistema". A classe `.dark` é
+ * aplicada em <html> por components/ThemeToggle.tsx e pelo script
+ * inline em app/layout.tsx (evita flash de tema errado antes da
+ * hidratação). Ver docs/design/design-tokens.md ("Dark mode") para a
+ * tabela completa claro→escuro e a auditoria de contraste. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /*
  * Design tokens — traduzidos de docs/design/design-tokens.md.
  * Definidos no namespace @theme do Tailwind v4: cada variável abaixo
@@ -12,21 +22,49 @@
  * (p-4 = 16px, p-6 = 24px, p-12 = 48px, p-24 = 96px, etc).
  */
 @theme {
-  /* Sálvia — cor de marca / primária */
+  /* Sálvia — cor de marca / primária. Fixa: o MESMO valor nos dois
+   * temas (ver bloco .dark abaixo, que não a redefine). Sage não é um
+   * neutro de fundo/texto que precise inverter — é a cor de marca, e
+   * boa parte do seu uso já é como FUNDO de elementos saturados
+   * (botão primário, botão flutuante do WhatsApp, pill selecionado),
+   * sempre pareados com --color-on-accent (também fixo) — mudar o
+   * valor de sage-700/900 quebraria esse par. Onde sage-700/900
+   * aparecem como TEXTO direto sobre um fundo neutro (que esse sim
+   * inverte), o componente usa um override dark: explícito para
+   * sage-300/sage-100 — ver docs/design/design-tokens.md.
+   */
   --color-sage-100: #dce3cb;
   --color-sage-300: #a8b48a;
   --color-sage-500: #7c8a5e;
   --color-sage-700: #5c6b41;
   --color-sage-900: #3f4a2e;
 
-  /* Creme / off-white */
+  /* Creme / off-white — estes SIM invertem no escuro (ver .dark
+   * abaixo): são o neutro de superfície da página. */
   --color-cream-300: #fbf7ec;
   --color-cream-500: #f5efdf;
   --color-cream-700: #e8dfc8;
 
-  /* Texto */
+  /* Texto — invertem no escuro (ver .dark abaixo). */
   --color-ink-600: #6b6455;
   --color-ink-900: #2e2a20;
+
+  /* Fundo geral da página — redeclarado aqui (mesmo valor do branco
+   * padrão do Tailwind) só para poder ser redefinido sob .dark
+   * abaixo; nenhuma mudança visual no claro. */
+  --color-white: #ffffff;
+
+  /* Texto/ícone sobre uma superfície de sage saturada (botão primário,
+   * botão flutuante do WhatsApp, pill de categoria/sabor selecionado)
+   * — FIXO nos dois temas, mesmo valor do cream-300 claro. Extraído
+   * como token próprio (não reaproveita --color-cream-300 direto)
+   * porque cream-300 tem um papel DIFERENTE e conflitante: como
+   * superfície de card ele precisa escurecer no tema escuro, mas como
+   * texto sobre um botão sage ele precisa continuar claro nos dois
+   * temas — a mesma variável não pode satisfazer os dois ao mesmo
+   * tempo. Ver docs/design/design-tokens.md ("Dark mode").
+   */
+  --color-on-accent: #fbf7ec;
 
   /* Utilitária (reaproveita a cor de marca — ver design-tokens.md) */
   --color-success: #7c8a5e;
@@ -55,7 +93,46 @@
   --shadow-lg: 0 16px 32px rgba(63, 74, 46, 0.18);
 }
 
+/* Valores escuros dos tokens de neutro — mesma variável do @theme
+ * acima, redefinida sob a classe .dark (aplicada em <html>). Toda
+ * utility que já existe (bg-white, bg-cream-300, text-ink-900, etc.)
+ * passa a resolver para o valor escuro automaticamente, sem precisar
+ * editar nenhum componente — só os poucos casos de sage-700/900 usados
+ * como TEXTO (não fundo) precisam de um override dark: explícito nos
+ * componentes, documentado em docs/design/design-tokens.md junto com
+ * a tabela completa e a auditoria de contraste (todos os pares
+ * verificados ≥4.5:1 texto normal / ≥3:1 UI, WCAG AA). */
+.dark {
+  --color-white: #1c1812;
+  --color-cream-300: #2a241a;
+  --color-cream-500: #221d15;
+  --color-cream-700: #84754f;
+  --color-ink-900: #f2ecdd;
+  --color-ink-600: #b6ac98;
+}
+
 @layer base {
+  /* Transição sutil ao trocar claro/escuro — aplicada de forma ampla
+   * (não só no body) porque cards, headings, bordas etc. mudam de tom
+   * junto quando a classe .dark é alternada; sem isso, o body
+   * "desliza" suavemente enquanto o resto da página troca de cor de
+   * golpe, o que pareceria inconsistente. Mesma duração/easing de
+   * micro-interação do resto do site
+   * (docs/design/motion-principles.md, duration-200/ease-in-out).
+   * motion-reduce: troca instantânea, sem transição. */
+  * {
+    transition:
+      background-color 200ms ease-in-out,
+      color 200ms ease-in-out,
+      border-color 200ms ease-in-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none;
+    }
+  }
+
   body {
     @apply font-body text-ink-900 bg-white;
   }
