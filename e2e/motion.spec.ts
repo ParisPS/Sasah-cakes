@@ -112,11 +112,53 @@ test.describe("prefers-reduced-motion", () => {
 // desaconselha: não tem uma definição confiável de "rede parada" e é
 // sensível a contenção de CPU/rede do ambiente de CI).
 async function waitForPortfolioImages(page: Page) {
-  await page.waitForFunction(() =>
-    Array.from(document.querySelectorAll("main img")).every(
-      (img) => (img as HTMLImageElement).complete,
-    ),
+  await page.waitForFunction(
+    () =>
+      Array.from(document.querySelectorAll("main img")).every(
+        (img) => (img as HTMLImageElement).complete,
+      ),
+    { timeout: 150_000 }, // ver nota em "aquecerCacheDeImagens" abaixo
   );
+}
+
+// Desce a página em passos pra trazer cada foto perto da viewport (sem
+// isso, o lazy loading nativo nunca dispara pra fotos longe do topo —
+// sobretudo no mobile, onde o grid vira 1 coluna e a página fica bem
+// mais alta) e espera todas terminarem de carregar.
+async function rolarEEsperarFotos(page: Page) {
+  await page.evaluate(async () => {
+    const step = window.innerHeight;
+    for (let y = 0; y < document.body.scrollHeight; y += step) {
+      window.scrollTo({ top: y, behavior: "instant" });
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+  });
+  await waitForPortfolioImages(page);
+}
+
+// Aquece o cache de imagens otimizadas do next/image (transcodificação
+// via sharp sob demanda) ANTES da passada que de fato mede CLS.
+//
+// Achado (Issue #120 → recorrência posterior): subir o timeout de 60s
+// pra 120s não resolveu de vez — o teste voltou a estourar mesmo a
+// 120s num run de CI real (ver histórico de Issues). O problema nunca
+// foi "o timeout é curto demais": é que a PRIMEIRA requisição de cada
+// variante de tamanho de imagem aciona uma transcodificação síncrona
+// no processo Node do `next start` (single-threaded pra JS, e sharp
+// compete pelo mesmo CPU) — sob a contenção real de CPU dos runners
+// compartilhados do GitHub Actions, só isso já pode consumir o
+// orçamento inteiro do teste, e a medição de CLS acaba acontecendo
+// bem no meio desse trabalho pesado em vez de depois dele.
+//
+// Visitar a página uma vez aqui, fora da janela medida, força essa
+// transcodificação a acontecer ANTES — as chamadas de
+// `waitForPortfolioImages` dentro do teste medido passam a bater no
+// cache em disco do Next (`.next/cache/images/`), que é uma leitura
+// rápida mesmo sob contenção de CPU, não mais um reprocessamento de
+// imagem do zero.
+async function aquecerCacheDeImagens(page: Page, path: string) {
+  await page.goto(path, { waitUntil: "domcontentloaded" });
+  await rolarEEsperarFotos(page);
 }
 
 test.describe("sem layout shift perceptível (CLS)", () => {
@@ -156,28 +198,23 @@ test.describe("sem layout shift perceptível (CLS)", () => {
   });
 
   test("Galeria ao carregar as fotos (skeleton → imagem)", async ({ page }) => {
-    // 60s estourava de forma consistente sob a contenção de CPU real dos
-    // runners compartilhados do GitHub Actions (Issue #120) — inclusive
-    // numa execução de `main` sem nenhuma mudança relacionada à Galeria,
-    // então não era uma regressão de código. Localmente (sem a mesma
-    // contenção) o teste sempre passou bem abaixo de 60s. 120s dá margem
-    // real sem enfraquecer a asserção em si (ainda exige as 12 fotos
-    // carregadas e CLS < 0.1).
-    test.setTimeout(120_000);
-    const cls = await measureCls(page, "/galeria", async () => {
-      // No mobile, o grid vira 1 coluna — a página fica bem mais alta, e
-      // as últimas fotos ficam longe o suficiente da viewport inicial
-      // para o lazy loading nativo nunca disparar sem rolar. Desce a
-      // página em passos para trazer cada uma para perto da viewport.
-      await page.evaluate(async () => {
-        const step = window.innerHeight;
-        for (let y = 0; y < document.body.scrollHeight; y += step) {
-          window.scrollTo({ top: y, behavior: "instant" });
-          await new Promise((resolve) => setTimeout(resolve, 100));
-        }
-      });
-      await waitForPortfolioImages(page);
-    });
+    // Histórico (Issue #120): 60s estourava de forma consistente sob
+    // contenção de CPU real do CI; subir pra 120s não resolveu de vez
+    // — voltou a estourar num run de CI posterior. A causa raiz nunca
+    // foi "o timeout é curto": é a transcodificação a frio das 12
+    // fotos (sharp, sob demanda, no processo do `next start`)
+    // acontecendo bem no meio da janela medida. `aquecerCacheDeImagens`
+    // abaixo tira esse custo de dentro da medição — o timeout aqui
+    // ainda é generoso (a transcodificação a frio, se acontecer,
+    // acontece na chamada de aquecimento, não mais disputando o
+    // orçamento com a medição em si).
+    test.setTimeout(180_000);
+
+    await aquecerCacheDeImagens(page, "/galeria");
+
+    const cls = await measureCls(page, "/galeria", () =>
+      rolarEEsperarFotos(page),
+    );
 
     expect(cls).toBeLessThan(0.1);
   });
