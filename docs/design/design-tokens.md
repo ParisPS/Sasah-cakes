@@ -119,13 +119,24 @@ tom artesanal em vez de "flat corporativo".
 Opção de tema escuro deliberada — não um "inverter cores" genérico.
 Implementação técnica: variante `dark:` do Tailwind v4 baseada em
 CLASSE (`@custom-variant dark (&:where(.dark, .dark *));` em
-`app/globals.css`), não só `prefers-color-scheme` — o site precisa de 3
-estados (claro / escuro / seguir sistema) com escolha manual persistida
-(`components/ThemeToggle.tsx` + `lib/tema.ts`, localStorage), e uma
-media query sozinha só cobre "seguir sistema". A classe `.dark` fica em
-`<html>`, aplicada por um script inline `beforeInteractive`
+`app/globals.css`), não só `prefers-color-scheme` — a classe `.dark`
+fica em `<html>`, aplicada por um script inline `beforeInteractive`
 (`app/layout.tsx`) antes da primeira pintura (evita flash de tema
-errado) e mantida pelo `ThemeToggle` depois de montado.
+errado) e mantida por `components/ThemeToggle.tsx` depois de montado.
+
+**Controle (revisado na Fase 11.1):** um único botão de ícone com morph
+sol/lua (`components/ThemeToggle.tsx`) — não mais um `<select>` com 3
+opções nomeadas. Em repouso mostra o ícone do tema ATUAL; hover/
+`focus-visible` faz um morph (opacity + scale + rotate, `duration-300`)
+para o ícone OPOSTO, como prévia da ação; clicar alterna de fato. O
+`aria-label` descreve a ação ("Mudar para modo escuro"/"Mudar para modo
+claro"), não o estado — atualiza a cada clique. Sem preferência salva,
+o site ainda abre conforme `prefers-color-scheme` do sistema
+(`lib/tema.ts` continua com o tipo `Tema = "claro" | "escuro" |
+"sistema"` internamente, só a UI parou de expor "sistema" como uma
+terceira opção clicável — redundante com um ícone binário por
+natureza); a partir do primeiro clique, a escolha manual persiste em
+localStorage como antes.
 
 ### Por que sálvia (sage-100 a 900) fica FIXA nos dois temas
 
