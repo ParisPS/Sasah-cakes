@@ -57,6 +57,10 @@ e2e/                 # testes end-to-end (Playwright)
 
 - **Domínio próprio não configurado** (opcional) — hoje o site roda só no
   domínio padrão da Vercel.
+- **Hardening de segurança** (ver [`docs/SECURITY_BACKLOG.md`](docs/SECURITY_BACKLOG.md))
+  — cabeçalhos HTTP de segurança, auditoria de dependências e verificação
+  dedicada de encoding no formulário de pedido, todos ainda não
+  endereçados.
 
 ## Fluxo de contribuição
 
