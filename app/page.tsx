@@ -82,14 +82,21 @@ export default function Home() {
       <section className="bg-cream-500 relative overflow-hidden px-4 py-24 text-center md:px-6 md:py-32">
         {/* Manchas de aquarela decorativas — ver design-tokens.md
             ("Cards" → decoração opcional). Puramente visual, sem
-            interação/motion. */}
+            interação/motion.
+            Dark mode: sage-100/300 ficam FIXOS entre os temas (ver
+            design-tokens.md "Dark mode") — pensados para se misturar
+            num fundo claro, sem tratamento próprio viravam uma mancha
+            clara/brilho sobre o fundo escuro (achado visual). dark:
+            troca para sage-900 (também fixo, mas escuro) numa opacidade
+            baixa — mesma linguagem decorativa, tom compatível com o
+            fundo escuro em vez de removida. */}
         <div
           aria-hidden="true"
-          className="rounded-pill bg-sage-300/30 pointer-events-none absolute -top-24 -left-24 h-72 w-72 blur-3xl"
+          className="rounded-pill bg-sage-300/30 dark:bg-sage-900/40 pointer-events-none absolute -top-24 -left-24 h-72 w-72 blur-3xl"
         />
         <div
           aria-hidden="true"
-          className="rounded-pill bg-sage-100/60 pointer-events-none absolute -right-20 -bottom-32 h-80 w-80 blur-3xl"
+          className="rounded-pill bg-sage-100/60 dark:bg-sage-900/25 pointer-events-none absolute -right-20 -bottom-32 h-80 w-80 blur-3xl"
         />
 
         <div className="relative mx-auto max-w-2xl">
